@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -27,8 +28,9 @@ public class UserController {
 
     /**
      * 这里不用 [User] 做返回值的原因是，怕就算密码错误返回了一个JSON到前台比人还是可以查看到整个用户信息
-     * @param user 封装前台信息
-     * @param i    根据什么来查询
+     *
+     * @param user    封装前台信息
+     * @param i       根据什么来查询
      * @param request
      * @return
      */
@@ -39,12 +41,11 @@ public class UserController {
         //账号不存在  返回0 前台AJAX验证账号不存在 [0代表账号不存在，返回页面显示登录失败]
         if (userList == null || userList.size() == 0) {
             return 0;
-        }
-        else {
+        } else {
             //获取返回的用户POJO
             User user1 = userList.get(0);
             //对比用户输入的密码是否与数据库存储的密码相同,相同则返回 2 [2代表登录成功，将用户信息存入seesion]
-            if (user.getUPassword().equals(user1.getUPassword())) {
+            if (user.getuPassword().equals(user1.getuPassword())) {
                 request.getSession().setAttribute("user", user1);
                 return 2;
             }
@@ -56,37 +57,47 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "resgist",method = RequestMethod.POST)
-    public String resgist(User user, Team team){
-        int i = userService.addUser(user,team);
-        if (i==1)
-        {
-            return "sucess";
-        }
-        else if (i==0)
-        {
-            return "fail";
+    /**
+     * 新增用户
+     *
+     * @param user 封装前台关于User表内容
+     * @param team 封装前台关于Team表内容
+     * @return
+     */
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    public String register(User user, Team team) {
+        // 新增用户
+        int i = userService.addUser(user, team);
+        if (i == 1) {
+            System.out.println("插入新用户成功");
+        } else if (i == 0) {
+            System.out.println("插入新用户失败");
         }
         return "/login";
     }
-    @RequestMapping(value = "update",method = RequestMethod.POST)
-    public String update(User user,HttpServletRequest request){
+
+    @RequestMapping(value = "update", method = RequestMethod.POST)
+    public void update(User user, HttpServletRequest request) {
+        // 从session中获取当前用户的当前信息
         HttpSession session = request.getSession();
         User user1 = (User) session.getAttribute("user");
-        if(user1 != null) {
-            user.setUId(user1.getUId());
+
+        if (user1 != null) {
+            // 将用户ID赋值给将要进行修改的POJO类
+            user.setuId(user1.getuId());
             try {
                 userService.updateUser(user);
-                return "/register";
+                System.out.println("更新用户成功");
+
             } catch (Exception e) {
                 e.printStackTrace();
-                return "/changeEmail";
+                System.out.println("更新用户失败");
             }
-        }else
-        {
-            return "非法数据";
+            // 更新session中用户的信息
+            session.setAttribute("user",user);
+        } else {
+            System.out.println("错误的操作,用户信息错误,将其赶回登录界面");
         }
-
     }
 
 }
