@@ -9,8 +9,6 @@ import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -30,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     public int addUser(User user, Team team) {
         List<User> userList = null;
-        String uName = user.getUName();
+        String uName = user.getuName();
         //创建Example对象，使用createCtiteria方法以uName查询数据库
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUNameEqualTo(uName);
@@ -55,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     public int addUser(User user) {
         List<User> userList = null;
-        String uName = user.getUName();
+        String uName = user.getuName();
         //创建Example对象，使用createCtiteria方法以uName查询数据库
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUEmailEqualTo(uName);
@@ -97,7 +95,7 @@ public class UserServiceImpl implements UserService {
         //用用户名查询
         else if (i==1)
         {
-            String uName = user.getUName();
+            String uName = user.getuName();
             UserExample userExample = new UserExample();
             userExample.createCriteria().andUNameEqualTo(uName);
             userList = userMapper.selectByExample(userExample);
@@ -105,7 +103,7 @@ public class UserServiceImpl implements UserService {
         //用用户邮箱查询
         else if (i==2)
         {
-            String uEmail = user.getUEmail();
+            String uEmail = user.getuEmail();
             UserExample userExample = new UserExample();
             userExample.createCriteria().andUEmailEqualTo(uEmail);
             userList = userMapper.selectByExample(userExample);

@@ -5,7 +5,6 @@ import com.pojo.Team;
 import com.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class TeamServiceImpl implements TeamService {
     private TeamMapper teamMapper;
     public int addTeam(Team team) {
         teamMapper.insert(team);
-        return team.getTId();
+        return team.gettId();
     }
 
     public int deleteTeam(int tId) {

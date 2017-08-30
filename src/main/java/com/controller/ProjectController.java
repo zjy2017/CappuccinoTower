@@ -17,7 +17,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/project")
 public class ProjectController {
-
     @Autowired
     ProjectService projectService; //创建项目接口
 
@@ -28,15 +27,10 @@ public class ProjectController {
      * @return
      */
     @RequestMapping("/goCreateProject")
-    public ModelAndView goCreateProject(){
-        //将遍历用户表的list返回
-        List<User> userList = userService.QueryUser();
+    public String goCreateProject(){
 
-        ModelAndView modelAndView=new ModelAndView();
 
-        modelAndView.addObject("userList",userList);
-        modelAndView.setViewName("project/putProject");
-       return modelAndView;
+       return "";
     }
 
     /**
@@ -47,8 +41,8 @@ public class ProjectController {
     @RequestMapping("/putProject")
     public ModelAndView putProject(Project project){
         //从页面中接收 Project 数据
-        String ProjectName=project.getPName();
-        String ProjectDescribe=project.getPDescribe();
+        String ProjectName=project.getpName();
+        String ProjectDescribe=project.getpDescribe();
 
         //调用实现类，插入项目数据
         projectService.addProject(project);
