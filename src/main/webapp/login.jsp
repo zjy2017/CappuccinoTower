@@ -25,7 +25,7 @@
                 function (text, status) {
                     if (text==2)
                     {
-                        alert("登录成功");
+                        location.href = "usersetting.jsp";
                     }
                     else if (text==1)
                     {

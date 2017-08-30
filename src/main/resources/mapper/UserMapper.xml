@@ -291,12 +291,13 @@
 		update user
 		<!-- 修改属性，不可以修改主键 -->
 		set
-		uEmail = #{uEmail, jdbcType=VARCHAR},
-		uPassword = #{uPassword, jdbcType=VARCHAR},
-		uPicture = #{uPicture, jdbcType=VARCHAR},
-		uName = #{uName, jdbcType=VARCHAR}
+		u_email = #{uEmail, jdbcType=VARCHAR},
+		u_password = #{uPassword, jdbcType=VARCHAR},
+		u_picture = #{uPicture, jdbcType=VARCHAR},
+		u_name = #{uName, jdbcType=VARCHAR}
 		<!-- 主键作为条件 -->
 		where
-		u_id = #{uId, jdbcType=INTEGER} 
+		u_id = #{uId, jdbcType=INTEGER}
 	</update>
+
 </mapper>

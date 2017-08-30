@@ -1,5 +1,6 @@
 package com.service;
 
+import com.pojo.Team;
 import com.pojo.User;
 
 import java.util.List;
@@ -10,6 +11,13 @@ import java.util.List;
  * [UserMapper]
  */
 public interface UserService {
+
+    /**
+     * 增加一个新的用户
+     * @param user 用户实体类
+     * @return  返回0代表失败，返回1代表成功
+     */
+    int addUser(User user, Team team);
 
     /**
      * 增加一个新的用户
