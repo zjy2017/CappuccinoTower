@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.pojo.Team;
 import com.pojo.User;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "User")
-public class LoginController {
+public class UserController {
     //注入依赖[UserService]
     @Autowired
     private UserService userService;
@@ -51,6 +53,40 @@ public class LoginController {
                 return 1;
             }
         }
+
+    }
+
+    @RequestMapping(value = "resgist",method = RequestMethod.POST)
+    public String resgist(User user, Team team){
+        int i = userService.addUser(user,team);
+        if (i==1)
+        {
+            return "sucess";
+        }
+        else if (i==0)
+        {
+            return "fail";
+        }
+        return "/login";
+    }
+    @RequestMapping(value = "update",method = RequestMethod.POST)
+    public String update(User user,HttpServletRequest request){
+        HttpSession session = request.getSession();
+        User user1 = (User) session.getAttribute("user");
+        if(user1 != null) {
+            user.setUId(user1.getUId());
+            try {
+                userService.updateUser(user);
+                return "/register";
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "/changeEmail";
+            }
+        }else
+        {
+            return "非法数据";
+        }
+
     }
 
 }

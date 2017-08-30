@@ -6,27 +6,27 @@ public class User {
 	/**
 	 * 用户编号（主键）
 	 */
-	private Integer uId = null;
+	private Integer uId;
 
 	/**
 	 * 用户邮箱
 	 */
-	private String uEmail = null;
+	private String uEmail;
 
 	/**
 	 * 用户密码
 	 */
-	private String uPassword = null;
+	private String uPassword;
 
 	/**
 	 * 用户头像（可为空）
 	 */
-	private String uPicture = null;
+	private String uPicture;
 
 	/**
 	 * 用户名
 	 */
-	private String uName = null;
+	private String uName;
 
 	public void setUId(Integer uId) {
 		this.uId = uId;
@@ -68,4 +68,14 @@ public class User {
 		return this.uName;
 	}
 
+	@Override
+	public String toString() {
+		return "User{" +
+				"uId=" + uId +
+				", uEmail='" + uEmail + '\'' +
+				", uPassword='" + uPassword + '\'' +
+				", uPicture='" + uPicture + '\'' +
+				", uName='" + uName + '\'' +
+				'}';
+	}
 }
