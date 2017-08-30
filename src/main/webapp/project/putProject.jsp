@@ -11,25 +11,6 @@
 <head>
     <script type="text/javascript" src="../resources/js/jquery-3.1.1.js"></script>
     <title>输入项目信息</title>
-    <script type="text/javascript">
-       var req=new XMLHttpRequest();
-       function queryInfo() {
-           //设置传送方式，对应Controllor路径，是否异步处理
-           req.open("POST","/User/selectUser",true);
-           //如果设置数据传送方式为post.则必须设置请求头信息
-           req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-           //设置回调函数，当前操作完成后进行的操作
-           req.onreadystatechange = callback;
-
-           //Ajax请求发送的数据不是表单,需要拼接数据,格式跟get方式一样
-           var reqData = "uName="+document.getElementById("uName").value();
-
-           //发送请求
-           req.send(reqData);
-
-       }
-    </script>
-
 </head>
 <body>
 <form action="/project/putProject" method="post">
@@ -52,15 +33,12 @@
         </tr>
         <br>
         <tr>
-            <td>添加组员</td>
-            <td><input type="text" id="uName" name="uName"></td>
-            <td><button  id="selectUser" onclick="queryInfo()" >查询</button></td>
         </tr>
         <br>
         <tr>
-            <c:forEach items="${userList}" var="user">
-               <input type="checkbox" name="selectUser" value="${user.UName}">
-                <span>${user.UName}</span>
+            <c:forEach items="${listUser}" var="user">
+               <input type="checkbox" name="uId" value="${user.uId}">
+                <span>${user.uName}</span>
             </c:forEach>
         </tr>
         <br>
