@@ -47,4 +47,17 @@ public interface UserService {
      * @return  返回0代表失败，返回1代表成功
      */
     List<User> selectUser(User user, int i);
+
+    /**
+     * 模糊查询名字
+     * @param uName
+     * @return
+     */
+    List<User> listByUname(String uName);
+
+    /**
+     * 遍历整个User表
+     * @return
+     */
+    List<User> QueryList();
 }
