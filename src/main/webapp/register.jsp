@@ -11,7 +11,7 @@
     <title>注册用户</title>
 </head>
 <body>
-<form action="/User/resgist" method="post">
+<form action="/User/register" method="post">
     团队名称：
     <input type="text" name="tName"/>
     你的名字：

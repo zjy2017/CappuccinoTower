@@ -20,13 +20,6 @@ public interface UserService {
     int addUser(User user, Team team);
 
     /**
-     * 增加一个新的用户
-     * @param user 用户实体类
-     * @return  返回0代表失败，返回1代表成功
-     */
-    int addUser(User user);
-
-    /**
      * 删除一个用户
      * @param uId 根据ID来删除
      * @return  返回0代表失败，返回1代表成功

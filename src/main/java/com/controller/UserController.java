@@ -57,34 +57,47 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "resgist", method = RequestMethod.POST)
-    public String resgist(User user, Team team) {
+    /**
+     * 新增用户
+     *
+     * @param user 封装前台关于User表内容
+     * @param team 封装前台关于Team表内容
+     * @return
+     */
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    public String register(User user, Team team) {
+        // 新增用户
         int i = userService.addUser(user, team);
         if (i == 1) {
-            return "sucess";
+            System.out.println("插入新用户成功");
         } else if (i == 0) {
-            return "fail";
+            System.out.println("插入新用户失败");
         }
         return "/login";
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public String update(User user, HttpServletRequest request) {
+    public void update(User user, HttpServletRequest request) {
+        // 从session中获取当前用户的当前信息
         HttpSession session = request.getSession();
         User user1 = (User) session.getAttribute("user");
+
         if (user1 != null) {
+            // 将用户ID赋值给将要进行修改的POJO类
             user.setuId(user1.getuId());
             try {
                 userService.updateUser(user);
-                return "/register";
+                System.out.println("更新用户成功");
+
             } catch (Exception e) {
                 e.printStackTrace();
-                return "/changeEmail";
+                System.out.println("更新用户失败");
             }
+            // 更新session中用户的信息
+            session.setAttribute("user",user);
         } else {
-            return "非法数据";
+            System.out.println("错误的操作,用户信息错误,将其赶回登录界面");
         }
-
     }
 
 }
