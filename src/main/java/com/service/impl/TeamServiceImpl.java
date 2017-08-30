@@ -19,7 +19,7 @@ public class TeamServiceImpl implements TeamService {
     private TeamMapper teamMapper;
     public int addTeam(Team team) {
         teamMapper.insert(team);
-        return 0;
+        return team.getTId;
     }
 
     public int deleteTeam(int tId) {
