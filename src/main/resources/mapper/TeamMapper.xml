@@ -106,6 +106,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pojo.Team">
+    <selectKey keyProperty="tId" order="AFTER" resultType="int">
+    SELECT LAST_INSERT_ID() AS tId
+    </selectKey>
     insert into team (t_id, t_name, isgroup
       )
     values (#{tId,jdbcType=INTEGER}, #{tName,jdbcType=VARCHAR}, #{isgroup,jdbcType=INTEGER}

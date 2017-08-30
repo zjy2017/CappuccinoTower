@@ -7,6 +7,7 @@ import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -44,10 +45,11 @@ public class ProjectController {
      * @return
      */
     @RequestMapping("/putProject")
-    public ModelAndView putProject(Project project, @RequestParam("uId") int[] uId, Model model){
+    public ModelAndView putProject( Project project, @RequestParam("uId") Integer[] uId){
         //判断是否接收到checkbox 中 Uid的值
-        String a = Arrays.toString(uId);
-        model.addAttribute("uId", a);
+        for(int i=0;i<uId.length;i++){
+            System.out.println(uId[i]);
+        }
 
         System.out.println();
         //从页面中接收 Project 数据
@@ -55,7 +57,7 @@ public class ProjectController {
         String ProjectDescribe=project.getpDescribe();
 
         //调用实现类，插入项目数据
-        projectService.addProject(project);
+        projectService.addProject(project,uId);
 
         ModelAndView modelAndView=new ModelAndView();
 
