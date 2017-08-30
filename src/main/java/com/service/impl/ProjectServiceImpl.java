@@ -33,17 +33,17 @@ public class ProjectServiceImpl implements ProjectService {
     public int addProject(Project project) {
         //创建一个新的团队表
         Team team = new Team();
-        team.setTName(project.getPName());
+        team.settName(project.getpName());
         team.setIsgroup(0);
 
         int tid = teamService.addTeam(team);
         //得到团队id
-        project.setTId(tid);
+        project.settId(tid);
 
         //判断是否有sensitive
-        if(project.getPSensitive()==null)
+        if(project.getpSensitive()==null)
         {
-            project.setPSensitive(0);
+            project.setpSensitive(0);
         }
 
         projectMapper.insert(project);

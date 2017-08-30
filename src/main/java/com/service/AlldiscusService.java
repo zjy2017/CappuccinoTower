@@ -1,7 +1,6 @@
 package com.service;
 
 import com.pojo.Alldiscus;
-import com.pojo.Discus;
 
 /**
  * Created by WU on 2017/8/29.
