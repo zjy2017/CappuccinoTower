@@ -1,7 +1,6 @@
 package com.service;
 
 import com.pojo.Project;
-
 import java.util.List;
 
 /**
@@ -13,7 +12,7 @@ public interface ProjectService {
      * @param project 项目实体类
      * @return 返回0代表失败，1代表成功
      */
-    int addProject(Project project);
+    int addProject(Project project,List<Integer> uId);
 
     /**
      * 删除一个项目

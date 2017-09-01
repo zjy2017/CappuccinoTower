@@ -10,7 +10,9 @@ import com.service.TeamService;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,7 +76,6 @@ public class UserServiceImpl implements UserService {
         }
 
     }
-
     public int deleteUser(int uId) {
         userMapper.deleteByPrimaryKey(uId);
         return 0;
@@ -92,11 +93,11 @@ public class UserServiceImpl implements UserService {
      * @return 若查询为空则判断返回空，查询不为空则返回
      */
     public List<User> selectUser(User user, int i) {
-        List<User> userList = null;
+        List<User> userList = new ArrayList<User>();
         User user1 = null;
         //用ID主键进行查询
         if (i == 0) {
-            user1 = userMapper.selectByPrimaryKey(i);
+            user1 = userMapper.selectByPrimaryKey(user.getuId());
             userList.add(user1);
         }
         //用用户名查询
@@ -121,5 +122,39 @@ public class UserServiceImpl implements UserService {
         else {
             return userList;
         }
+    }
+
+    /**
+     * 对uName进行模糊查询
+     * @param uName
+     * @return
+     */
+    public List<User> listByUname(String uName) {
+        List<User> listByUname = null;
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        //拼接SQL语句
+        if (StringUtils.hasText(uName)) {
+            uName = "%" + uName + "%";
+        }
+        if (StringUtils.hasText(uName)) {
+            criteria.andUNameLike(uName);
+        }
+        //select u_id, u_email, u_password, u_picture, u_name from user WHERE u_name like '%小%';
+        //将按照uName查找到的List 返回
+        listByUname = userMapper.selectByExample(userExample);
+        return listByUname;
+    }
+
+    /**
+     * 遍历整个User表   稍后删掉
+     * @return
+     */
+    public List<User> QueryList(){
+        List<User> list=null;
+        UserExample userExample=new UserExample();
+        userExample.setDistinct(true);
+        list=userMapper.selectByExample(userExample);
+        return list;
     }
 }
