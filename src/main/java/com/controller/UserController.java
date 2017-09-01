@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * Created by BF on 2017/8/29.
- * 登录控制
+ * 登录控制,用户表增删改查
  */
 @Controller
 @RequestMapping(value = "User")
@@ -39,7 +39,7 @@ public class UserController {
     public int login(User user, @RequestParam("aaa") int i, HttpServletRequest request) {
         List<User> userList = userService.selectUser(user, i);
         //账号不存在  返回0 前台AJAX验证账号不存在 [0代表账号不存在，返回页面显示登录失败]
-        if (userList == null || userList.size() == 0) {
+        if (userList == null || userList.get(0).getuId()==null) {
             return 0;
         } else {
             //获取返回的用户POJO

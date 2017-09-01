@@ -24,15 +24,15 @@ import java.util.List;
 @Transactional
 public class ProjectServiceImpl implements ProjectService {
 
-    //创建项目类的Mapper
+    //注入ProjectMapper依赖 [对数据库Project表进行操作的Dao层]
     @Autowired
     ProjectMapper projectMapper;
 
-    //创建团队的Service
+    //注入TeamService依赖
     @Autowired
     TeamService teamService;
 
-    //创建团队和用户的Service
+    //注入团队和用户依赖
     @Autowired
     UserandteamService userandteamService;
 
@@ -40,10 +40,10 @@ public class ProjectServiceImpl implements ProjectService {
     /**
      * 创建一个新的项目
      * @param project 项目实体类
-     * @return
+     * @return 若成功添加返回1,用户名称已存在返回0
      */
 
-    public int addProject(Project project,Integer[] uId) {
+    public int addProject(Project project,List<Integer> uId) {
         //创建一个新的团队表
         Team team = new Team();
         team.settName(project.getpName());
@@ -51,24 +51,25 @@ public class ProjectServiceImpl implements ProjectService {
         //返回团队表的ID
         int tid = teamService.addTeam(team);
         //创建UserAndTeam表
-        // TODO
-        for(int i=0;i<uId.length;i++)
-        {
-            Userandteam userandteam=new Userandteam();
-            userandteam.setuId(uId[i]);
-            userandteam.settId(tid);
 
-            //这里以后要判断是否是项目项目创建者
-            //默认为0，为组员
-            userandteam.setType(0);
+        for(int i=0;i<uId.size();i++)
+        {
+            Userandteam userandteam = new Userandteam();
+            // 判断是否创建项目者本身 是则设置为超管
+            if (i==uId.size()-1) {
+                userandteam.setType(1);
+            }
+            else {
+                userandteam.setType(0);
+            }
+            userandteam.setuId(uId.get(i));
+            userandteam.settId(tid);
             userandteamService.addUserandteam(userandteam);
         }
-
-        //得到团队id
+        // 得到团队id
         project.settId(tid);
-        //判断是否有sensitive
-        if(project.getpSensitive()==null)
-        {
+        // 判断是否有sensitive
+        if(project.getpSensitive()==null) {
             project.setpSensitive(0);
         }
 

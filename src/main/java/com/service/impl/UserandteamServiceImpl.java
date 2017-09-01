@@ -15,9 +15,15 @@ import java.util.List;
  */
 @Service
 public class UserandteamServiceImpl implements UserandteamService {
-    //注解注入UserandteamMapper
+    // 注入UserandteamMapper依赖 [对数据库UserAndTeam表进行操作的Dao层]
     @Autowired
     UserandteamMapper userandteamMapper;
+
+    /**
+     * 往[UserandteamService] 表中添加一天新的数据
+     * @param userandteam 用户和团队实体类
+     * @return
+     */
     public int addUserandteam(Userandteam userandteam) {
         userandteamMapper.insert(userandteam);
         return 1;
