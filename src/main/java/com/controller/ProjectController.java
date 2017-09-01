@@ -4,19 +4,19 @@ import com.pojo.Project;
 import com.pojo.User;
 import com.service.ProjectService;
 import com.service.UserService;
+import com.util.ObtainSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
  * Created by WU on 2017/8/29.
+ * 项目表的增删改查
  */
 @Controller
 @RequestMapping("/project")
@@ -26,6 +26,8 @@ public class ProjectController {
 
     @Autowired
     UserService userService; //创建用户接口
+
+    ObtainSession obtainSession =  new ObtainSession();
     /**
      * 跳转到输入项目信息界面
      * @return
@@ -45,23 +47,25 @@ public class ProjectController {
      * @return
      */
     @RequestMapping("/putProject")
-    public ModelAndView putProject( Project project, @RequestParam("uId") Integer[] uId){
-        //判断是否接收到checkbox 中 Uid的值
-        for(int i=0;i<uId.length;i++){
-            System.out.println(uId[i]);
+    public ModelAndView putProject(Project project, @RequestParam("uId") List<Integer> uId, HttpServletRequest request){
+        // 判断在创建项目的时候是否选择了队员
+        if (uId==null||uId.size()==0)
+        {
+            System.out.println("没有选择组员");
         }
+        User user = obtainSession.getUser(request);
+        // 将ID插入List数组,设置默认超管
+        uId.add(user.getuId());
 
-        System.out.println();
-        //从页面中接收 Project 数据
-        String ProjectName=project.getpName();
-        String ProjectDescribe=project.getpDescribe();
-
-        //调用实现类，插入项目数据
+        // 调用实现类，插入项目数据
         projectService.addProject(project,uId);
 
-        ModelAndView modelAndView=new ModelAndView();
 
-        //将数据放到modelAndView
+        //　TODO [修改返回方式]
+        // 将数据放到modelAndView
+        String ProjectName=project.getpName();
+        String ProjectDescribe=project.getpDescribe();
+        ModelAndView modelAndView=new ModelAndView();
         modelAndView.addObject("ProjectName",ProjectName);
         modelAndView.addObject("ProjectDescribe",ProjectDescribe);
 
@@ -77,10 +81,10 @@ public class ProjectController {
     @RequestMapping("/selectName")
     public ModelAndView checkName(String uName)
     {
-//        模糊查询名字返回的List集合
+        // 模糊查询名字返回的List集合
         List<User> listUser=userService.listByUname(uName);
         ModelAndView modelAndView =new ModelAndView();
-//      将List放到ModelAndView中
+        // 将List放到ModelAndView中
         modelAndView.addObject("listUser",listUser);
         modelAndView.setViewName("project/afterselect");
         return modelAndView;

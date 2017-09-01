@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,17 +88,16 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 查找与选择 [User]
-     *
      * @param user 用户实体类
      * @param i    根据什么来查找（0代表ID，1代表用户名，2代表邮箱）
      * @return 若查询为空则判断返回空，查询不为空则返回
      */
     public List<User> selectUser(User user, int i) {
-        List<User> userList = null;
+        List<User> userList = new ArrayList<User>();
         User user1 = null;
         //用ID主键进行查询
         if (i == 0) {
-            user1 = userMapper.selectByPrimaryKey(i);
+            user1 = userMapper.selectByPrimaryKey(user.getuId());
             userList.add(user1);
         }
         //用用户名查询
@@ -126,7 +126,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 对uName进行模糊查询
-     *
      * @param uName
      * @return
      */
