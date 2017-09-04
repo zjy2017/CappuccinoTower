@@ -57,7 +57,7 @@ public class ProjectController {
         String ProjectDescribe=project.getpDescribe();
 
         //调用实现类，插入项目数据(返回项目id)
-        int pId=projectService.addProject(project,uId);
+        int pId=projectService.addProject(project, Arrays.asList(uId));
         //测试id
         System.out.println(pId+"............");
 
@@ -183,18 +183,24 @@ public class ProjectController {
     }
 
 
-
+    /**
+     *根据用户ID ，将其所参加的项目遍历出来
+     * @param uId
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/queryProjectByUserId" ,method = RequestMethod.GET)
     public String queryProjectByUserId(String uId,HttpServletRequest request){
+        System.out.println("进入contollerlll");
         //将页面传来的用户ID变成int类型的
         int aa= Integer.parseInt(uId);
         List<Project> projectList = projectService.QueryList(aa);
         if(projectList!=null&&projectList.size()!=0){
             HttpSession session = request.getSession();
             session.setAttribute("projectList",projectList);
-            return "";
+            return "project/querylist";
         }
         System.out.println("查找失败");
-        return "";
+        return "project/success";
     }
 }

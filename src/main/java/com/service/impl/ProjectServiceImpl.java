@@ -1,10 +1,7 @@
 package com.service.impl;
 
 import com.dao.ProjectMapper;
-import com.pojo.Project;
-import com.pojo.ProjectExample;
-import com.pojo.Team;
-import com.pojo.Userandteam;
+import com.pojo.*;
 import com.service.ProjectService;
 import com.service.TeamService;
 import com.service.UserandteamService;
@@ -35,7 +32,6 @@ public class ProjectServiceImpl implements ProjectService {
     //注入团队和用户依赖
     @Autowired
     UserandteamService userandteamService;
-
 
     /**
      * 创建一个新的项目
@@ -146,11 +142,37 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     public List<Project> QueryList(int uId) {
-        ProjectExample projectExample=new ProjectExample();
-        //调用对遍历出的对象进行查重
-        projectExample.setDistinct(true);
+        System.out.println("service.......");
+        Userandteam userandteam=new Userandteam();
+        //将uId放到userandteam对象中去
+        userandteam.setuId(uId);
+        //根据uId(用户ID)查询tId(团队编号)  通过Userandteam表
+        //得到用户ID所参加的团队 List
+        List<Userandteam> userandteamList = userandteamService.selectUserandteam(userandteam, 0);
 
-        return null;
+        //创建一个项目List集合去接收通过tId查询到的项目
+        List<Project> projectList=new ArrayList<Project>();
+
+        //调用tId（团队编号）去查找pId(项目)  通过Project表
+        for(int i=0;i<userandteamList.size();i++){
+            ProjectExample projectExample=new ProjectExample();
+            //userandteamList.get(i).gettId()   得到每个团队ID
+            projectExample.createCriteria().andTIdEqualTo(userandteamList.get(i).gettId());
+            List<Project> projects = projectMapper.selectByExample(projectExample);
+            //将查到的项目放到项目List中
+            projectList.add(projects.get(0));
+        }
+        //判断
+        if(projectList.get(0).getpId()==null&&projectList==null)
+        {
+            System.out.println("没有查询到");
+            return null;
+        }
+        else {
+            System.out.println("返回集合");
+            return projectList;
+        }
+
     }
 
 }
