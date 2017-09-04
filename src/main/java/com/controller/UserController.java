@@ -36,7 +36,7 @@ public class UserController {
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
-    public int login(User user, @RequestParam("aaa") int i, HttpServletRequest request) {
+    public int login(User user, @RequestParam("loginType") int i, HttpServletRequest request) {
         List<User> userList = userService.selectUser(user, i);
         //账号不存在  返回0 前台AJAX验证账号不存在 [0代表账号不存在，返回页面显示登录失败]
         if (userList == null || userList.get(0).getuId()==null) {
