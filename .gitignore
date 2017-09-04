@@ -8,4 +8,4 @@
 .idea/vcs.xml
 .idea/workspace.xml
 src/main/resources/jdbc.properties
-/.idea/compiler.xml
+/.idea/

@@ -35,4 +35,11 @@ public interface ProjectService {
      * @return 返回0代表失败，1代表成功
      */
     List<Project> selectProject(Project project,int i);
+
+
+    /**
+     * 根据个人表对项目表进行遍历
+     * @return
+     */
+    List<Project> QueryList(int uId);
 }

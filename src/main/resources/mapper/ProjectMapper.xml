@@ -5,6 +5,7 @@
     <id column="p_id" jdbcType="INTEGER" property="pId" />
     <result column="p_name" jdbcType="VARCHAR" property="pName" />
     <result column="p_sensitive" jdbcType="INTEGER" property="pSensitive" />
+
     <result column="ispublic" jdbcType="INTEGER" property="ispublic" />
     <result column="t_id" jdbcType="INTEGER" property="tId" />
     <result column="discusallid" jdbcType="INTEGER" property="discusallid" />
@@ -134,6 +135,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pojo.Project">
+    <!-- 新增项目的时候返回此次的自增ID -->
+    <selectKey keyProperty="pId" order="AFTER" resultType="int">
+      SELECT LAST_INSERT_ID() AS pId
+    </selectKey>
     insert into project (p_id, p_name, p_sensitive, 
       ispublic, t_id, discusallid, 
       f_totalid, p_describe)
