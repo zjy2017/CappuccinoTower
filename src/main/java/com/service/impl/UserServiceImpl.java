@@ -1,13 +1,16 @@
 package com.service.impl;
 
 import com.dao.UserMapper;
+import com.pojo.Project;
 import com.pojo.Team;
 import com.pojo.User;
 import com.pojo.UserExample;
+import com.service.ProjectService;
 import com.service.TeamService;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ import java.util.List;
  * [UserMapper] [UserService]
  */
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     //注入UserMapper依赖 [对数据库进行操作的Dao层]
@@ -26,7 +30,7 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Autowired
-    TeamService teamService;
+    ProjectService projectService;
 
     public int addUser(User user, Team team) {
         List<User> userList = null;
@@ -38,12 +42,18 @@ public class UserServiceImpl implements UserService {
         userList = userMapper.selectByExample(userExample);
         //若结果为空或者长度为0
         if (userList == null || userList.size() == 0) {
-            //添加用户
+            // 创建新的项目
+            Project project = new Project();
+            // 添加用户
             userMapper.insert(user);
-            //是否存在小组默认为否
-            team.setIsgroup(0);
-            //将团队名加入
-            teamService.addTeam(team);
+            // 新注册用户时默认为超管
+            List<Integer> list = new ArrayList<Integer>();
+            list.add(user.getuId());
+            // 添加默认参数
+            project.setpName(team.gettName());
+            project.setIspublic(0);
+
+            projectService.addProject(project,list);
             return 1;
         } else {
             return 0;

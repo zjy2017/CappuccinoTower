@@ -3,9 +3,7 @@
 <html>
 <title>登录页面</title>
 <head>
-
-    <meta charset="utf-8"/>
-    <title></title>
+    <title>Tower登录</title>
     <script type="text/javascript" src="resources/js/jquery-3.1.1.js"></script>
     <link rel="stylesheet" href="resources/css/login.css"/>
     <link rel="stylesheet" type="text/css" href="resources/js/jquery-easyui-1.4.5/themes/default/easyui.css">
@@ -41,7 +39,7 @@
             var loginEmail = $("#loginEmail").val();
             var loginPsw = $("#loginPsw").val();
             $.post(
-                '${pageContext.request.contextPath}/User/login',
+                '${pageContext.request.contextPath}/user/login',
                 {
                     uEmail:loginEmail,
                     uPassword:loginPsw,
