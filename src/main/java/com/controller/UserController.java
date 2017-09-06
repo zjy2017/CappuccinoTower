@@ -19,7 +19,7 @@ import java.util.List;
  * 登录控制,用户表增删改查
  */
 @Controller
-@RequestMapping(value = "User")
+@RequestMapping(value = "user")
 public class UserController {
     //注入依赖[UserService]
     @Autowired

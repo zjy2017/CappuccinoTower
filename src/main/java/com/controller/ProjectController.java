@@ -4,15 +4,14 @@ import com.pojo.Project;
 import com.pojo.User;
 import com.service.ProjectService;
 import com.service.UserService;
+import com.util.ObtainSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,12 +19,15 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/project")
+@Transactional
 public class ProjectController {
+    // 注入项目服务依赖[ProjectService]
     @Autowired
-    ProjectService projectService; //创建项目接口
+    ProjectService projectService;
 
+    //注入用户服务依赖[UserService]
     @Autowired
-    UserService userService; //创建用户接口
+    UserService userService;
     /**
      * 跳转到输入项目信息界面
      * @return
@@ -40,32 +42,29 @@ public class ProjectController {
     }
 
     /**
-     * 向数据库插入信息
+     * 新增项目
      * @param project
      * @return
      */
     @RequestMapping("/putProject")
-    public ModelAndView putProject( Project project, @RequestParam("uId") Integer[] uId){
-        //判断是否接收到checkbox 中 Uid的值
-        for(int i=0;i<uId.length;i++){
-            System.out.println(uId[i]);
-        }
+    public ModelAndView putProject( Project project, @RequestParam("uId") List<Integer> uId,HttpServletRequest requestr){
 
-        System.out.println();
-        //从页面中接收 Project 数据
+        // 从页面中接收 Project 数据
         String ProjectName=project.getpName();
         String ProjectDescribe=project.getpDescribe();
 
-        //调用实现类，插入项目数据(返回项目id)
-        int pId=projectService.addProject(project, Arrays.asList(uId));
-        //测试id
-        System.out.println(pId+"............");
+        // 超级管理员ID
+        int superId = new ObtainSession(requestr).getUser().getuId();
+        uId.add(superId);
 
-        ModelAndView modelAndView=new ModelAndView();
+        //调用实现类，插入项目数据(返回项目)
+        Project projectback = projectService.addProject(project, uId);
 
+        requestr.getSession().setAttribute("project",projectback);
         //将数据放到modelAndView
         //向页面返回项目 ID ，，名字，，描述
-        modelAndView.addObject("pId",pId);
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.addObject("pId",projectback.getpId());
         modelAndView.addObject("ProjectName",ProjectName);
         modelAndView.addObject("ProjectDescribe",ProjectDescribe);
 
@@ -81,10 +80,10 @@ public class ProjectController {
     @RequestMapping("/selectName")
     public ModelAndView checkName(String uName)
     {
-//        模糊查询名字返回的List集合
+        // 模糊查询名字返回的List集合
         List<User> listUser=userService.listByUname(uName);
         ModelAndView modelAndView =new ModelAndView();
-//      将List放到ModelAndView中
+        // 将List放到ModelAndView中
         //将模糊查询到的List集合返回到页面中
         modelAndView.addObject("listUser",listUser);
         modelAndView.setViewName("project/afterselect");
@@ -164,19 +163,20 @@ public class ProjectController {
 
 
     /**
-     *根据ID对项目进行删除
-     * @param request
+     * 根据ID对项目进行删除
      * @return
      */
     @RequestMapping(value = "/deleteProject",method =RequestMethod.GET)
-    public String deleteProject(String pId,HttpServletRequest request){
-
-        //将页面传过来的String 类型的pId转换成int类型
-        int aa= Integer.parseInt(pId);
-        int i=projectService.deleteProject(aa);
-
+    public String deleteProject(HttpServletRequest request){
+        // 定义操作返回值，默认为0 [失败的意思]
+        int issuccess = 0;
+        // 获取session中当前的项目信息
+        Project project1 = (Project) request.getSession().getAttribute("project");
+        System.out.println(project1.toString() + "打印的project");
+        // 删除项目
+        issuccess = projectService.deleteProject(project1);
         //判断是否成功
-        if(i==1){
+        if(issuccess==1){
             System.out.println("修改成功");
         }
         return "project/success";

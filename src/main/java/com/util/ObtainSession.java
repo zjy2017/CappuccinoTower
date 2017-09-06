@@ -10,12 +10,21 @@ import javax.servlet.http.HttpSession;
  * 获取页面Session工具类
  */
 public class ObtainSession {
+
+    private HttpServletRequest request;
+
     // [User实体类]  从Session中获取的User
     private User user;
 
     private HttpSession session;
+    // 新的构造器
+    public ObtainSession(HttpServletRequest request) {
+        this.request = request;
+    }
+    // 将默认构造方法隐藏起来
+    private ObtainSession(){}
 
-    public  User getUser(HttpServletRequest request)
+    public  User getUser()
     {
         this.session = request.getSession();
         user = (User) session.getAttribute("user");
