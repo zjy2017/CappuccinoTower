@@ -14,6 +14,7 @@ public interface DynamicService {
     /**
      * 创建一个动态表
      * @param dynamic 动态表实体类
+     * @param action 定义操作动作
      * @return 返回0表示失败，返回1表示成功
      */
     int addDynamic(Dynamic dynamic);
@@ -38,9 +39,9 @@ public interface DynamicService {
     /**
      * 查询一个动态表
      * @param dynamic 动态表实体类
-     * @param dynamicId 根据id查询
+     * @param pId 根据项目id查询
      * @return
      */
-    List<Dynamic> selectDynamic(Dynamic dynamic,int dynamicId);
+    List<Dynamic> selectDynamic(Dynamic dynamic,int pId);
 
 }

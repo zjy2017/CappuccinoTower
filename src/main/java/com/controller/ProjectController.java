@@ -1,9 +1,12 @@
 package com.controller;
 
+import com.pojo.Dynamic;
 import com.pojo.Project;
 import com.pojo.User;
+import com.service.DynamicService;
 import com.service.ProjectService;
 import com.service.UserService;
+import com.util.DynamicTool;
 import com.util.ObtainSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,10 +27,15 @@ public class ProjectController {
     // 注入项目服务依赖[ProjectService]
     @Autowired
     ProjectService projectService;
-
     //注入用户服务依赖[UserService]
     @Autowired
     UserService userService;
+    // 注入DynamicService依赖 [添加动态]
+    @Autowired
+    DynamicService dynamicService;
+
+    // 创建一个动态的PO
+    Dynamic dynamic = new Dynamic();
     /**
      * 跳转到输入项目信息界面
      * @return
@@ -53,14 +61,23 @@ public class ProjectController {
         String ProjectName=project.getpName();
         String ProjectDescribe=project.getpDescribe();
 
-        // 超级管理员ID
+        // 项目创建者ID
         int superId = new ObtainSession(requestr).getUser().getuId();
         uId.add(superId);
-
-        //调用实现类，插入项目数据(返回项目)
+        // 设置项目所属团队
+        //int teamId = new ObtainSession(requestr).getTeam().gettId();
+        //TODO 测试
+        int teamId = 8;
+        project.settId(teamId);
+        // 调用实现类，插入项目数据(返回项目)
         Project projectback = projectService.addProject(project, uId);
-
+        // 将新建的project丢入session中备用
         requestr.getSession().setAttribute("project",projectback);
+        // 动态-->将操作信息存入动态表,因为用到session所以在Controller中控制,不再去Service中控制,减少代码使用
+        // 动态操作
+        DynamicTool d = new DynamicTool(projectback.getpId(),"project","创建了这个项目: ",requestr,dynamicService);
+        d.newDynamic();
+
         //将数据放到modelAndView
         //向页面返回项目 ID ，，名字，，描述
         ModelAndView modelAndView=new ModelAndView();

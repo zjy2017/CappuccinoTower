@@ -2,6 +2,7 @@ package com.service.impl;
 
 import com.dao.TeamMapper;
 import com.pojo.Team;
+import com.pojo.Userandteam;
 import com.service.TeamService;
 import com.service.UserandteamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,18 @@ public class TeamServiceImpl implements TeamService {
     /**
      * 新增一个团队表
      * @param team 团队实体类
+     * @param uId 用户ID
      * @return 返回此次新增数据所自增的主键
      */
-    public int addTeam(Team team) {
+    public int addTeam(Team team,int uId) {
+        // 团队与用户表的关系--> 新建一个管队的时候创建者必为超级管理员
+        Userandteam u = new Userandteam();
         teamMapper.insert(team);
+        u.settId(team.gettId());
+        u.setuId(uId);
+        u.setType(1);
+        // 插入新的用户与团队关系
+        userandteamService.addUserandteam(u);
         return team.gettId();
     }
 

@@ -59,7 +59,6 @@ public class UserController {
 
     /**
      * 新增用户
-     *
      * @param user 封装前台关于User表内容
      * @param team 封装前台关于Team表内容
      * @return
