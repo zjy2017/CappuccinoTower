@@ -5,9 +5,7 @@ import com.dao.ProjectMapper;
 import com.dao.TatalfileMapper;
 import com.dao.TeamMapper;
 import com.pojo.*;
-import com.service.ProjectService;
-import com.service.TeamService;
-import com.service.UserandteamService;
+import com.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,15 +34,15 @@ public class ProjectServiceImpl implements ProjectService {
     // 注入TatalfileMapper依赖 [对数据库TatalfileMapper表进行操作的Dao层]
     @Autowired
     TatalfileMapper tatalfileMapper;
-
-
-    //注入TeamService依赖
+    // 注入TeamService依赖
     @Autowired
     TeamService teamService;
-
-    //注入团队和用户依赖
+    // 注入团队和用户依赖
     @Autowired
     UserandteamService userandteamService;
+    // 注入项目和用户依赖
+    @Autowired
+    UserandprojectService userandprojectService;
 
     /**
      * 创建一个新的项目
@@ -54,34 +52,25 @@ public class ProjectServiceImpl implements ProjectService {
      */
 
     public Project addProject(Project project, List<Integer> uId) {
-        //创建一个新的团队表
-        Team team = new Team();
-        team.settName(project.getpName());
-        team.setIsgroup(0);
-        //返回团队表的ID
-        int tid = teamService.addTeam(team);
-        //创建UserAndTeam表
-
-        for (int i = 0; i < uId.size(); i++) {
-            Userandteam userandteam = new Userandteam();
-            // 判断是否创建项目者本身 是则设置为超管
-            if (i == uId.size() - 1) {
-                userandteam.setType(1);
-            } else {
-                userandteam.setType(0);
-            }
-            userandteam.setuId(uId.get(i));
-            userandteam.settId(tid);
-            userandteamService.addUserandteam(userandteam);
-        }
-        // 得到团队id
-        project.settId(tid);
         // 判断是否有sensitive
         if (project.getpSensitive() == null) {
             project.setpSensitive(0);
         }
-
         projectMapper.insert(project);
+        // 创建UserAndProject表
+        for (int i = 0; i < uId.size(); i++) {
+            Userandproject userandproject = new Userandproject();
+            // 判断是否创建项目者本身 是则设置为创建者
+            if (i == uId.size() - 1) {
+                userandproject.setType(1);
+            } else {
+                userandproject.setType(0);
+            }
+            userandproject.setuId(uId.get(i));
+            // 设置项目ID
+            userandproject.setpId(project.getpId());
+            userandprojectService.addUserandproject(userandproject);
+        }
         return project;
     }
 
