@@ -39,5 +39,11 @@ public interface FileService {
      * @param fileId 根据文件ID进行查找
      * @return
      */
-    List<File> selectFile(File file,int fileId);
+    List<File> selectFile(String file, int fileId);
+
+    /**
+     * 遍历上传的文件
+     * @return
+     */
+    List<File> QueryList();
 }
