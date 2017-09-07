@@ -37,10 +37,4 @@ public interface TaskService {
      * @return
      */
     List<Task> selectTask(Task task,int i);
-
-    /**
-     * 查找所有任务
-     * @return
-     */
-    List<Task> QueryList();
 }
