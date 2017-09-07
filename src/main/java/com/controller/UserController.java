@@ -16,10 +16,10 @@ import java.util.List;
 
 /**
  * Created by BF on 2017/8/29.
- * 登录控制
+ * 登录控制,用户表增删改查
  */
 @Controller
-@RequestMapping(value = "User")
+@RequestMapping(value = "user")
 public class UserController {
     //注入依赖[UserService]
     @Autowired
@@ -36,10 +36,10 @@ public class UserController {
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
-    public int login(User user, @RequestParam("aaa") int i, HttpServletRequest request) {
+    public int login(User user, @RequestParam("loginType") int i, HttpServletRequest request) {
         List<User> userList = userService.selectUser(user, i);
         //账号不存在  返回0 前台AJAX验证账号不存在 [0代表账号不存在，返回页面显示登录失败]
-        if (userList == null || userList.size() == 0) {
+        if (userList == null || userList.get(0).getuId()==null) {
             return 0;
         } else {
             //获取返回的用户POJO
@@ -59,7 +59,6 @@ public class UserController {
 
     /**
      * 新增用户
-     *
      * @param user 封装前台关于User表内容
      * @param team 封装前台关于Team表内容
      * @return
