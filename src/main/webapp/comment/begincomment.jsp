@@ -17,7 +17,7 @@
         模拟用户名uName:<input type="text" name="uName" value="小赵">
 
         评论内容：<input type="text" name="cContent">
-        <input type="text" name="aa" value="0" hidden>
+        <input type="text" name="type" value="0" hidden>
         评论: <input type="submit" value="评论">
     </form>
     <a href="/Comment/queryComment?taskid=1">显示评论</a>
