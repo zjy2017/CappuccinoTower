@@ -10,14 +10,6 @@ import java.util.Date;
  * Created by WU on 2017/9/4.
  */
 public class TimeGetTrans {
-    //得到系统当前时间并且转换成Date类型
-    public Date getTime(){
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        java.util.Date time=null;
- * 获取当前系统时间工具类
- */
-public class TimeGetTrans {
     // slf4j日志配置
     private static final Logger _LOG = LoggerFactory.getLogger(TimeGetTrans.class);
 
