@@ -106,6 +106,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pojo.File">
+    <!-- 新增用户的时候返回此次的自增ID -->
+    <selectKey keyProperty="fileId" order="AFTER" resultType="int">
+      SELECT LAST_INSERT_ID() AS fileId
+    </selectKey>
     insert into file (file_id, file_url, file_name
       )
     values (#{fileId,jdbcType=INTEGER}, #{fileUrl,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}

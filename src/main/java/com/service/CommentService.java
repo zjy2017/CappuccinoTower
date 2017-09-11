@@ -14,9 +14,10 @@ public interface CommentService {
     /**
      * 新增一个新的讨论
      * @param comment 评论表
+     * @param Type 判断条件
      * @return 返回0表示失败，返回1表示成功
      */
-    int addComment(Comment comment);
+    Comment addComment(Comment comment, int Type);
 
     /**
      * 删除一个评论表

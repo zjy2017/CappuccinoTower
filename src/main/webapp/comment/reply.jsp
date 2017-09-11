@@ -17,16 +17,16 @@
         <%--模拟任务ID--%>
         <input type="text" name="taskId" value="1">
         <%--模拟将被评论的人的信息存入表中--%>
-        <input type="text" name="bCid" value="7">
+        <input type="text" name="bcId" value="2">
         <input type="text" name="buUsername" value="小王">
-        <input type="text" name="buId" value="1">
+        <input type="text" name="buId" value="4">
         <br>
         <br>
         <br>
         <input type="text" name="uId" value="2"><BR>
         <input type="text" name="uName" value="小赵"><BR>
         <input type="text" name="cContent"><BR>
-        <input type="text" name="aa" value="1" hidden><br>
+        <input type="text" name="type" value="2" hidden><br>
         <input type="submit" value="回复">
 
     </form>
