@@ -116,6 +116,7 @@ public class UserServiceImpl implements UserService {
             userExample.createCriteria().andUEmailEqualTo(uEmail);
             userList = userMapper.selectByExample(userExample);
         }
+
         //若查询为空则返回null
         if (userList == null || userList.size() == 0) {
             return null;
