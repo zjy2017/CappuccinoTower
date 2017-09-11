@@ -4,7 +4,6 @@ import com.pojo.Project;
 import com.pojo.User;
 import com.service.ProjectService;
 import com.service.UserService;
-import com.util.AjaxResult;
 import com.util.ObtainSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-/**对项目的操作
+/**
  * Created by WU on 2017/8/29.
  */
 @Controller
@@ -75,21 +74,20 @@ public class ProjectController {
 
     /**
      * 按照模糊查询名字 进行名字选择组员
-     * @param
+     * @param uName  用户姓名
      * @return
      */
     @RequestMapping("/selectName")
-    @ResponseBody
-    public AjaxResult checkName(User user)
+    public ModelAndView checkName(String uName)
     {
-
         // 模糊查询名字返回的List集合
-        List<User> listUser=userService.listByUname(user.getuName());
+        List<User> listUser=userService.listByUname(uName);
         ModelAndView modelAndView =new ModelAndView();
         // 将List放到ModelAndView中
         //将模糊查询到的List集合返回到页面中
-
-        return new AjaxResult(1,"操作成功",listUser);
+        modelAndView.addObject("listUser",listUser);
+        modelAndView.setViewName("project/afterselect");
+        return modelAndView;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.service.impl;
 
+import com.dao.TeamMapper;
 import com.dao.UserMapper;
 import com.pojo.Project;
 import com.pojo.Team;
@@ -25,35 +26,29 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    //注入UserMapper依赖 [对数据库进行操作的Dao层]
+    // 注入UserMapper依赖 [对数据库进行操作的Dao层]
     @Autowired
     UserMapper userMapper;
-
+    // 注入TeamService依赖 [对数据库进行操作的Sercie层]
     @Autowired
-    ProjectService projectService;
+    TeamService teamService;
 
     public int addUser(User user, Team team) {
         List<User> userList = null;
-        String uName = user.getuName();
         //创建Example对象，使用createCtiteria方法以uName查询数据库
         UserExample userExample = new UserExample();
-        userExample.createCriteria().andUNameEqualTo(uName);
+        // where uName = uName;
+        userExample.createCriteria().andUNameEqualTo(user.getuName());
+        // Where uEmail = uEmail  -->  where uName = uName or uEmail = uEmail;
+        userExample.or(userExample.createCriteria().andUEmailEqualTo(user.getuEmail()));
         //userList接受查询结果
         userList = userMapper.selectByExample(userExample);
         //若结果为空或者长度为0
         if (userList == null || userList.size() == 0) {
-            // 创建新的项目
-            Project project = new Project();
             // 添加用户
             userMapper.insert(user);
-            // 新注册用户时默认为超管
-            List<Integer> list = new ArrayList<Integer>();
-            list.add(user.getuId());
-            // 添加默认参数
-            project.setpName(team.gettName());
-            project.setIspublic(0);
-
-            projectService.addProject(project,list);
+            // 创建新的团队--> 创建者默认为超级管理员
+            teamService.addTeam(team,user.getuId());
             return 1;
         } else {
             return 0;

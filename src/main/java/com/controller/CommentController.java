@@ -3,12 +3,17 @@ package com.controller;
 import com.pojo.Comment;
 import com.pojo.User;
 import com.service.CommentService;
+import com.util.ObtainSession;
 import com.util.TimeGetTrans;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,45 +26,34 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "Comment")
+@Transactional
 public class CommentController {
-    //调用扩展类
+    // slf4j日志配置
+    private static final Logger _LOG = LoggerFactory.getLogger(CommentController.class);
     @Autowired
     CommentService commentService;
 
     //向评论表中新增数据
-    @RequestMapping(value = "insert")
-    //aa 是用来判断 是评论还是 回复
-    public String insertComment(HttpServletRequest request, int aa,Model model){
-        Comment comment=new Comment();
-       //将评论内容存入到Comment
-        comment.setcContent(request.getParameter("cContent"));
-
-        //模拟从session中获取到数据包括 uId(用户ID) taskId（任务ID） uName(用户名字)
-        comment.setuId(Integer.valueOf(request.getParameter("uId")));
-        comment.setTaskId(Integer.valueOf(request.getParameter("taskId")));
-        comment.setuName(request.getParameter("uName"));
-        //如果是回复才进去,aa==1，评论时aa==0
-        if(aa==1) {
-            //通过回复点击 触发事件 返回被评论者的id 、姓名和评论ID
-            comment.setBuUsername(request.getParameter("buUsername"));
-            comment.setBuId(Integer.valueOf(request.getParameter("buId")));
-            comment.setBcId(Integer.valueOf(request.getParameter("bCid")));
-        }
-        //将数据存入Comment数据库中
-        int i = commentService.addComment(comment);
-
-        if(i==1){
+    @RequestMapping(value = "insert",method = RequestMethod.POST)
+    //type 是用来判断 是评论还是 回复
+    public String insertComment(HttpServletRequest request, @RequestParam("type") int type, Comment comment){
+        // 为Comment补全信息
+        User user = new ObtainSession(request).getUser();
+        comment.setuId(user.getuId());
+        comment.setuName(user.getuName());
+        // 将数据存入Comment数据库中
+        comment = commentService.addComment(comment,type);
+        if(comment!=null){
             //添加成功就跳进遍历Controllor进行重新遍历
-            //自己编写URL
-            model.addAttribute("taskid",request.getParameter("taskId"));
-            return "redirect:queryComment";
+            return "success";
         }
         return "comment/fail";
     }
-
+    // TODO 点击任务后会把评论显示出来
     @RequestMapping(value = "queryComment",method = RequestMethod.GET)
     //前台要传过来一个任务ID 即 taskid
     public String queryComment(String taskid,HttpServletRequest request){
+        System.out.println(taskid);
         Comment comment=new Comment();
         //将任务ID放到一个评论表中
         comment.setTaskId(Integer.valueOf(taskid));
@@ -73,6 +67,7 @@ public class CommentController {
         return "comment/fail";
     }
 
+    // TODO 修改
     /**
      * 根据ID对要修改的评论进行查找
      * @param cid

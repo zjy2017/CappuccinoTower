@@ -6,12 +6,14 @@ package com.util;
  * @2015年5月20日
  */
 public class AjaxResult {
-	// 状态码
+
+	// 标识码
 	private int errcode = 1;
-	// 返回的操作提示
+	// 提示语句
 	private String info = "操作成功";
 	// 返回的数据
-	private Object data; //--> Object data --> list data
+	private Object data;
+	// 封装了页面数据的对象
 	private Object page;
 	
 	public AjaxResult(int errcode, String info, Object data){
