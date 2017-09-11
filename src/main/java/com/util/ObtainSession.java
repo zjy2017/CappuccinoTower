@@ -1,5 +1,6 @@
 package com.util;
 
+import com.pojo.Project;
 import com.pojo.Team;
 import com.pojo.User;
 import org.slf4j.Logger;
@@ -22,6 +23,8 @@ public class ObtainSession {
     private User user;
     // [Team实体类]  从Session中获取的Team
     private Team team;
+    // [Project实体类]  从Session中获取的Project
+    private Project project;
 
     private HttpSession session;
     // 新的构造器
@@ -44,5 +47,11 @@ public class ObtainSession {
         if (team==null)
             _LOG.error("从session中获取Team对象出错,为空");
         return this.team;
+    }
+    public Project getProject(){
+        project = (Project) session.getAttribute("project");
+        if (project==null)
+            _LOG.error("从session中获取Project对象出错,为空");
+        return this.project;
     }
 }

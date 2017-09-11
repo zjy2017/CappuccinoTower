@@ -2,6 +2,8 @@ package com.controller;
 
 import com.pojo.Task;
 import com.service.TaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,14 +18,16 @@ import java.util.List;
 
 /**
  * Created by chen on 2017/9/4.
+ * 任务控制层
  */
 @Controller
 @RequestMapping(value = "Task")
 public class TaskController {
+    // slf4j日志配置
+    private static final Logger _LOG = LoggerFactory.getLogger(TaskController.class);
     //注入依赖
     @Autowired
     private TaskService taskService;
-
     /**
      * 新增任务
      * @param task
@@ -31,20 +35,21 @@ public class TaskController {
      * @return
      */
     @RequestMapping(value = "AddTask",method = RequestMethod.POST)
-    //aa用来判断是从清单里添加还是直接添加的任务  aa=1是从清单里创建任务   aa=0是直接创建任务
-    public String addTask(Task task, HttpServletRequest request,String taskinfoid,int aa){
+    // aa用来判断是从清单里添加还是直接添加的任务  aa=1是从清单里创建任务   aa=0是直接创建任务
+    // TODO 优化参数  重设返回值
+    public void addTask(Task task, HttpServletRequest request,String taskinfoid,int aa){
         if(aa==1)
         {
             task.setTaskinfoId(Integer.valueOf(taskinfoid));
         }
+        // 返回此次新增任务的ID
         int i = taskService.addTask(task);
-        request.getSession().setAttribute("task",task);
-        request.getSession().setAttribute("taskid",i);
-        if(i!=0){
-            return "AllSuccess";
-        }else{
-            return "AllFail";
+        if (i==0){
+            _LOG.error("向数据库插入新的一个任务出错 --> Controller层");
         }
+
+        task.setTaskId(i);
+
     }
 
     /**

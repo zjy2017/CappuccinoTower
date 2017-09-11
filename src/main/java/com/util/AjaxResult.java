@@ -7,16 +7,13 @@ package com.util;
  */
 public class AjaxResult {
 
-	public Object getPage() {
-		return page;
-	}
-	public void setPage(Object page) {
-		this.page = page;
-	}
-
+	// 标识码
 	private int errcode = 1;
+	// 提示语句
 	private String info = "操作成功";
+	// 返回的数据
 	private Object data;
+	// 封装了页面数据的对象
 	private Object page;
 	
 	public AjaxResult(int errcode, String info, Object data){
@@ -54,7 +51,12 @@ public class AjaxResult {
 	public AjaxResult(){
 		
 	}
-
+	public Object getPage() {
+		return page;
+	}
+	public void setPage(Object page) {
+		this.page = page;
+	}
 	public int geterrcode() {
 		return errcode;
 	}

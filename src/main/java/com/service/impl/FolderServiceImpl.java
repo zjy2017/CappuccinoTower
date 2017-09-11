@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by chen on 2017/9/6.
+ * 文件夹的增删改查[Folder]
  */
 @Service
 public class FolderServiceImpl implements FolderService{

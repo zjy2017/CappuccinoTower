@@ -2,8 +2,11 @@ package com.controller;
 
 import com.service.FileService;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,31 +22,49 @@ import java.util.List;
 
 /**
  * Created by chen on 2017/8/30.
+ * 文件控制层
+ * TODO 还没整合文件总表 没有编写
  */
 @RequestMapping("/file")
 @Controller
+@Transactional
 public class FileController {
+
+    // slf4j日志配置
+    private static final Logger _LOG = LoggerFactory.getLogger(FileController.class);
     @Autowired
     private FileService fileService;
+
+    /**
+     * 上传文件Controller
+     * @param file springMVC 文件上传控件
+     * @param request
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "uploadfile", method = RequestMethod.POST)
     public String doUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
 
         if (file.isEmpty()) {
-            System.out.println(file.getOriginalFilename());
             String fileName = file.getOriginalFilename();
+            // 获取存放路径
             String filePath = request.getSession().getServletContext().getRealPath("/") + "upload/";
             com.pojo.File file1 = new com.pojo.File();
             file1.setFileUrl(filePath);
             file1.setFileName(fileName);
-            int i=fileService.addFile(file1);
-            if(i==1){
-                System.out.println("上传成功");
-            }else if(i==0){
-                System.out.println("上传失败");
+            // 将文件数据存入数据库
+            file1 = fileService.addFile(file1);
+            if(file1!=null){
+                _LOG.info("FileController中把文件存入数据库成功！");
+            }else if(file1==null){
+                _LOG.error("FileController中文件存入数据库失败");
             }
-            System.out.println("fileName = " + fileName);
-            FileUtils.copyInputStreamToFile(file.getInputStream(), new File(filePath, fileName));
-            System.out.println("------------Process File:{},Size:{}--------------"+filePath);
+            try {
+                FileUtils.copyInputStreamToFile(file.getInputStream(), new File(filePath, fileName));
+            }catch (Exception e){
+                _LOG.error("文件流输入发生错误");
+                throw new IOException();
+            }
             return "File/success1";
         }
         return "File/upload";
@@ -51,13 +72,18 @@ public class FileController {
 
     /**
      * 列出上传的文件
+     * @param request
+     * @return
      */
     @RequestMapping(value = "listfile")
     public ModelAndView listfile(HttpServletRequest request){
-        //返回所有的file
+        // 返回所有的file
         List<com.pojo.File> fileList = fileService.QueryList();
-        System.out.println(fileList);
-        request.getSession().setAttribute("fileList",fileList);
+        if (fileList==null||fileList.size()==0){
+            _LOG.error("去除文件列表时候为空");
+            throw new NullPointerException();
+        }
+        //TODO 单例模式存取数据
         ModelAndView modelAndView = new ModelAndView();
         //将List放到ModelandView中
         modelAndView.addObject("fileList",fileList);
@@ -65,6 +91,11 @@ public class FileController {
         return modelAndView;
     }
 
+    /**
+     * 下载文件
+     * @param request
+     * @param response
+     */
     @RequestMapping(value = "downloadfile" ,method = RequestMethod.GET)
     public void downloadfile(HttpServletRequest request, HttpServletResponse response){
         System.out.println("1");
@@ -82,8 +113,6 @@ public class FileController {
             fileName = new String(fileName.getBytes("iso8859-1"),"UTF-8");
             System.out.println("3");
             //获取上传文件的目录
-//            ServletContext sc = request.getSession().getServletContext();
-//            System.out.println("4");
 
             //得到要下载的文件
             File file = new File(filePath+"\\"+fileName);
@@ -120,15 +149,20 @@ public class FileController {
         }
     }
 
-
+    /**
+     * 删除文件
+     * @param fileId
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "deletefile",method = RequestMethod.GET)
-    public String deletefile(String fileId,HttpServletRequest request){
-        int fileId1 = Integer.parseInt(fileId);
-        int i = fileService.deleteFile(fileId1);
-        if(i==1){
-            return "success1";
-        }else{
-            return "filelist1";
+    public String deletefile(int fileId,HttpServletRequest request){
+        try{
+            fileService.deleteFile(fileId);
+        }catch (Exception e){
+            _LOG.error("FileController层删除文件出错！");
         }
+
+        return null;
     }
 }
