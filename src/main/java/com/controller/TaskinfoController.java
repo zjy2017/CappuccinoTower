@@ -1,7 +1,11 @@
 package com.controller;
 
+import com.pojo.Project;
 import com.pojo.Taskinfo;
 import com.service.TaskinfoService;
+import com.util.ObtainSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +18,16 @@ import java.util.List;
 
 /**
  * Created by chen on 2017/9/5.
+ * 任务清单控制器
  */
 @Controller
 @Transactional
 @RequestMapping(value = "TaskInfo")
 public class TaskinfoController {
+    // slf4j日志配置
+    private static final Logger _LOG = LoggerFactory.getLogger(TaskinfoController.class);
+
+
     @Autowired
     private TaskinfoService taskinfoService;
 
@@ -30,21 +39,19 @@ public class TaskinfoController {
      */
     @RequestMapping(value = "addTaskInfo")
     public String addTaskInfo(Taskinfo taskinfo, HttpServletRequest request){
-        //调用addTaskinfo方法
-        System.out.println(taskinfo+"______________________________");
-        int TaskinfoId = taskinfoService.addTaskinfo(taskinfo);
-        System.out.println(TaskinfoId+"____________________________");
-        //将刚创建的任务清单对象存入session中
-        request.getSession().setAttribute("TaskinfoId",TaskinfoId);
-        if(TaskinfoId!=0){
-            return "task/createTask";
-        }else{
-            return "AllFail";
+        int pId = new ObtainSession(request).getProject().getpId();
+        //调用addTaskinfo方法   --> 返回了任务清单的ID
+        taskinfo = taskinfoService.addTaskinfo(taskinfo,pId);
+        //TODO 将刚创建的任务清单对象存入session中
+        request.getSession().setAttribute("taskinfo",taskinfo);
+        if(taskinfo==null){
+            _LOG.error("向数据库插入数据失败");
         }
+        return "AllFail";
     }
 
     /**
-     * 任务清单创建后的信息显示
+     * 任务清单创建后的信息显示    无用，整合完后看是否删除
      * @param taskinfo
      * @param taskinfoid
      * @param request
@@ -70,45 +77,37 @@ public class TaskinfoController {
     /**
      * 更新任务清单信息
      * @param taskinfo
-     * @param taskinfoId
-     * @param request
      * @return
      */
+    //TODO 貌似不用Request.getParmeter 获取不到值
     @RequestMapping(value = "updateTaskInfo",method = RequestMethod.POST)
-    public String updateTaskInfo(Taskinfo taskinfo,String taskinfoId,HttpServletRequest request){
-        HttpSession session = request.getSession();
-        //将修改的数据取出
-        String taskinfoName=request.getParameter("taskinfoName");
-        String takinfoDescribe=request.getParameter("takinfoDescribe");
-        taskinfo = (Taskinfo) request.getSession().getAttribute("taskinfo1");
-        //存入对象中
-        taskinfo.setTaskinfoName(taskinfoName);
-        taskinfo.setTakinfoDescribe(takinfoDescribe);
+    public String updateTaskInfo(Taskinfo taskinfo){
+        // TODO 前端传ID记得隐藏
         //调用
-        int i=taskinfoService.updateTaskinfo(taskinfo);
-        System.out.println(taskinfo+"!!!!!!!!!!!!!!");
-        session.setAttribute("TaskinfoId",taskinfo.getTaskinfoId());
-        if(i==1){
-            System.out.println("更新成功");
+        taskinfo = taskinfoService.updateTaskinfo(taskinfo);
+
+        if (taskinfo!=null)
+        {
             return "AllSuccess";
-        }else if(i==0){
-            System.out.println("更新失败");
-            return "AllFail";
         }
         return null;
     }
 
     /**
-     * 任务清单列表
+     * 遍历任务清单列表
      * @param request
      * @return
      */
+    //TODO 到时候返回一个Map 封装成JSON
     @RequestMapping(value = "taskInfoList")
     public String TaskInfoList (HttpServletRequest request){
         //调用querylist方法将所有任务清单取出
         List<Taskinfo> taskinfoList = taskinfoService.QueryList();
-        //存入session中，返回页面
-        request.getSession().setAttribute("taskinfoList",taskinfoList);
+        if (taskinfoList==null||taskinfoList.size()==0) {
+            _LOG.error("读取到的任务清单列表为空");
+            return null;
+        }
+        // 以Map格式返回JSOn数据
         return "TaskInfo/TaskinfoList";
     }
 

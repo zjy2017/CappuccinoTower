@@ -93,8 +93,7 @@ public class ProjectServiceImpl implements ProjectService {
         try {
             // 删除项目
             projectMapper.deleteByPrimaryKey(project.getpId());
-            // 删除团队
-            teamService.deleteTeam(project.gettId());
+            // TODO 还没写删除其子目录
             // 如果讨论不为空,则删除讨论总表
             if (project.getDiscusallid()!=null){
                 discusMapper.deleteByPrimaryKey(project.getDiscusallid());
@@ -120,8 +119,12 @@ public class ProjectServiceImpl implements ProjectService {
      */
     public int updateProject(Project project) {
         //Mybatis会默认为text类型的自动生成 withBlOBs 来对 数据库进行修改
-        projectMapper.updateByPrimaryKeyWithBLOBs(project);
-        return 1;
+        try{
+            projectMapper.updateByPrimaryKeyWithBLOBs(project);
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
     }
 
 
@@ -157,7 +160,6 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * 对根据用户ID 对项目表进行遍历
-     *
      * @return
      */
     public List<Project> QueryList(int uId) {

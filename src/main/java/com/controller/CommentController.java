@@ -35,20 +35,14 @@ public class CommentController {
 
     //向评论表中新增数据
     @RequestMapping(value = "insert",method = RequestMethod.POST)
-    //aa 是用来判断 是评论还是 回复
+    //type 是用来判断 是评论还是 回复
     public String insertComment(HttpServletRequest request, @RequestParam("type") int type, Comment comment){
         // 为Comment补全信息
         User user = new ObtainSession(request).getUser();
         comment.setuId(user.getuId());
         comment.setuName(user.getuName());
-
-        // 如果是回复才进去,aa==1，评论时aa==0
-        if(type==1) {
-            commentService.selectComment(comment,1);
-        }
         // 将数据存入Comment数据库中
         comment = commentService.addComment(comment,type);
-
         if(comment!=null){
             //添加成功就跳进遍历Controllor进行重新遍历
             return "success";

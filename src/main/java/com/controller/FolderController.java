@@ -14,11 +14,13 @@ import java.util.List;
 
 /**
  * Created by chen on 2017/9/6.
+ * 文件夹控制器
  */
 @Controller
 @RequestMapping(value = "Folder")
 @Transactional
 public class FolderController {
+
     @Autowired
     FolderService folderService;
 

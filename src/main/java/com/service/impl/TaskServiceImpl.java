@@ -6,6 +6,8 @@ import com.pojo.Task;
 import com.pojo.TaskExample;
 import com.service.TaskService;
 import com.util.TimeGetTrans;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +19,17 @@ import java.util.List;
  */
 @Service
 public class TaskServiceImpl implements TaskService {
+
+    // slf4j日志配置
+    private static final Logger _LOG = LoggerFactory.getLogger(TaskServiceImpl.class);
     @Autowired
     TaskMapper taskMapper;
+
+    /**
+     * 新增任务
+     * @param task 任务实体类
+     * @return
+     */
     public int addTask(Task task) {
         //对taskinfo进行判断, taskinfoid为0 即使没有清单的任务
         if(task.getTaskinfoId()==null){
@@ -27,7 +38,12 @@ public class TaskServiceImpl implements TaskService {
 
         TimeGetTrans timeGetTrans=new TimeGetTrans();
         task.setTaskCreatetime(timeGetTrans.getTime());
-         taskMapper.insert(task);
+        try{
+            taskMapper.insert(task);
+        }catch (Exception e){
+            _LOG.error("新增任务出错 --> Service层");
+            return 0;
+        }
         return task.getTaskId();
     }
 
