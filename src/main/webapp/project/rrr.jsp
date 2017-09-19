@@ -61,30 +61,30 @@
             $("#td2").blur(function(e) {
                 if ($("#td2").val() != "请输入你的名字") {
 
-                    $.ajax({
-                        type: "Post",
-                        url: "/user/login",
-                        dataType: "json",
-                        data: {
-                            uName: $("#td2").val(),
-                            uPassword: 000000000000,
-                            loginType: 1,
-                        },
-                        success: function (date) {
-                            if (date.errcode == 0) {
-                                $("#td21").html("该用户名可以使用");
-                                $("#td21").css({"color": "#F00"});
-                            }
-                            if (date.errcode == 1) {
-                                $("#td21").html("该用户名已经存在");
-                                $("#td21").css({"color": "#F00"});
-                            }
-                        },
-                        error: function () {
-                            alert("错误信息")
+                $.ajax({
+                    type: "Post",
+                    url: "/user/login",
+                    dataType: "json",
+                    data: {
+                        uName: $("#td2").val(),
+                        uPassword: 000000000000,
+                        loginType: 1,
+                    },
+                    success: function (date) {
+                        if (date.errcode == 0) {
+                            $("#td21").html("该用户名可以使用");
+                            $("#td21").css({"color": "#F00"});
                         }
-                    })
-                }//if的结束
+                        if (date.errcode == 1) {
+                            $("#td21").html("该用户名已经存在");
+                            $("#td21").css({"color": "#F00"});
+                        }
+                    },
+                    error: function () {
+                        alert("错误信息")
+                    }
+                })
+            }//if的结束
             })
 
             //验证邮箱是否合法
@@ -127,13 +127,12 @@
             //验证密码是否符合要求
             $("#td4").blur(function () {
                 var password=$("#td4").val();
-                if(password.length<6){
-                    $("#td41").html("密码长度要大于6");
-                    $("#td41").css({"color": "#F00"});
+                    if(password.length<6){
+                        $("#td41").html("密码长度要大于6");
+                        $("#td41").css({"color": "#F00"});
                 }else{
-                    $("#td41").html("密码可以使用");
-                    $("#td41").css({"color": "#F00"});
-                }
+                        $("#td41").remove();
+                    }
             })
 
 

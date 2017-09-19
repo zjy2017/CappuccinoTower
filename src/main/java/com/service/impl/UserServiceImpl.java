@@ -111,6 +111,7 @@ public class UserServiceImpl implements UserService {
             userExample.createCriteria().andUEmailEqualTo(uEmail);
             userList = userMapper.selectByExample(userExample);
         }
+
         //若查询为空则返回null
         if (userList == null || userList.size() == 0) {
             return null;
@@ -141,7 +142,10 @@ public class UserServiceImpl implements UserService {
         //select u_id, u_email, u_password, u_picture, u_name from user WHERE u_name like '%小%';
         //将按照uName查找到的List 返回
         listByUname = userMapper.selectByExample(userExample);
-        return listByUname;
+        if(listByUname!=null&&listByUname.size()!=0){
+            return listByUname;
+        }
+        return null;
     }
 
     /**
