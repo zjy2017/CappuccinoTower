@@ -30,9 +30,9 @@ public class CommentServiceImpl implements CommentService{
      * @return
      */
     public int addComment(Comment comment) {
-        //调用工具类获取系统当前时间并转换成Date格式
+        // 调用工具类获取系统当前时间并转换成Date格式
         TimeGetTrans time=new TimeGetTrans();
-        //测试一下时间是否正确
+        // 测试一下时间是否正确
         System.out.println();
         //将获取的时间放到 comment
         comment.setcTime(time.getTime());
@@ -48,6 +48,10 @@ public class CommentServiceImpl implements CommentService{
         commentMapper.insert(comment);
 
         return 1;
+    }
+
+    public Comment addComment(Comment comment, int Type) {
+        return null;
     }
 
     /**

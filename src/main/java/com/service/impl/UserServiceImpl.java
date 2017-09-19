@@ -142,7 +142,10 @@ public class UserServiceImpl implements UserService {
         //select u_id, u_email, u_password, u_picture, u_name from user WHERE u_name like '%小%';
         //将按照uName查找到的List 返回
         listByUname = userMapper.selectByExample(userExample);
-        return listByUname;
+        if(listByUname!=null&&listByUname.size()!=0){
+            return listByUname;
+        }
+        return null;
     }
 
     /**

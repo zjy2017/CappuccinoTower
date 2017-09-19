@@ -72,8 +72,12 @@ public class UserandteamServiceImpl implements UserandteamService {
         //根据uId(用户ID)查找tId（团队编号）
         if(i==0)
         {
-            userandteam1 = userandteamMapper.selectByPrimaryKey(userandteam.getUtId());
-            userandteamList.add(userandteam1);
+            UserandteamExample userandteamExample=new UserandteamExample();
+            userandteamExample.createCriteria().andUIdEqualTo(userandteam.getuId());
+            userandteamList= userandteamMapper.selectByExample(userandteamExample);
+
+            System.out.println(userandteamList.get(0).gettId()+"这是团队id");
+
             //userandteamList
             if(userandteamList==null&&userandteamList.size()==0){
                 System.out.println("没有查询到数据");

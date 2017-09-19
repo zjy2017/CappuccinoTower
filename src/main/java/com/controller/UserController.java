@@ -101,6 +101,4 @@ public class UserController {
             System.out.println("错误的操作,用户信息错误,将其赶回登录界面");
         }
     }
-
-
 }
