@@ -2,13 +2,11 @@ package com.service.impl;
 
 import com.dao.TeamMapper;
 import com.dao.UserMapper;
-import com.pojo.Project;
-import com.pojo.Team;
-import com.pojo.User;
-import com.pojo.UserExample;
+import com.pojo.*;
 import com.service.ProjectService;
 import com.service.TeamService;
 import com.service.UserService;
+import com.service.UserandteamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +30,9 @@ public class UserServiceImpl implements UserService {
     // 注入TeamService依赖 [对数据库进行操作的Sercie层]
     @Autowired
     TeamService teamService;
+    //注入团队和用户依赖
+    @Autowired
+    UserandteamService userandteamService;
 
     public int addUser(User user, Team team) {
         List<User> userList = null;
@@ -152,11 +153,28 @@ public class UserServiceImpl implements UserService {
      * 遍历整个User表   稍后删掉
      * @return
      */
-    public List<User> QueryList(){
-        List<User> list=null;
-        UserExample userExample=new UserExample();
-        userExample.setDistinct(true);
-        list=userMapper.selectByExample(userExample);
-        return list;
+    public List<User> QueryList(int tId){
+        Userandteam userandteam = new Userandteam();
+        //将tId放到userandteam对象中去
+        userandteam.settId(tId);
+        //根据tId（团队ID）查询uId（用户编号）通过userandteam表
+        //得到团队中的用户 List
+        List<Userandteam> userandteamList = userandteamService.selectUserandteam(userandteam,2);
+
+        List<User> userList = new ArrayList<User>();
+        for(int i=0;i<userandteamList.size();i++){
+            UserExample userExample = new UserExample();
+            userExample.createCriteria().andUIdEqualTo(userandteamList.get(i).getuId());
+            List<User> users = userMapper.selectByExample(userExample);
+            userList.add(users.get(0));
+        }
+        //判断
+        if(userList!=null||userList.size()!=0){
+            return userList;
+        }else{
+            System.out.println("没有查询到1111");
+            return null;
+        }
+
     }
 }

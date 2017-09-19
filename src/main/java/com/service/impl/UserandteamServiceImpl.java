@@ -76,8 +76,6 @@ public class UserandteamServiceImpl implements UserandteamService {
             userandteamExample.createCriteria().andUIdEqualTo(userandteam.getuId());
             userandteamList= userandteamMapper.selectByExample(userandteamExample);
 
-            System.out.println(userandteamList.get(0).gettId()+"这是团队id");
-
             //userandteamList
             if(userandteamList==null&&userandteamList.size()==0){
                 System.out.println("没有查询到数据");
@@ -100,6 +98,24 @@ public class UserandteamServiceImpl implements UserandteamService {
                 return null;
             }else {
                 // 返回List数组
+                return userandteamList;
+            }
+        }
+        if(i==2)
+        {
+            //根据tid查询用户id
+            UserandteamExample userandteamExample=new UserandteamExample();
+            userandteamExample.createCriteria().andTIdEqualTo(userandteam.gettId());
+            userandteamList= userandteamMapper.selectByExample(userandteamExample);
+
+            System.out.println(userandteamList.get(0).getuId()+"这是用户id");
+
+            //userandteamList
+            if(userandteamList==null&&userandteamList.size()==0){
+                System.out.println("没有查询到数据");
+                return null;
+            }else {
+                System.out.println("返回了List集合");
                 return userandteamList;
             }
         }
