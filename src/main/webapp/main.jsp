@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>团队-Power</title>
+    <title>新页面~~~~~~~</title>
     <link rel="stylesheet" href="resources/css/index.css" />
     <link rel="stylesheet" type="text/css" href="resources/js/jquery-easyui-1.4.5/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="resources/js/jquery-easyui-1.4.5/themes/icon.css">
@@ -31,7 +31,61 @@
             $(".icon-filter").tooltip()
         })
 
+        function godynamic() {
+            alert($("#select1_1").val());
+            $.ajax({
+                type:"Post",
+                url:"/dynamic/DynamicList",
+                dataType:"json",
+                data:{
+                    tId:$("#select1_1").val(),
+                },
+                success:function (result) {
+                    if(result.errcode==1){
+                        location.href="dynamic/dynamic.jsp?tId="+$('#select1_1').val();
+                    }
+                    if(result.errcode==0){
+                        alert("生成动态列表失败");
+                    }
+                },
+                error:function () {
+                    alert("生成动态列表失败11111");
+                }
+            })
 
+
+        }
+
+        $(document).ready(function () {
+            $("#下拉菜单")
+            $.ajax({
+                type:"POST",
+                url:"/team/TeamByUid",
+                dataType:"json",
+                data:{
+                    uId:${user.uId},
+                },
+                success : function (result) {
+                    $.each(result.data,function (n,v) {
+                        var op="<option value="+v.tId+">"+v.tName+"</option>"
+                        $("#select1_1").append(op);
+                    })
+
+                },
+                error:function () {
+                    alert("错错错")
+                }
+            })
+
+        })
+
+        $("#select1_1").change(function () {
+            alert($("#select1_1").val());
+            $.ajax({
+                type:"POST",
+                url:""
+            })
+        })
     </script>
 
     <style>
@@ -51,25 +105,17 @@
 
 <div style="margin-left: 100px;margin-top: 30px;">
     <div id="下拉菜单">
-        <a href="javascript:void(0)" id="mb" class="easyui-menubutton"
-           data-options="menu:'#mm'" style="color:red;">卡布其诺 ▼</a>
+        <select id="select1_1">
+        </select>
 
         <div id="mm" style="width:150px;">
             <div class="menu-sep"></div>
-            <div>团队账户</div>
-            <div>应用中心</div>
-            <div>邀请成员</div>
-            <div>团队统计（PRO）</div>
-            <div>升级为Pro版</div>
-            <div class="menu-sep"></div>
-            <div>切换团队：EDG</div>
-            <div class="menu-sep"></div>
-            <div>创建管理团队</div>
+
         </div>
 
         <span style="margin-left: 40px;">
     		<a href="#" style="color: coral;margin-left: 40px;">项目</a>
-    		<a href="#" style="color: coral;margin-left: 40px;">动态</a>
+            <button onclick=godynamic() style="color: coral;margin-left: 40px;">动态</button>
     		<a href="#" style="color: coral;margin-left: 40px;">周报</a>
     		<a href="#" style="color: coral;margin-left: 40px;">团队</a>
     		<a href="#" style="color: coral;margin-left: 40px;">我自己</a>
