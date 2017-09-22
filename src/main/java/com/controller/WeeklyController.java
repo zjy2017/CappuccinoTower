@@ -39,6 +39,8 @@ public class WeeklyController {
      */
     @RequestMapping(value = "addWeekly")
     public AjaxResult addWeekly(Weekly weekly, HttpServletRequest request){
+
+
         int i = weeklyService.addWeekly(weekly,0);
         if(i==1){
             int wId = weekly.getWeeklyId();
