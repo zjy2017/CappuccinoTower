@@ -43,9 +43,9 @@
             })
         })
     </script>
-    <%--页面开始时遍历所有成员--%>
     <script type="text/javascript">
         $(document).ready(function () {
+            <%--页面开始时遍历所有成员--%>
             $.ajax({
                 type:"Post",
                 url:"/userandteam/QueryUserByTid",
@@ -55,11 +55,38 @@
                 },
                 success:function (result) {
                     $.each(result.data,function (n,v) {
-                        $("#query1").append("<div>"+v.uName+"</div>")
+                        if(v.type==1){
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "超级管理员</a>" +
+                                "<a style='margin-left:730px;'>"+v.uEmail+"</a><br>")
+                        }else{
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "</a>" +
+                                "<a style='margin-left:800px;'>"+v.uEmail+"</a><br>")
+                        }
+
                     })
                 },
                 error:function () {
                    alert("遍历组员失败")
+                }
+            })
+
+            <%--开始时遍历分组的名字--%>
+            $.ajax({
+                type:"Post",
+                url:"/group/QueryGroupByTid",
+                dataType:"json",
+                data:{
+                    tId:${param.tId},
+                },
+                success:function (result) {
+                    $.each(result.data,function (n,v) {
+                        $("#inteam").append("<button>"+v.gName+"</button>")
+                    })
+                },
+                error:function () {
+                    alert("分组名遍历失败");
                 }
             })
         })
@@ -74,14 +101,15 @@
     </div>
     <br>
     <button class="team_btn" id="inteam_team" onclick="">所有成员</button>
-    <button class="team_btn" id="inteam_invite" style="margin-left: 0px;">邀请新成员</button>
-    <button class="team_btn" id="inteam_newgroup">新建分组</button>
+    <div class="team_btn" id="inteam_group"></div>
+    <button class="team_btn" id="inteam_invite" style="margin-left:650px;">邀请新成员</button>
+    <button class="team_btn" id="inteam_newgroup" style="">新建分组</button>
     <div class="menu-sep" style="margin-left: 0px;margin-top: 20px;margin-bottom: 20px;width: 1000px;"></div>
 </div>
 
 <%--遍历组员--%>
 <div id="query" >
-    <div id="query1" ></div>
+    <div id="query1" style="color: slateblue;font-weight: bold; margin-left: 80px;margin-top: -60px;margin-bottom: 10px;"></div>
 </div>
 <!--新建分组-->
 <div id="team_newgroup" style="margin-left: 80px;margin-top: -60px;">

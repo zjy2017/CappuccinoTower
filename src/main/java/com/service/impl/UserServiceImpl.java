@@ -1,11 +1,11 @@
 package com.service.impl;
 
+import com.dao.GroupofteamMapper;
 import com.dao.TeamMapper;
 import com.dao.UserMapper;
 import com.dao.UserandteamMapper;
 import com.dto.TeamforJsp;
 import com.pojo.*;
-import com.service.ProjectService;
 import com.service.TeamService;
 import com.service.UserService;
 import com.service.UserandteamService;
@@ -41,6 +41,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     TeamMapper teamMapper;
+
+    @Autowired
+    GroupofteamMapper groupofteamMapper;
 
 
     public int addUser(User user, Team team) {
@@ -213,6 +216,8 @@ public class UserServiceImpl implements UserService {
             teamforJsp.setuEmail(user.getuEmail());
             if(team.getIsgroup()!=0){
                 //带改善
+            }else{
+
             }
             teamforJspList.add(teamforJsp);
         }

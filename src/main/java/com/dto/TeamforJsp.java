@@ -24,6 +24,11 @@ public class TeamforJsp {
     private Integer gId;
 
     /**
+     * 分组名字
+     */
+    private String gName;
+
+    /**
      * 用户编号（主键）
      */
     private Integer uId;
@@ -47,6 +52,15 @@ public class TeamforJsp {
      * 用户身份，默认为0（0为组员，1为超管，2为普通管理员，其他为游客）
      */
     private Integer type;
+
+    public String getgName() {
+        return gName;
+    }
+
+    public void setgName(String gName) {
+        this.gName = gName;
+    }
+
 
     public Integer gettId() {
         return tId;
