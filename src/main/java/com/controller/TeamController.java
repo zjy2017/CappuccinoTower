@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class TeamController {
 
     @RequestMapping(value = "TeamByUid")
     @ResponseBody
-    public AjaxResult TeamByUid(@RequestParam("uId")int uId,Userandteam userandteam){
+    public AjaxResult TeamByUid(@RequestParam("uId")int uId, Userandteam userandteam, HttpServletRequest request){
         List<Team> teamList1 = new ArrayList<Team>();
         userandteam.setuId(uId);
         List<Userandteam> userandteamList = userandteamService.selectUserandteam(userandteam, 0);

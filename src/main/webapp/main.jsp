@@ -32,7 +32,6 @@
         })
 
         function godynamic() {
-            alert($("#select1_1").val());
             $.ajax({
                 type:"Post",
                 url:"/dynamic/DynamicList",
@@ -88,6 +87,32 @@
         })
     </script>
 
+    <%--跳转到团队界面--%>
+    <script type="text/javascript">
+        function goteam() {
+            $.ajax({
+                type:"Post",
+                url:"/userandteam/judgeUser",
+                dataType:"json",
+                data:{
+                    tId:$('#select1_1').val(),
+                },
+                success:function (result) {
+                    if(result.errcode){
+                        if(result.data.type==1){
+                            location.href = "team/teamformanger.jsp?tId="+result.data.tId+"";
+                        }
+                        if(result.data.type==0){
+                            location.href = "team/teamfornumber.jsp?tId="+result.data.tId+"";
+                        }
+                    }
+                },
+                error:function () {
+                    alert("跳转到团队失败了");
+                }
+            })
+        }
+    </script>
     <style>
         iframe{
             position: absolute;height: 1000px;width: 1100px;
@@ -117,7 +142,7 @@
     		<a href="#" style="color: coral;margin-left: 40px;">项目</a>
             <button onclick=godynamic() style="color: coral;margin-left: 40px;">动态</button>
     		<a href="#" style="color: coral;margin-left: 40px;">周报</a>
-    		<a href="#" style="color: coral;margin-left: 40px;">团队</a>
+    		<button onclick=goteam()>团队</button>
     		<a href="#" style="color: coral;margin-left: 40px;">我自己</a>
     		<a href="#" style="color: coral;margin-left: 40px;">知人</a>
     		<a href="#" style="color: coral;margin-left: 40px;">升级到Pro</a>
