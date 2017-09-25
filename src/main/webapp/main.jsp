@@ -29,6 +29,38 @@
                 $("#通知框").hide()
             })
             $(".icon-filter").tooltip()
+            // 第一次进来遍历所有团队
+            $.ajax({
+                type:"POST",
+                url:"/user/queryTeam",
+                dataType:"json",
+                success : function (result) {
+                    alert("成功")
+                    $.each(result.data,function (n,v) {
+                        var op="<option value="+v.tId+">"+v.tName+"</option>"
+                        $("#select1_1").append(op);
+                    })
+
+                },
+                error:function () {
+                    alert("错错错")
+                }
+            })
+            // 切换团队
+            $("#select1_1").change(function () {
+                alert($("#select1_1").val());
+                $.ajax({
+                    type:"POST",
+                    url:"/user/changeTeam",
+                    dataType:"json",
+                    data:{
+                        tId:$("#select1_1").val(),
+                    },
+                    success:function (result) {
+                        alert("切换团队成功");
+                    }
+                })
+            })
         })
 
         function godynamic() {
@@ -52,40 +84,13 @@
                     alert("生成动态列表失败11111");
                 }
             })
-
-
         }
 
-        $(document).ready(function () {
-            $("#下拉菜单")
-            $.ajax({
-                type:"POST",
-                url:"/team/TeamByUid",
-                dataType:"json",
-                data:{
-                    uId:${user.uId},
-                },
-                success : function (result) {
-                    $.each(result.data,function (n,v) {
-                        var op="<option value="+v.tId+">"+v.tName+"</option>"
-                        $("#select1_1").append(op);
-                    })
+        function goweekly() {
+                        location.href="/weekly/weekly.jsp";
+        }
 
-                },
-                error:function () {
-                    alert("错错错")
-                }
-            })
 
-        })
-
-        $("#select1_1").change(function () {
-            alert($("#select1_1").val());
-            $.ajax({
-                type:"POST",
-                url:""
-            })
-        })
     </script>
 
     <style>
@@ -116,7 +121,7 @@
         <span style="margin-left: 40px;">
     		<a href="#" style="color: coral;margin-left: 40px;">项目</a>
             <button onclick=godynamic() style="color: coral;margin-left: 40px;">动态</button>
-    		<a href="#" style="color: coral;margin-left: 40px;">周报</a>
+    		<button onclick=goweekly() style="color: coral;margin-left: 40px;">周报</button>
     		<a href="#" style="color: coral;margin-left: 40px;">团队</a>
     		<a href="#" style="color: coral;margin-left: 40px;">我自己</a>
     		<a href="#" style="color: coral;margin-left: 40px;">知人</a>
