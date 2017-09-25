@@ -1,5 +1,6 @@
 package com.service;
 
+import com.dto.TeamforJsp;
 import com.pojo.Groupofteam;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface GroupService {
      * @param group 分组实体类
      * @return 返回0表示失败，返回1表示成功
      */
-    int addGroup(Groupofteam group);
+    int addGroup(int[] uId,Groupofteam groupofteam);
 
     /**
      * 删除一个分组
@@ -39,4 +40,11 @@ public interface GroupService {
      * @return
      */
     List<Groupofteam> selectGroup(Groupofteam group,int gId);
+
+    /**
+     * 根据gId 返回一个DTO
+     * @param gId
+     * @return
+     */
+    public List<TeamforJsp> SelectUserByGid(int gId);
 }

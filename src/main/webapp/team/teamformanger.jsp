@@ -30,22 +30,22 @@
             $("#team_newgroup").hide()
             $("#team_invite").hide()
 
-            $("#inteam_newgroup").click(function(){
-
-                $("#team_invite").hide()
-                $("#team_newgroup").show()
-            })
+//            $("#inteam_newgroup").click(function(){
+//                $("#query1").html("");
+//                $("#team_invite").hide()
+//                $("#team_newgroup").show()
+//            })
 
             $("#inteam_invite").click(function(){
-
-                $("#team_newgroup").hide()
-                $("#team_invite").show()
+                $("#query1").html("");
+                $("#team_newgroup").hide();
+                $("#team_invite").show();
             })
         })
     </script>
+    <%--遍历团队人员--%>
     <script type="text/javascript">
         $(document).ready(function () {
-            <%--页面开始时遍历所有成员--%>
             $.ajax({
                 type:"Post",
                 url:"/userandteam/QueryUserByTid",
@@ -55,6 +55,7 @@
                 },
                 success:function (result) {
                     $.each(result.data,function (n,v) {
+                        $("#topic").html(v.tName);
                         if(v.type==1){
                             $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
                                 "超级管理员</a>" +
@@ -72,7 +73,11 @@
                 }
             })
 
-            <%--开始时遍历分组的名字--%>
+        })
+    </script>
+    <%--遍历分组--%>
+    <script type="text/javascript">
+        $(document).ready(function () {
             $.ajax({
                 type:"Post",
                 url:"/group/QueryGroupByTid",
@@ -82,7 +87,8 @@
                 },
                 success:function (result) {
                     $.each(result.data,function (n,v) {
-                        $("#inteam").append("<button>"+v.gName+"</button>")
+                        $("#inteam_group").append("" +
+                            "<a class='team_btn' onclick='selectGroup(this)' id='"+v.gId+"'>"+v.gName+"</a>")
                     })
                 },
                 error:function () {
@@ -92,18 +98,147 @@
         })
     </script>
 
+    <%--根据gid进行查询组员--%>
+    <script type="text/javascript">
+        function selectGroup(obj) {
+            var gId=obj.id;
+            $.ajax({
+                type:"Post",
+                url:"/group/SelectUserByGid",
+                dataType:"json",
+                data:{
+                    gId:gId,
+                },
+                success:function (result) {
+                    $("#query1").html("");
+                    $.each(result.data,function (n,v) {
+                        if(v.type==1){
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "超级管理员</a>" +
+                                "<a style='margin-left:730px;'>"+v.uEmail+"</a><br>")
+                        }else{
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "</a>" +
+                                "<a style='margin-left:800px;'>"+v.uEmail+"</a><br>")
+                        }
+
+                    })
+                },
+                error:function () {
+                    alert("小组成员遍历错误")
+                }
+
+            })
+        }
+    </script>
+
+    <%--按钮所有成员的操作--%>
+    <script type="text/javascript">
+        function selectteam() {
+            $.ajax({
+                type:"Post",
+                url:"/userandteam/QueryUserByTid",
+                dataType:"json",
+                data:{
+                    tId:${param.tId},
+                },
+                success:function (result) {
+                    $("#query1").html("");
+                    $.each(result.data,function (n,v) {
+                        if(v.type==1){
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "超级管理员</a>" +
+                                "<a style='margin-left:730px;'>"+v.uEmail+"</a><br>")
+                        }else{
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "</a>" +
+                                "<a style='margin-left:800px;'>"+v.uEmail+"</a><br>")
+                        }
+
+                    })
+                },
+                error:function () {
+                    alert("遍历组员失败")
+                }
+            })
+        }
+    </script>
+
+    <%--遍历所有的组员，放到checkbox中等待选择--%>
+    <script type="text/javascript">
+        function createnewgroup() {
+            $.ajax({
+                type:"Post",
+                url:"/userandteam/QueryUserByTid",
+                dataType:"json",
+                data:{
+                    tId:${param.tId},
+                },
+                success:function (result) {
+                    $.each(result.data,function (n,v) {
+                        $("#query1").html("");
+                        $("#team_invite").hide();
+                        $("#team_newgroup").show();
+                        if(v.type==1){
+                            $("#checkboxuser").append("<input type='checkbox' id='checkbox-2-"+v.uId+"' value='"+v.uId+"' name='uId' checked>" +
+                                "<label for='checkbox-2-"+v.uId+"' style='height: 10px;width: 50px;text-align: left;font-weight: bold;font-size: 18px;'>"+v.uName+"</label>")
+                        }else{
+                            $("#checkboxuser").append("<input type='checkbox' id='checkbox-2-"+v.uId+"' value='"+v.uId+"' name='uId'>" +
+                                "<label for='checkbox-2-"+v.uId+"' style='height: 10px;width: 50px;text-align: left;font-weight: bold;font-size: 18px;'>"+v.uName+"</label>")
+                        }
+
+                    })
+                },
+                error:function () {
+                    alert("遍历组员失败")
+                }
+            })
+        }
+    </script>
+    
+    <%--新建分组--%>
+    <script type="text/javascript">
+        function addGroup() {
+            var arr=[];
+            $("input[type='checkbox']:checked").each(function(){
+                arr.push(this.value);
+            });
+            //数组转换成json，都在了，数组和json
+
+            $.ajax({
+                type:"Post",
+                url:"/group/addGroup",
+                dataType:"json",
+                data:{
+                    tId:${param.tId},
+                    uId:arr,
+                    gName:$("#gName").val(),
+                },
+                success:function (result) {
+                    if(result.errcode==1){
+                        alert("新增分组成功")
+                    }
+                },
+                error:function () {
+                    alert("添加分组失败")
+                }
+            })
+
+        }
+    </script>
 </head>
 
 <body style="background-color: #212121;">
 <div style="margin: 90px;">
     <div class="container">
-        <a style="font-size: 35px;">卡布奇诺</a>
+        <a id="topic" style="font-size: 35px;"></a>
     </div>
     <br>
-    <button class="team_btn" id="inteam_team" onclick="">所有成员</button>
-    <div class="team_btn" id="inteam_group"></div>
+    <a id="inteam_group">
+    <button class="team_btn" id="inteam_team" onclick="selectteam()">所有成员</button>
+    </a>
     <button class="team_btn" id="inteam_invite" style="margin-left:650px;">邀请新成员</button>
-    <button class="team_btn" id="inteam_newgroup" style="">新建分组</button>
+    <button class="team_btn" id="inteam_newgroup" style="" onclick="createnewgroup()">新建分组</button>
     <div class="menu-sep" style="margin-left: 0px;margin-top: 20px;margin-bottom: 20px;width: 1000px;"></div>
 </div>
 
@@ -111,27 +246,29 @@
 <div id="query" >
     <div id="query1" style="color: slateblue;font-weight: bold; margin-left: 80px;margin-top: -60px;margin-bottom: 10px;"></div>
 </div>
+<%--遍历分组成员--%>
+<div id="selectgroup">
+    <div id="selectgroup1"></div>
+</div>
 <!--新建分组-->
 <div id="team_newgroup" style="margin-left: 80px;margin-top: -60px;">
     <div class="container">
         <a style="font-size: 25px;">新建成员分组</a></div>
     <br>
-    <textarea placeholder="成员分组名称" style="margin-top: 10px; color:slateblue;background-color: #212121; margin-left: 10px;border-radius: calc(5px); resize: none;height: 25px;width: 300px;"></textarea>
+    <input id="gName" placeholder="成员分组名称" style="margin-top: 10px; color:slateblue;background-color: #212121; margin-left: 10px;border-radius: calc(5px); resize: none;height: 25px;width: 300px;"></input>
     <br>
     <br>
     <div class="container">
         <a style="margin-left: 0px;font-size: 25px;color: white;">选择成员</a>
     </div>
     <br><br>&nbsp;&nbsp;
-    <input type="checkbox" id="checkbox-2-1" />
-    <label for="checkbox-2-1" style="height: 10px;width: 50px;text-align: left;font-weight: bold;font-size: 18px;">BF</label>
-    <input type="checkbox" id="checkbox-2-2" />
-    <label for="checkbox-2-2" style="height: 10px;width: 50px;text-align: left;font-weight: bold;font-size: 18px;">YG</label>
-    <input type="checkbox" id="checkbox-2-3" />
-    <label for="checkbox-2-3" style="height: 10px;width: 50px;text-align: left;font-weight: bold;font-size: 18px;">JX</label>
+    <div id="checkboxuser">
+
+    </div>
+
     <div class="menu-sep" style="margin-left: 10px;margin-top: 20px;margin-bottom: 20px;width: 1000px;"></div>
     <button class="team_btn"  style="margin-left: 10px;width: 170px;border-color: #212121;">邀请新成员加入分组</button><br>
-    <button class="team_btn"  style="margin-left: 40px;">保存设置</button>
+    <button class="team_btn"  style="margin-left: 40px;" onclick="addGroup()">保存设置</button>
 
 </div>
 

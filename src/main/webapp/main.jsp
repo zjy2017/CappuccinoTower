@@ -51,9 +51,8 @@
                     alert("生成动态列表失败11111");
                 }
             })
-
-
         }
+
 
         $(document).ready(function () {
             $("#下拉菜单")

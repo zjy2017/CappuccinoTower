@@ -2,7 +2,7 @@
   Created by IntelliJ IDEA.
   User: WU
   Date: 2017/9/21
-  Time: 9:01
+  Time: 8:35
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -40,12 +40,131 @@
 
                 $("#team_newgroup").hide()
                 $("#team_invite").show()
+            })
+        })
+    </script>
+    <%--遍历团队人员--%>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                type:"Post",
+                url:"/userandteam/QueryUserByTid",
+                dataType:"json",
+                data:{
+                    tId:${param.tId},
+                },
+                success:function (result) {
+                    $.each(result.data,function (n,v) {
+                        $("#topic").html(v.tName);
+                        if(v.type==1){
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "超级管理员</a>" +
+                                "<a style='margin-left:730px;'>"+v.uEmail+"</a><br>")
+                        }else{
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "</a>" +
+                                "<a style='margin-left:800px;'>"+v.uEmail+"</a><br>")
+                        }
 
+                    })
+                },
+                error:function () {
+                    alert("遍历组员失败")
+                }
             })
 
         })
     </script>
+    <%--遍历分组--%>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                type:"Post",
+                url:"/group/QueryGroupByTid",
+                dataType:"json",
+                data:{
+                    tId:${param.tId},
+                },
+                success:function (result) {
+                    if(result.errcode==1) {
+                        $.each(result.data, function (n, v) {
+                            $("#inteam_group").append("" +
+                                "<a class='team_btn' onclick='selectGroup(this)' id='" + v.gId + "'>" + v.gName + "</a>")
+                        })
+                    }
+                },
+                error:function () {
+                    alert("分组名遍历失败");
+                }
+            })
+        })
+    </script>
 
+    <%--根据gid进行查询组员--%>
+    <script type="text/javascript">
+        function selectGroup(obj) {
+            var gId=obj.id;
+            $.ajax({
+                type:"Post",
+                url:"/group/SelectUserByGid",
+                dataType:"json",
+                data:{
+                    gId:gId,
+                },
+                success:function (result) {
+                    $("#query1").html("");
+                    $.each(result.data,function (n,v) {
+                        if(v.type==1){
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "超级管理员</a>" +
+                                "<a style='margin-left:730px;'>"+v.uEmail+"</a><br>")
+                        }else{
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "</a>" +
+                                "<a style='margin-left:800px;'>"+v.uEmail+"</a><br>")
+                        }
+
+                    })
+                },
+                error:function () {
+                    alert("小组成员遍历错误")
+                }
+
+            })
+        }
+    </script>
+
+    <%--按钮所有成员的操作--%>
+    <script type="text/javascript">
+        function selectteam() {
+            $.ajax({
+                type:"Post",
+                url:"/userandteam/QueryUserByTid",
+                dataType:"json",
+                data:{
+                    tId:${param.tId},
+                },
+                success:function (result) {
+                    $("#query1").html("");
+                    $.each(result.data,function (n,v) {
+                        if(v.type==1){
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "超级管理员</a>" +
+                                "<a style='margin-left:730px;'>"+v.uEmail+"</a><br>")
+                        }else{
+                            $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
+                                "</a>" +
+                                "<a style='margin-left:800px;'>"+v.uEmail+"</a><br>")
+                        }
+
+                    })
+                },
+                error:function () {
+                    alert("遍历组员失败")
+                }
+            })
+        }
+    </script>
 </head>
 
 <body style="background-color: #212121;">
@@ -54,11 +173,21 @@
         <a style="font-size: 35px;">卡布奇诺</a>
     </div>
     <br>
-    <button class="team_btn" id="inteam_invite" style="margin-left: 0px;">邀请新成员</button>
-    <button class="team_btn" id="inteam_newgroup">新建分组</button>
+    <a id="inteam_group">
+        <button class="team_btn" id="inteam_team" onclick="selectteam()">所有成员</button>
+    </a>
+
     <div class="menu-sep" style="margin-left: 0px;margin-top: 20px;margin-bottom: 20px;width: 1000px;"></div>
 </div>
 
+<%--遍历组员--%>
+<div id="query" >
+    <div id="query1" style="color: slateblue;font-weight: bold; margin-left: 80px;margin-top: -60px;margin-bottom: 10px;"></div>
+</div>
+<%--遍历分组成员--%>
+<div id="selectgroup">
+    <div id="selectgroup1"></div>
+</div>
 <!--新建分组-->
 <div id="team_newgroup" style="margin-left: 80px;margin-top: -60px;">
     <div class="container">
@@ -97,6 +226,7 @@
         <a style="font-size: 20px;">通过微信扫码，邀请好友</a></div><br>
     <a style="font-size: 15px;color: grey;margin-left: 90px;">用微信扫描二维码获取邀请函，转发给微信好友/群，即可邀请他们加入你的团队。</a>
 </div>
+
 </div>
 </body>
 
