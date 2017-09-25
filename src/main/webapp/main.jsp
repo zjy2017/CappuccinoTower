@@ -29,6 +29,38 @@
                 $("#通知框").hide()
             })
             $(".icon-filter").tooltip()
+            // 第一次进来遍历所有团队
+            $.ajax({
+                type:"POST",
+                url:"/user/queryTeam",
+                dataType:"json",
+                success : function (result) {
+                    alert("成功")
+                    $.each(result.data,function (n,v) {
+                        var op="<option value="+v.tId+">"+v.tName+"</option>"
+                        $("#select1_1").append(op);
+                    })
+
+                },
+                error:function () {
+                    alert("错错错")
+                }
+            })
+            // 切换团队
+            $("#select1_1").change(function () {
+                alert($("#select1_1").val());
+                $.ajax({
+                    type:"POST",
+                    url:"/user/changeTeam",
+                    dataType:"json",
+                    data:{
+                        tId:$("#select1_1").val(),
+                    },
+                    success:function (result) {
+                        alert("切换团队成功");
+                    }
+                })
+            })
         })
 
         function godynamic() {
@@ -52,8 +84,6 @@
                 }
             })
         }
-
-
         $(document).ready(function () {
             $("#下拉菜单")
             $.ajax({
@@ -74,16 +104,6 @@
                     alert("错错错")
                 }
             })
-
-        })
-
-        $("#select1_1").change(function () {
-            alert($("#select1_1").val());
-            $.ajax({
-                type:"POST",
-                url:""
-            })
-        })
     </script>
 
     <%--跳转到团队界面--%>
