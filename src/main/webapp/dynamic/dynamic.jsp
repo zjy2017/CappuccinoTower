@@ -19,8 +19,38 @@
     <script type="text/javascript" src="../resources/js/jquery-easyui-1.4.5/jquery.min.js"></script>
     <script type="text/javascript" src="../resources/js/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../resources/js/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
-    
+
     <script type="text/javascript">
+        /**
+         * 把毫秒级时间转换成字符串,保留时分秒
+         * 格式：yyyy年MM月dd日 hh点mm分ss秒
+         * @param date
+         * @returns {string}
+         */
+        function dateFormatDetail(date) {
+            var dateStr = new Date(v.date);
+            // 重写toString方法
+            Date.prototype.toLocaleString = function() {
+                return this.getFullYear() + "年" + (this.getMonth() + 1) + "月" + this.getDate() + "日 " + this.getHours() + "点" + this.getMinutes() + "分" + this.getSeconds() + "秒";
+            };
+            return dateStr.toLocaleString();
+        }
+
+        /**
+         * 把毫秒级时间转换成字符串
+         * 格式：yyyy年MM月dd日
+         * @param date
+         * @returns {string}
+         */
+        function dateFormat(date) {
+            var dateStr = new Date(date);
+            // 重写toString方法
+            Date.prototype.toLocaleString = function() {
+                return this.getFullYear() + "年" + (this.getMonth() + 1) + "月" + this.getDate() + "日";
+            };
+            return dateStr.toLocaleString();
+        }
+        //打开动态页面，自动遍历当前团队所有动态
          $(document).ready(function () {
              $.ajax({
                  type:"Post",
@@ -31,7 +61,7 @@
                  },
                  success:function (result) {
                         $.each(result.data,function (n,v) {
-                            $("#ul1_1").append("<li><h1>"+v.pName+"</h1><div>"+v.date+"</div>" +
+                            $("#ul1_1").append("<li><h1>"+v.pName+"</h1><div>"+dateFormat(v.date)+"</div>" +
                                 "<div>"+v.uname+":"+v.action+"</div></li>")
                         })
                      },
@@ -43,6 +73,7 @@
          })
     </script>
     <script type="text/javascript">
+        //打开动态页面，在select1中遍历用户在该团队中所有项目
         $(document).ready(function () {
            $("#select1")
             $.ajax({
@@ -65,6 +96,7 @@
                 })
 
 
+            //点击select1中的项目执行该方法，显示被点击项目的动态列表
             $("#select1").change(function () {
                  $.ajax({
                      type:"POST",
@@ -78,7 +110,7 @@
                          if(result.errcode==1){
                              $("#ul1_1").html("");
                              $.each(result.data,function (n,v) {
-                                 $("#ul1_1").append("<li><h1>"+v.pName+"</h1><div>"+v.date+"</div>" +
+                                 $("#ul1_1").append("<li><h1>"+v.pName+"</h1><div>"+dateFormat(v.date)+"</div>" +
                                      "<div>"+v.uname+":"+v.action+"</div></li>")
                              })
                          }else{
@@ -88,6 +120,7 @@
                  })
             })
 
+            ////打开动态页面，在select2中遍历该团队中所有组员
             $("#select2")
             $.ajax({
                 type:"POST",
@@ -108,6 +141,7 @@
                 }
             })
 
+            //点击select2中的组员执行该方法，显示被点击组员的动态列表
             $("#select2").change(function () {
                 $.ajax({
                     type:"POST",
@@ -121,7 +155,7 @@
                         if(result.errcode==1){
                             $("#ul1_1").html("");
                             $.each(result.data,function (n,v) {
-                                $("#ul1_1").append("<li><h1>"+v.pName+"</h1><div>"+v.date+"</div>" +
+                                $("#ul1_1").append("<li><h1>"+v.pName+"</h1><div>"+dateFormat(v.date)+"</div>" +
                                     "<div>"+v.uname+":"+v.action+"</div></li>")
                             })
                         }else{
