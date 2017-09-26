@@ -310,6 +310,130 @@
             background-position: right center;
         }
     </style>
+
+
+    <%--对项目进行操作--%>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //            页面加载时遍历项目信息
+            $.ajax({
+                type:"Post",
+                url:"/project/displayProject",
+                dataType:"json",
+                data:{
+                    pId:${param.pId},
+                },
+                success:function (result) {
+                    $("#project").append("<h2 style='font-size: 25px;color: deeppink'>"+result.data.pName+"</h2>" +
+                    "<h3 style='font-size: 15px;color: grey;margin-top: 0px;'>"+result.data.pDescribe+"</h3>")
+                },
+                error:function () {
+                    alert("项目输出错了");
+                }
+            })
+        })
+
+        //页面加载时遍历任务清单
+        $(document).ready(function () {
+            $.ajax({
+                type:"Post",
+                url:"/TaskInfo/taskInfoList",
+                dataType:"json",
+                data:{
+                    pId:${param.pId},
+                },
+                success:function (result) {
+                    $.each(result.data,function (n,v) {
+                        $("#task_list").append("<div><div><h2>" +
+                            "<a href='../TaskInfo/displayonetaskinfo.jsp?taskinfoId="+v.taskinfoId+"'>"+v.taskinfoName+"</a>" +
+                            "</h2></div></div><br>")
+                    })
+                },
+                error:function () {
+                    alert("任务遍历失败");
+                },
+            })
+        })
+
+        //页面加载时遍历讨论表
+        $(document).ready(function () {
+            $.ajax({
+                type:"Post",
+                url:"/discus/QueryDiscus",
+                dataType:"json",
+                data:{
+                    pId:${param.pId},
+                },
+                success:function (result) {
+                    $.each(result.data,function (n,v) {
+                        $("#discus_all").append("<a class='ps_btn' style='display: inline;font-size: 20px;'>"+v.uName+"</a><br>" +
+                            "<a  href='../discus/discusAndcomment.jsp?discusId="+v.discusId+"'>" +
+                            "<h3 class='ps_btn' style='color: white;margin-left:0px; font-weight: bold;'>"+v.dTopic+"</h3></a>" +
+                            "<div class='discuss1' style='color: grey;margin-left:0px;font-size: 15px;'>"+v.dContent+"</div>")
+                    })
+                },
+                error:function () {
+                    alert("遍历评论错了")
+                }
+            })
+        })
+
+        //页面加载的时候加载文件和文件夹
+        $(document).ready(function () {
+            $.ajax({
+                type:"Post",
+                url:"/total/QueryFileByPid",
+                dataType:"json",
+                data:{
+                    pId:${param.pId},
+                },
+                success:function (result) {
+                    $.each(result.data,function (n,v) {
+                        if(v.type==0){
+                            $("#file_folderdiv").append("<i class='icono-folder' id='file_folder"+v.fileId+"' style='cursor: pointer;margin-left: 10px;'></i><span style='color: white;' id='"+v.fileId+"'>"+v.fileName+"</span>");
+                        }
+                        if(v.type==1){
+                            $("#file_folderdiv").append("<i class='icono-folder' id='file_folder"+v.folderId+"' style='cursor: pointer;margin-left: 10px;'></i><span style='color: white;' id='"+v.folderId+"'><a href=''>"+v.folderName+"</a></span>")
+                        }
+                    })
+                },
+                error:function () {
+                    alert("文件遍历了失败");
+                }
+            })
+        })
+    </script>
+
+    <script type="text/javascript">
+        //打开上传文件的表单
+        function upfile() {
+            $("#uploadForm").show();
+        }
+        //关闭上传文件的表单
+        function closefile() {
+            $("#uploadForm").hide();
+        }
+        //        上传文件
+        function doUpload() {
+            var formData = new FormData($("#uploadForm")[0]);
+            //用form 表单直接 构造formData 对象就不需要下面的append 方法来为表单进行赋值了。
+            $.ajax({
+                url: "/file/uploadfile",
+                type: "Post",
+                data: formData,
+                async: false,//要求同步 不是不需看你的需求
+                cache: false,
+                contentType: false,  //必须false才会自动加上正确的Content-Type
+                processData: false, //必须false才会避开jQuery对 formdata 的默认处理
+                success: function (result) {
+                    alert(result.errcode);
+                },
+                error: function () {
+                    alert("上传失败");
+                }
+            })
+        }
+    </script>
 </head>
 
 <body style="background-color: #212121;">
@@ -317,10 +441,10 @@
     <!--最上面的部分-->
     <div>
 				<span>
-				<div class="container">
-				<a style="font-size: 25px;color: deeppink">晚会</a></div><br>
-				<a style="font-size: 15px;color: grey;margin-top: 0px;">一个很酷的晚会</a>
-			</span>
+				    <div id="project" class="container">
+                    </div>
+                    <br>
+			    </span>
         <span style="margin-left: 830px;margin-top: -30px;">
 				<span> <button class="ps_btn" id="incount" href="#" style="border: none;">待处理任务（10）</button> </span>
 				<span> <button class="ps_btn" id="inmember" href="#" style="border: none;">成员（2）</button> </span>
@@ -575,28 +699,23 @@
 
         <!--任务栏-->
         <div id="task_alltask" style="margin-left: 200px;margin-top: -30px;">
-            <a style="font-size: 25px;color: white;">当前任务</a>
-            <br>
-            <br>
-            <input id="mycheckboxt1" name="a" type="checkbox" class="checkbix" data-shape="circled" data-text="">
-            <a id="task1" href="#" style="color: pink;margin-left: -10px;">600个俯卧撑</a>
-            <br>
-            <input id="mycheckboxt2" name="b" type="checkbox" class="checkbix" data-shape="circled" data-text="">
-            <a href="#" style="color: pink;margin-left: -10px;">800个仰卧起坐</a>
-            <br>
-            <input id="mycheckboxt3" name="c" type="checkbox" class="checkbix" data-shape="circled" data-text="">
-            <a href="#" style="color: pink;margin-left: -10px;">20公里慢跑</a>
+            <%--<a style="font-size: 25px;color: white;">当前任务</a>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<input id="mycheckboxt1" name="a" type="checkbox" class="checkbix" data-shape="circled" data-text="">--%>
+            <%--<a id="task1" href="#" style="color: pink;margin-left: -10px;">600个俯卧撑</a>--%>
+            <%--<br>--%>
+            <%--<input id="mycheckboxt2" name="b" type="checkbox" class="checkbix" data-shape="circled" data-text="">--%>
+            <%--<a href="#" style="color: pink;margin-left: -10px;">800个仰卧起坐</a>--%>
+            <%--<br>--%>
+            <%--<input id="mycheckboxt3" name="c" type="checkbox" class="checkbix" data-shape="circled" data-text="">--%>
+            <%--<a href="#" style="color: pink;margin-left: -10px;">20公里慢跑</a>--%>
 
             <!--清单栏-->
-            <div style="margin-left: 0px;margin-top: 30px;">
+            <div id="task_list" style="margin-left: 0px;margin-top: 30px;">
                 <a style="font-size: 25px;color: white;">当前清单</a>
                 <br>
-                <br>
-                <a href="#" id="list1" style="color: pink;margin-left: 20px;">买1斤大白菜</a>
-                <br>
-                <a href="#" style="color: pink;margin-left: 20px;">借6瓶酱油</a>
-                <br>
-                <a href="#" style="color: pink;margin-left: 20px;">抢60张A4纸</a>
+           </a>
             </div>
         </div>
     </div>
@@ -623,18 +742,13 @@
             <button id="adddiscuss_cancel" class="ps_btn" style="font-size: 20px;">取消</button>
         </div>
         <!--讨论列表-->
-        <div style="margin-left: 210px;margin-top:10px;">
-
+        <div id="discus_all" style="margin-left: 210px;margin-top:10px;">
             <a style="font-size: 25px;color: white;">当前讨论</a>
-            <br>
-            <br>
-
-            <a><img src="img/fzl5.jpg" height="50px" /></a>
-            <button class="ps_btn" href="#" style="display: inline;font-size: 20px;">PG ONE万磁王</button>
-            </br>
-            </br>
-            <a class="discuss1 " href="#	" style="color: white;margin-left: 55px; font-weight: bold;">竞猜：谁是冠军!!</a></br>
-            <a class="discuss1 " href="#" style="color: grey;margin-left: 55px;font-size: 15px;">大家都来说说今晚我会不会拿冠军</a>
+            <%--<button class="ps_btn" href="#" style="display: inline;font-size: 20px;">PG ONE万磁王</button>--%>
+            <%--</br>--%>
+            <%--</br>--%>
+            <%--<a class="discuss1 " href="#	" style="color: white;margin-left: 55px; font-weight: bold;">竞猜：谁是冠军!!</a></br>--%>
+            <%--<a class="discuss1 " href="#" style="color: grey;margin-left: 55px;font-size: 15px;">大家都来说说今晚我会不会拿冠军</a>--%>
             <!--评论列表-->
             <div style="margin-left: 55px;margin-top:10px;">
                 <a id="discuss_newcom" style="color: white;font-size: 15px;"><span>勇郭：</span>这是一条新添加的评论</a>
@@ -666,7 +780,12 @@
             <li>
                 <a id="inaddtask1" href="#">- 上传文件 -</a>
                 <ul class="submenu">
-                    <li><a id="inaddtask2" style="text-align: center;" href="#">上传文件</a></li>
+                    <li><a id="inaddtask2" style="text-align: center;" onclick="upfile()">上传文件</a></li>
+                    <li><form id= "uploadForm" enctype="multipart/form-data" hidden >
+                        <table><tr><td>上传文件:<input class="ps_btn" type="file" name="file"/></td></tr>
+                        <tr><td><input type="button" value="上传" onclick="doUpload()" class="ps_btn"/>
+                        <td><button onclick="closefile()" class="ps_btn">取消</button></td></tr></table>
+                    </form></li>
                     <li><a id="inaddlist" style="text-align: center;" href="#">创建文件夹</a></li>
                 </ul>
             </li>
@@ -676,19 +795,19 @@
             <a style="font-size: 25px;color: white;">文件夹列表</a>
             <br>
             <br>
-            <span style="color: white;">
-					<i class="icono-folder" id="file_folder1" style="cursor: pointer;margin-left: 10px;"></i>
-					 需求文档
-				</span>
-            <span style="color: white;margin-left: 20px;">
-					<i class="icono-folder" id="file_folder2" style="cursor: pointer;margin-left: 10px;"></i>
-					 参考资料
-				</span>
-            <br>
-            <br>
-            <br>
-            <br>
-            <button class="ps_btn" id="inallfile" style="border: none;">查看所有文件</button>
+            <%--<span style="color: white;">--%>
+					<%--<i class="icono-folder" id="file_folder1" style="cursor: pointer;margin-left: 10px;"></i>--%>
+					 <%--需求文档--%>
+				<%--</span>--%>
+            <%--<span style="color: white;margin-left: 20px;">--%>
+					<%--<i class="icono-folder" id="file_folder2" style="cursor: pointer;margin-left: 10px;"></i>--%>
+					 <%--参考资料--%>
+				<%--</span>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<button class="ps_btn" id="inallfile" style="border: none;">查看所有文件</button>--%>
         </div>
 
         <!--需求文档点进去文件列表-->

@@ -253,11 +253,10 @@ public class ProjectController {
     public AjaxResult displayProject(@RequestParam("pId")int pId,HttpServletRequest request){
         System.out.println("进来了dis");
         int uId=new ObtainSession(request).getUser().getuId();
-        Project project = projectService.projectALL(pId, uId);
-        System.out.println(project.getpName());
-        if (project!=null){
-            request.getSession().setAttribute("project",project);
-            return new AjaxResult(1,"成功",project);
+        ProjectList projectList = projectService.projectALL(pId, uId);
+        System.out.println(projectList.getpName());
+        if (projectList!=null){
+            return new AjaxResult(1,"成功",projectList);
         }
         return new AjaxResult(0,"失败");
     }

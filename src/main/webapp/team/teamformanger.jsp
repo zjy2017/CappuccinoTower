@@ -111,6 +111,8 @@
                 },
                 success:function (result) {
                     $("#query1").html("");
+                    $("#team_newgroup").hide();
+                    $("#team_invite").hide();
                     $.each(result.data,function (n,v) {
                         if(v.type==1){
                             $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
@@ -144,6 +146,8 @@
                 },
                 success:function (result) {
                     $("#query1").html("");
+                    $("#team_newgroup").hide();
+                    $("#team_invite").hide();
                     $.each(result.data,function (n,v) {
                         if(v.type==1){
                             $("#query1").append("<a><a href='../user/userfromteam.jsp?uId="+v.uId+"'>"+v.uName+"</a>" +
@@ -175,10 +179,12 @@
                     tId:${param.tId},
                 },
                 success:function (result) {
+                    $("#query1").html("");
+                    $("#team_invite").hide();
+                    $("#team_newgroup").show();
+                    $("#checkboxuser").html("");
                     $.each(result.data,function (n,v) {
-                        $("#query1").html("");
-                        $("#team_invite").hide();
-                        $("#team_newgroup").show();
+
                         if(v.type==1){
                             $("#checkboxuser").append("<input type='checkbox' id='checkbox-2-"+v.uId+"' value='"+v.uId+"' name='uId' checked>" +
                                 "<label for='checkbox-2-"+v.uId+"' style='height: 10px;width: 50px;text-align: left;font-weight: bold;font-size: 18px;'>"+v.uName+"</label>")

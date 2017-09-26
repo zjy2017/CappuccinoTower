@@ -2,6 +2,7 @@ package com.service.impl;
 
 import com.dao.DiscusMapper;
 import com.dao.ProjectMapper;
+
 import com.dao.TeamMapper;
 import com.dao.TotalfileMapper;
 import com.dto.ProjectList;
@@ -34,7 +35,7 @@ public class ProjectServiceImpl implements ProjectService {
     DiscusMapper discusMapper;
     // 注入TatalfileMapper依赖 [对数据库TatalfileMapper表进行操作的Dao层]
     @Autowired
-    TotalfileMapper tatalfileMapper;
+    TotalfileMapper totalfileMapper;
     // 注入TeamService依赖
     @Autowired
     TeamService teamService;
@@ -102,7 +103,7 @@ public class ProjectServiceImpl implements ProjectService {
             }
             // 如果文件不为空，则删除文件总表
             if (project.getfTotalid()!=null){
-                tatalfileMapper.deleteByPrimaryKey(project.getfTotalid());
+                totalfileMapper.deleteByPrimaryKey(project.getfTotalid());
             }
             return 1;
         } catch (Exception e) {
@@ -200,7 +201,7 @@ public class ProjectServiceImpl implements ProjectService {
      * 将项目的相关信息全部遍历出来
      * @return
      */
-    public Project projectALL(int pId,int uId){
+    public ProjectList projectALL(int pId,int uId){
         //创建ProjectList,返回web层的对象
         ProjectList projectList=new ProjectList();
         //根据pId查找出项目的信息；
@@ -211,7 +212,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectList.setpDescribe(project.getpDescribe());
         projectList.setIspublic(project.getIspublic());
         projectList.setpSensitive(project.getpSensitive());
-        return project;
+        return projectList;
     }
 
 }
