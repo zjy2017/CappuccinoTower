@@ -42,10 +42,6 @@
             })
             $(".icon-filter").tooltip()
 
-
-
-
-
         })
 
         /*$("#manmenu1").hover(function(){
@@ -78,10 +74,91 @@
 
     </script>
 
+    <%--页面加载时遍历团队--%>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                type:"POST",
+                url:"/user/queryTeam",
+                dataType:"json",
+                success : function (result) {
+                    $.each(result.data,function (n,v) {
+                        var op="<option value="+v.tId+">"+v.tName+"</option>"
+                        $("#queryTeam").append(op);
+                    })
+
+                },
+                error:function () {
+                    alert("遍历团队错误");
+                }
+            })
+
+            // 切换团队
+            $("#queryTeam").change(function () {
+                $.ajax({
+                    type:"POST",
+                    url:"/user/changeTeam",
+                    dataType:"json",
+                    data:{
+                        tId:$("#queryTeam").val(),
+                    },
+                    success:function (result) {
+                    },
+                    error:function () {
+                        alert("变换团队失败");
+                    }
+                })
+            })
+            //  团队变化时遍历项目
+            $("#queryTeam").change(function () {
+
+                $.ajax({
+                    type:"POST",
+                    url:"/team/ProjectByTid",
+                    dataType:"json",
+                    success:function (result) {
+                        document.getElementById("program_index").src="program_index.jsp";
+//                        document.getElementById('program_index').contentWindow.location.reload(true);
+                    },
+                    error:function () {
+                        alert("遍历项目失败———团队变换时");
+                    }
+                })
+            })
+
+        })
+    </script>
+    <%--跳转到团队时进行判断--%>
+    <script type="text/javascript">
+        function goteam() {
+            $.ajax({
+                type:"Post",
+                url:"/userandteam/judgeUser",
+                dataType:"json",
+                data:{
+                    tId:$('#queryTeam').val(),
+                },
+                success:function (result) {
+                    if(result.errcode){
+                        if(result.data.type==1){
+                            document.getElementById("program_index").src="../team/teamformanger.jsp?tId="+result.data.tId+"";
+                        }
+                        if(result.data.type==0){
+                            document.getElementById("program_index").src="../team/teamfornumber.jsp?tId="+result.data.tId+"";
+                        }
+                    }
+                },
+                error:function () {
+                    alert("跳转到团队失败了");
+                }
+            })
+        }
+    </script>
+
     <style>
         iframe{
-            position: absolute;height:1500px;width: 1000px;
-            margin-top: 70px;margin-left: 170px;
+            position: absolute;height:1500px;width: 1320px;
+            margin-top: 70px;margin-left: 60px;
 
         }
     </style>
@@ -89,7 +166,7 @@
 
 <body style="background-color:#212121;">
 
-<iframe  id="if" src="http://localhost:8080/main/program_index.jsp"
+<iframe  id="program_index" src="http://localhost:8080/main/program_index.jsp"
          frameborder="0" scrolling="no"></iframe>
 
 
@@ -97,17 +174,9 @@
 
 
     <div class="back" style="z-index: 1000;">
-        <a href="#" class="btn-back">
-            <div style="background-color: darkgrey">
-            </div>
-            <span style="font-size: 15px;">选择团队</span>
-        </a>
         <div class="menu-back">
-            <ul class="nav-links">
-                <li><a href="#">卡布奇诺</a></li>
-                <li><a href="#">欧米伽小分队</a></li>
-                <li class="active"><a href="#">创建 / 管理团队</a></li>
-            </ul>
+            <select id="queryTeam" class="nav-links">
+            </select>
         </div>
     </div>
 
@@ -116,7 +185,7 @@
     		<a href="#" style="color: pink;margin-left: 40px;font-size: 25px;">项目</a>
     		<a href="#" style="color: #ffdd4d;margin-left: 40px;font-size: 25px;">动态</a>
     		<a href="#" style="color: #0abd6a;margin-left: 40px;font-size: 25px;">周报</a>
-    		<a href="#" style="color: slateblue;margin-left: 40px;font-size: 25px;">团队</a>
+    		<a href="#" style="color: slateblue;margin-left: 40px;font-size: 25px;" onclick="goteam()">团队</a>
     		<a href="#" style="color: deepskyblue;margin-left: 40px;font-size: 25px;">我自己</a>
     		</span>
 

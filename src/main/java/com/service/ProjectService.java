@@ -35,7 +35,7 @@ public interface ProjectService {
      * @param i 根据什么来查找 （0代表ID，1代表项目名）
      * @return 返回0代表失败，1代表成功
      */
-    List<Project> selectProject(Project project,int i);
+    List<Project> selectProject(Project project, int i);
 
 
     /**
@@ -47,5 +47,5 @@ public interface ProjectService {
     /**
      * 将一个项目的相关信息全部遍历出来
      */
-    public Project projectALL(int pId, int uId);
+    public ProjectList projectALL(int pId, int uId);
 }

@@ -1,9 +1,8 @@
 package com.service.impl;
 
+import com.dao.ProjectMapper;
 import com.dao.TeamMapper;
-import com.pojo.Team;
-import com.pojo.User;
-import com.pojo.Userandteam;
+import com.pojo.*;
 import com.service.TeamService;
 import com.service.UserandteamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,10 @@ public class TeamServiceImpl implements TeamService {
     // 注入UserAndTeamService依赖 [对数据库UserAndTeam表进行间接操作]
     @Autowired
     private UserandteamService userandteamService;
+
+    //注入ProjectMapper依赖
+    @Autowired
+    ProjectMapper projectMapper;
 
     private static List<Team> teamList = new ArrayList<Team>();
     public static List<Team> getTeamList() {
@@ -134,5 +137,31 @@ public class TeamServiceImpl implements TeamService {
      */
     public List<Team> selectAll(){
         return getTeamList();
+    }
+
+    /**
+     * 设置TeamList
+     * @param a
+     */
+    public void backAll(List<Team> a){
+        TeamServiceImpl.setTeamList(a);
+    }
+
+
+    /**
+     * 根据团队id查找所做的项目
+     * @param tId
+     * @return
+     */
+    public List<Project> ProjectByTid(int tId){
+        System.out.println("进入了ProjectByTid------>Service");
+        ProjectExample projectExample=new ProjectExample();
+        projectExample.createCriteria().andTIdEqualTo(tId);
+        //select * from project where tId=?
+        List<Project> projectList = projectMapper.selectByExample(projectExample);
+        if(projectList!=null&&projectList.size()!=0){
+            return projectList;
+        }
+        return null;
     }
 }

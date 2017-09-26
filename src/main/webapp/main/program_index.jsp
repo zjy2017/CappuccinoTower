@@ -56,7 +56,26 @@
             text-align: center;
         }
     </style>
-
+    <%--页面开始遍历项目--%>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                type:"Post",
+                url:"/team/ProjectByTid",
+                dataType:"json",
+                success:function (result) {
+                    $.each(result.data,function (n,v) {
+                        $("#projectContext").append("<a href='main_program.jsp?pId="+v.pId+"'" +
+                            "class='programe_btn'" +
+                            "style='font-size: 30px;'>"+v.pName+"</a><br>")
+                    })
+                },
+                error:function () {
+                    alert("遍历项目失败");
+                }
+            })
+        })
+    </script>
     <script type="text/javascript">
         $(document).ready(function() {
             $(".icono-heart").click(function() {
@@ -135,15 +154,8 @@
         <button id="program_innewprogram"  class="programe_btn" href="#" style="float: right; margin-top: 10px;margin-right: 10px	;">新建项目</button>
     </div>
 
-    <div id="项目内容" style=" height: 300px;width: 1100px; margin-top: 20px;">
-        <button href="#" class="programe_btn" style="font-size: 20px;" id="star1">星标项目A</button>
-        <button href="#" class="programe_btn" style="font-size: 20px;margin-left: 10px;">星标项目B</button>
-        <br>
-        <button href="#" class="programe_btn" style="font-size: 20px;margin-top: 10px;">星标项目C</button>
-        <br>
-        <br>
-        <button href="#" class="programe_btn pb" style="font-size: 20px;">其余项目D</a>
-            <button href="#" class="programe_btn pb" style="font-size: 20px; margin-left: 10px;">其余项目E</button>
+    <%--用来存放遍历的项目--%>
+    <div id="projectContext" style=" height: 300px;width: 1100px; margin-top: 20px;">
     </div>
 
     <!--<div style="margin-top: 10px;">
