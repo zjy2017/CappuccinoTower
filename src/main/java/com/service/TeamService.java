@@ -39,5 +39,18 @@ public interface TeamService {
      */
     List<Team> selectTeam(Team team,int i);
 
+
+    /**
+     * 用户登录 根据用户ID查找出他所属的所有团队
+     * @param uId
+     * @return
+     */
+    List<Team> selectTeam(int uId);
     List<Team> Query();
+
+    /**
+     * 获取全部存在的团队信息
+     * @return
+     */
+    List<Team> selectAll();
 }
