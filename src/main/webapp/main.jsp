@@ -84,26 +84,7 @@
                 }
             })
         }
-        $(document).ready(function () {
-            $("#下拉菜单")
-            $.ajax({
-                type:"POST",
-                url:"/team/TeamByUid",
-                dataType:"json",
-                data:{
-                    uId:${user.uId},
-                },
-                success : function (result) {
-                    $.each(result.data,function (n,v) {
-                        var op="<option value="+v.tId+">"+v.tName+"</option>"
-                        $("#select1_1").append(op);
-                    })
 
-                },
-                error:function () {
-                    alert("错错错")
-                }
-            })
     </script>
 
     <%--跳转到团队界面--%>
