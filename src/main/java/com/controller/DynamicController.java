@@ -76,7 +76,6 @@ public class DynamicController {
         List<General> generalList = dynamicService.QueryList(dynamic);
         setGL(generalList);
         if(generalList!=null){
-            System.out.println(generalList.get(0).getAaName()+"/*/*/*/*/*/*/*/*/*/");
             return new AjaxResult(1,"遍历动态列表成功",generalList);
         }else{
             return new AjaxResult(0,"遍历动态列表失败");

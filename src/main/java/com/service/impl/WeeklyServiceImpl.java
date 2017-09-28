@@ -73,6 +73,17 @@ public class WeeklyServiceImpl implements WeeklyService {
                 return null;
             }
         }
+        //根据周报ID查询周报
+        else if(i==2){
+            WeeklyExample weeklyExample = new WeeklyExample();
+            weeklyExample.createCriteria().andWeeklyIdEqualTo(weekly.getWeeklyId());
+            List<Weekly> weeklies = weeklyMapper.selectByExample(weeklyExample);
+            if(weeklies!=null||weeklies.size()!=0){
+                return weeklies;
+            }else{
+                return null;
+            }
+        }
         return null;
     }
 

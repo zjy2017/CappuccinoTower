@@ -24,34 +24,6 @@
     <link rel="stylesheet" href="../resources/select_css/combo.select.css">
     <!--SELECT-->
     <script src="http://www.jq22.com/jquery/1.11.1/jquery.min.js"></script>
-    <%--<script src="../resources/select_js/jquery.combo.select.js"></script>--%>
-    <%--<script>--%>
-        <%--$(function () {--%>
-            <%--$('select')--%>
-                <%--.comboSelect()--%>
-            <%--/**--%>
-             <%--* on Change--%>
-             <%--*/--%>
-            <%--$('.js-select').change(function (e, v) {--%>
-                <%--$('.idx').text(e.target.selectedIndex)--%>
-                <%--$('.val').text(e.target.value)--%>
-            <%--})--%>
-            <%--/**--%>
-             <%--* Open select--%>
-             <%--*/--%>
-            <%--$('.js-select-open').click(function (e) {--%>
-                <%--$('.js-select').focus()--%>
-                <%--e.preventDefault();--%>
-            <%--})--%>
-            <%--/**--%>
-             <%--* Open select--%>
-             <%--*/--%>
-            <%--$('.js-select-close').click(function (e) {--%>
-                <%--$('.js-select').trigger('comboselect:close')--%>
-                <%--e.preventDefault();--%>
-            <%--})--%>
-        <%--})--%>
-    <%--</script>--%>
     <script type="text/javascript">
         /**
          * 把毫秒级时间转换成字符串,保留时分秒
@@ -121,9 +93,9 @@
                 },
                 success:function (result) {
                     if(result.errcode==1){
-//                        alert("11111");
+
                         if(result.data.type==1){
-                            alert(result.data.task.taskName);
+                            location.href="../main/task_index.jsp?operateId='"+a+"'";
                         }else if(result.data.type==2){
                             alert(result.data.discus.dTopic);
                         }else if(result.data.type==3){
@@ -135,7 +107,7 @@
                         }else if(result.data.type==6){
                             alert(result.data.team.tName);
                         }else if(result.data.type==7){
-                            alert(result.data.weekly.wTime);
+                            location.href="../weekly/weekly11.jsp?operateId='"+a+"'";
                         }
                     }
                 }
