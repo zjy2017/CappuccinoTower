@@ -141,7 +141,6 @@ public class UserController {
             i++;
         }
         teamService.backAll(teamList);
-
         return new AjaxResult(0,"失败");
     }
 

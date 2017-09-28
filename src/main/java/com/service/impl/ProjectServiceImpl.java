@@ -54,7 +54,6 @@ public class ProjectServiceImpl implements ProjectService {
      */
 
     public Project addProject(Project project, List<Integer> uId) {
-        project.settId(1);
         // 判断是否有sensitive
         if (project.getpSensitive() == null) {
             project.setpSensitive(0);
@@ -201,7 +200,7 @@ public class ProjectServiceImpl implements ProjectService {
      * 将项目的相关信息全部遍历出来
      * @return
      */
-    public ProjectList projectALL(int pId,int uId){
+    public Project projectALL(int pId,int uId){
         //创建ProjectList,返回web层的对象
         ProjectList projectList=new ProjectList();
         //根据pId查找出项目的信息；
@@ -212,7 +211,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectList.setpDescribe(project.getpDescribe());
         projectList.setIspublic(project.getIspublic());
         projectList.setpSensitive(project.getpSensitive());
-        return projectList;
+        return project;
     }
 
 }

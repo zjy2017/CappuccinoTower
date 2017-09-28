@@ -1,17 +1,16 @@
 package com.controller;
 
+import com.pojo.File;
 import com.pojo.Folder;
 import com.service.DynamicService;
+import com.service.FileService;
 import com.service.FolderService;
 import com.util.AjaxResult;
 import com.util.DynamicTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -35,13 +34,14 @@ public class FolderController {
     public AjaxResult AddFolder(Folder folder, HttpServletRequest request, @RequestParam("pId")int pId){
         try{
             int folderid = folderService.addFolder(folder,pId);
+            folder.setFolderId(folderid);
             request.getSession().setAttribute("folderid",folderid);
             int i = folderid;
             //动态操作
             DynamicTool d = new DynamicTool(i,"folder","新建了一个文件夹",request,dynamicService);
             d.newDynamic();
             //返回1，表示增加文件夹成功
-            return new AjaxResult(1,"增加文件夹成功");
+            return new AjaxResult(1,"增加文件夹成功",folder);
         }catch (Exception e){
             e.printStackTrace();
             //返回0，表示增加文件夹失败
@@ -103,5 +103,17 @@ public class FolderController {
             //返回0，表示删除文件夹失败
             return new AjaxResult(0,"删除文件夹失败");
         }
+    }
+
+
+    @RequestMapping("/queryFileByFolderId")
+    @ResponseBody
+    public AjaxResult queryFileByFolderId(@RequestParam("folderId")int folderId){
+        System.out.println("进入了queryFileByFolderId------>Controller");
+        List<File> fileList = folderService.queryFileByFolderId(folderId);
+        if(fileList!=null){
+            return new AjaxResult(1,"成功",fileList);
+        }
+        return new AjaxResult(0,"失败");
     }
 }
