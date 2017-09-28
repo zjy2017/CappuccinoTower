@@ -337,14 +337,13 @@
     String today = dft.format(date.getTime());  // today即为当前时间
 %>
 <div style="margin: 30px;">
-    <a id="inreport_index" aria-label='word' class='h-button centered' data-text='周报总览' href='#' style="text-align: center; font-size: 30px;">
+    <a id="inreport_index" aria-label='word' class='h-button centered' data-text='周报总览' href='#' style="text-align: center; font-size:30px;">
         <span>R</span>
         <span>e</span>
         <span>p</span>
         <span>o</span>
         <span>r</span>
         <span>t</span>
-
     </a>
     <p style="text-align: center;font-size: 30px;color: #0abd6a;font-weight: bold;">
         <a href="#" class="report_btn" style="font-weight: bold;font-size: 30px;">
