@@ -65,7 +65,7 @@ public class WeeklyController {
         System.out.println(uId);
         int tId = new ObtainSession(request).getTeam().gettId();
         //周报无需绑定项目，一个团队对应一个周报
-        int pId =0;
+        int pId =new ObtainSession(request).getProject().getpId();
         // 先根据所选日期查询有无周报存在
         try {
             Weekly weekly = new Weekly();
@@ -161,14 +161,13 @@ public class WeeklyController {
         Weekly weekly = new Weekly();
         int tId = new ObtainSession(request).getTeam().gettId();
         int uId = new ObtainSession(request).getUser().getuId();
-        int pId = 0;
+        int pId = new ObtainSession(request).getProject().getpId();
         try {
             //将所选时间格式化，根据时间查询数据库
             Date date = DateUtil.getDate(wTime, "yyyy-MM-dd");
             weekly.setwTime(date);
             weekly.settId(tId);
             List<Weekly> weeklies = weeklyService.selectWeekly(weekly, 0);
-            System.out.println(weeklies+"****************");
             //若查询到周报，则进行更新数据
             if (weeklies.size() != 0) {
                 Integer weeklyId = weeklies.get(0).getWeeklyId();

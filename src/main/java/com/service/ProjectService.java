@@ -47,5 +47,5 @@ public interface ProjectService {
     /**
      * 将一个项目的相关信息全部遍历出来
      */
-    public ProjectList projectALL(int pId, int uId);
+     Project projectALL(int pId, int uId);
 }

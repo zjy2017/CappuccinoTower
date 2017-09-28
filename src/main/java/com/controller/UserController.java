@@ -123,14 +123,22 @@ public class UserController {
      * @param request
      */
     @RequestMapping(value = "changeTeam", method = RequestMethod.POST)
-    public void changeTeam(@RequestParam("tId")int tId,HttpServletRequest request){
-
+    @ResponseBody
+    public AjaxResult changeTeam(@RequestParam("tId")int tId,HttpServletRequest request){
+        System.out.println("进入了changeTeam------>Controller");
         List<Team> teamList = teamService.selectAll();
+        int i=0;
         for (Team team : teamList){
             if (team.gettId()==tId){
                 request.getSession().setAttribute("team",team);
+                teamList.add(0,teamList.remove(i));
+                System.out.println(team.toString());
+                return new AjaxResult(1,"成功");
             }
+            i++;
         }
+        teamService.backAll(teamList);
+        return new AjaxResult(0,"失败");
     }
 
     @RequestMapping(value = "selectUser")
