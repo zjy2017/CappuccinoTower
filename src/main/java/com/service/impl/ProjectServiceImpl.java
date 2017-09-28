@@ -54,7 +54,6 @@ public class ProjectServiceImpl implements ProjectService {
      */
 
     public Project addProject(Project project, List<Integer> uId) {
-        project.settId(1);
         // 判断是否有sensitive
         if (project.getpSensitive() == null) {
             project.setpSensitive(0);

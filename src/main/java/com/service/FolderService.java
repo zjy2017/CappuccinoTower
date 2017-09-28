@@ -1,5 +1,6 @@
 package com.service;
 
+import com.pojo.File;
 import com.pojo.Folder;
 
 import java.util.List;
@@ -47,4 +48,11 @@ public interface FolderService {
      * @return
      */
     List<Folder> QueryList(int totalid);
+
+    /**
+     * 根据文件夹ID遍历其中的文件
+     * @param folderId
+     * @return
+     */
+    public List<File> queryFileByFolderId(int folderId);
 }

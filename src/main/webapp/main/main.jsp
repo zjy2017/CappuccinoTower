@@ -74,6 +74,24 @@
 
     </script>
 
+    <%--跳转回项目--%>
+    <script type="text/javascript">
+        function goproject() {
+            $.ajax({
+                type:"Post",
+                url:"/team/ProjectByTid",
+                dataType:"json",
+                success:function (result) {
+                    document.getElementById("program_index").src="program_index.jsp";
+                },
+                error:function () {
+                    alert("跳转回项目失败了");
+                }
+            })
+        }
+    </script>
+
+
     <%--页面加载时遍历团队--%>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -215,9 +233,10 @@
 
 
     <span style="margin-left: 40px;">
-    		<a href="#" style="color: pink;margin-left: 40px;font-size: 25px;">项目</a>
-    		<a href="#" style="color: #ffdd4d;margin-left: 40px;font-size: 25px;" onclick=godynamic()>动态</a>
-    		<a href="#" style="color: #0abd6a;margin-left: 40px;font-size: 25px;" onclick=goweekly()>周报</a>
+
+    		<a href="#" style="color: pink;margin-left: 40px;font-size: 25px;" onclick="goproject()">项目</a>
+    		<a href="#" style="color: pink;margin-left: 40px;font-size: 25px;" onclick=godynamic()>动态</a>
+    		<a href="#" style="color: pink;margin-left: 40px;font-size: 25px;" onclick=goweekly()>周报</a>
     		<a href="#" style="color: slateblue;margin-left: 40px;font-size: 25px;" onclick="goteam()">团队</a>
     		<a href="#" style="color: deepskyblue;margin-left: 40px;font-size: 25px;">我自己</a>
     		</span>
