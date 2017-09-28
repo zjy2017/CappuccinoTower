@@ -345,16 +345,11 @@
     String today = dft.format(date.getTime());  // today即为当前时间
 %>
 <div style="margin: 30px;">
-    <a id="inreport_index" aria-label='word' class='h-button centered' data-text='周报总览' href='#'
-       style="text-align: center; font-size: 30px;">
-        <span>R</span>
-        <span>e</span>
-        <span>p</span>
-        <span>o</span>
-        <span>r</span>
-        <span>t</span>
 
-    </a>
+    <div  href='#' style="text-align: center;font-size: 30px;color: #0ABD6A">
+        周报总览
+    </div>
+
     <p style="text-align: center;font-size: 30px;color: #0abd6a;font-weight: bold;">
         <a href="#" class="report_btn" style="font-weight: bold;font-size: 30px;">
         </a>
@@ -380,8 +375,10 @@
 
 <!--周报设置DIV-->
 <div id="report_setting" style="margin-left: 260px;">
+
     <div class="container">
         <h2 style="color: white;">周报内容</h2></div>
+
     <p id="report_setting_p1" style="color:white;height:30px;width: 600px; font-size: 17px;">&nbsp;&nbsp;本周工作成果总结，说说你对自己点赞或失望的地方。
     </p>
     <textarea id="tx1"
@@ -399,9 +396,10 @@
     <p id="report_setting_p4" style="color:white;height:30px;width: 600px; font-size: 17px;">&nbsp;&nbsp;你觉得采取哪些措施，会对你提升工作效率有帮助
 
     </p>
-    <textarea id="tx4"
-              style="resize: none;height:30px;width: 600px;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea><br>
-    <button class="report_btn" id="weeklyUpdate" onclick="ccc()">保存周报</button>
+
+    <textarea id="tx4" style="resize: none;height:30px;width: 600px;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea><br><br>
+    <button class="report_btn" style="border: solid 1px #0ABD6A;font-size: 20px" id="weeklyUpdate" onclick="ccc()">保存周报</button>
+
     <br>
     <span id="team_add_span">
 				<textarea placeholder="编辑周报新问题"
@@ -411,6 +409,7 @@
 			</span>
     </br>
 
+
     <span id="member_add_span">&nbsp;&nbsp;
 
 					<button class="report_btn" id="member_add_sure">添加</button>
@@ -418,12 +417,13 @@
 			</span>-
 </div>
 <!--主页面-->
-<div id="report_index">
-    <%--<img src="images/fzl2.jpg" height="50px" style=" margin-left: 50px;margin-top: 30px;" />--%>
-    <br><br><br><br>
-    <%--<a href="#" class="report_btn" style="margin-left: 60px;font-weight: bold;">邓超</a>--%>
-    <div style="margin-left: 250px;margin-top: -110px;margin-bottom: 10px;">
-        <div class="container">
+
+<div id="report_index" style="magin-left:80px">
+    <br>
+    <a href="#" class="report_btn" style="margin-left: 60px;font-weight: bold;font-size: 30px"></a>
+    <div style="margin-left: 250px;margin-top: -50px;margin-bottom: 10px;">
+        <div style="color: white;magin-top:10px" >
+
             <h3 style="color:0#0ABD6A;">本周周报</h3></div>
         <div id="weekly1_1_content">
             <div id="p1" style="font-weight: bold;color: #0ABD6A;"><span>"本周工作成果总结，说说你对自己点赞或失望的地方。"</span><br>
@@ -454,6 +454,10 @@
     </div>
     <br>
     <div class="menu-sep" style="margin-left:0px ;"></div>
+    <div  style="margin-left: 250px;">
+        <h3 style="color: white;">他们本周无周报记录</h3>
+    </div>
+
 </div>
 </div>
 

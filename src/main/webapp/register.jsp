@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>注册</title>
     <link rel="stylesheet" href="../resources/css/register.css"/>
     <script type="text/javascript" src="../resources/js/jquery-3.1.1.js"></script>
     <script type="text/javascript">
@@ -206,20 +206,7 @@
         <a id="a2" href="login.jsp" style="color: grey;">直接登录→</a>
         </br>
         <span id="a1">已有power账户？</span></p>
-    <p style="margin-top: 200px;text-align: center;font-family:tahoma;font-size: 15px;">
-        <span style="color: lightskyblue;">C</span>
-        <span style="color: plum;">a</span>
-        <span style="color: lightskyblue;">p</span>
-        <span style="color: plum;">p</span>
-        <span style="color: lightskyblue;">u</span>
-        <span style="color: plum;">c</span>
-        <span style="color: lightskyblue;">c</span>
-        <span style="color: plum;">i</span>
-        <span style="color: lightskyblue;">n</span>
-        <span style="color: plum;">o</span>
-        <span style="color: orangered;">®</span>
 
-    </p>
 </div>
 </body>
 </html>

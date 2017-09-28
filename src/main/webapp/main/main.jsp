@@ -209,6 +209,7 @@
         iframe{
             position: absolute;height:1500px;width: 1320px;
             margin-top: 70px;margin-left: 60px;
+            border: solid 1px white;
 
         }
     </style>
