@@ -191,6 +191,7 @@
         iframe{
             position: absolute;height:1500px;width: 1320px;
             margin-top: 70px;margin-left: 60px;
+            border: solid 1px white;
 
         }
     </style>
@@ -215,8 +216,8 @@
 
     <span style="margin-left: 40px;">
     		<a href="#" style="color: pink;margin-left: 40px;font-size: 25px;">项目</a>
-    		<a href="#" style="color: pink;margin-left: 40px;font-size: 25px;" onclick=godynamic()>动态</a>
-    		<a href="#" style="color: pink;margin-left: 40px;font-size: 25px;" onclick=goweekly()>周报</a>
+    		<a href="#" style="color: #ffdd4d;margin-left: 40px;font-size: 25px;" onclick=godynamic()>动态</a>
+    		<a href="#" style="color: #0abd6a;margin-left: 40px;font-size: 25px;" onclick=goweekly()>周报</a>
     		<a href="#" style="color: slateblue;margin-left: 40px;font-size: 25px;" onclick="goteam()">团队</a>
     		<a href="#" style="color: deepskyblue;margin-left: 40px;font-size: 25px;">我自己</a>
     		</span>

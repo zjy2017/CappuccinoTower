@@ -273,7 +273,7 @@
     </style>
 </head>
 <body style="margin: 20px;">
-<p>筛选动态:</p>
+<p style="color: #ffdd4d;font-size: 30px">筛选动态:</p>
 <div style="float:left;">
     <select id="select1">
         <option value='0'>所有项目</option>

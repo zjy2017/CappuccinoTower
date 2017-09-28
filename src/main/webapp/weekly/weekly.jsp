@@ -340,14 +340,9 @@
     String today = dft.format(date.getTime());  // today即为当前时间
 %>
 <div style="margin: 30px;">
-    <a id="inreport_index" aria-label='word' class='h-button centered' data-text='周报总览' href='#' style="text-align: center; font-size:30px;">
-        <span>R</span>
-        <span>e</span>
-        <span>p</span>
-        <span>o</span>
-        <span>r</span>
-        <span>t</span>
-    </a>
+    <div  href='#' style="text-align: center;font-size: 30px;color: #0ABD6A">
+        周报总览
+    </div>
     <p style="text-align: center;font-size: 30px;color: #0abd6a;font-weight: bold;">
         <a href="#" class="report_btn" style="font-weight: bold;font-size: 30px;">
             </a>
@@ -372,10 +367,10 @@
 
 <!--周报设置DIV-->
 <div id="report_setting" style="margin-left: 260px;">
-    <div class="container">
+    <div >
         <h3 style="color: white;">周报模版设置</h3></div>
     <p style="color: grey;">可以根据团队 / 小组 / 成员 三个不同层级，分别设置周报模板</p>
-    <div class="container">
+    <div >
         <h3 style="color: white;">团队级模板</h3></div>
     <p style="color: grey;">团队所有成员，需要填写的内容</p>
 
@@ -393,8 +388,8 @@
     <p id="report_setting_p4" style="color:white;height:30px;width: 600px; font-size: 17px;">&nbsp;&nbsp;你觉得采取哪些措施，会对你提升工作效率有帮助
 
     </p>
-    <textarea id="tx4" style="resize: none;height:30px;width: 600px;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea><br>
-    <button class="report_btn" id="weeklyUpdate" onclick="ccc()">保存周报</button>
+    <textarea id="tx4" style="resize: none;height:30px;width: 600px;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea><br><br>
+    <button class="report_btn" style="border: solid 1px #0ABD6A;font-size: 20px" id="weeklyUpdate" onclick="ccc()">保存周报</button>
     <br>
     <span id="team_add_span">
 				<textarea placeholder="编辑周报新问题" style="color: #0ABD6A;background-color: #212121;resize: none;width: 300px;height: 20px;"></textarea><br>
@@ -402,12 +397,8 @@
 				<button id="team_add_cancel" class="report_btn">取消</button>
 			</span>
     </br>
-    <div class="container">
-        <h3 style="color:white">小组级模块</h3></div>
-    <p style="color: grey;">指定小组的成员，需要填写的内容
-    <p style="color: grey;">团队内还没有小组，<button class="report_btn">点击这里新建小组。</button></p>
-    </br>
-    <div class="container">
+
+    <div>
         <h3 style="color: white;">成员级模块</h3></div>
     <p style="color: grey;">指定的成员，需要填写的内容</p>
     <p style="color: grey;">还没有成员级的模板</p>
@@ -415,22 +406,22 @@
     <br>
     <span id="member_add_span">&nbsp;&nbsp;
 				<select style="width: 70px;" class="easyui-combobox">
+                    <%--用AJAX遍历出团队的人--%>
 					<option>BF</option>
 					<option>YG</option>
 					<option>JH</option>
 				</select>
-				<textarea placeholder="输入成员问题" style="float: left; height: 20px; font-size: 15px;background-color: #212121;color: #0ABD6A;resize: none;" ></textarea>&nbsp;
+				<textarea cols="20" rows="1" placeholder="输入成员问题" style=" float: left; font-size: 15px;background-color: #212121;color: #0ABD6A;resize: none;" ></textarea>&nbsp;
 					<button class="report_btn" id="member_add_sure">添加</button>
 				<button id="member_add_cancel" class="report_btn">取消</button>
 			</span>-
 </div>
 <!--主页面-->
-<div id="report_index">
-    <img src="images/fzl2.jpg" height="50px" style=" margin-left: 50px;margin-top: 30px;" />
+<div id="report_index" style="magin-left:80px">
     <br>
-    <a href="#" class="report_btn" style="margin-left: 60px;font-weight: bold;">邓超</a>
-    <div style="margin-left: 250px;margin-top: -110px;margin-bottom: 10px;">
-        <div class="container" >
+    <a href="#" class="report_btn" style="margin-left: 60px;font-weight: bold;font-size: 30px"></a>
+    <div style="margin-left: 250px;margin-top: -50px;margin-bottom: 10px;">
+        <div style="color: white;magin-top:10px" >
             <h3 style="color:0#0ABD6A;">本周周报</h3></div>
         <div id="weekly1_1_content">
         <div id="p1" style="font-weight: bold;color: #0ABD6A;"><span>"本周工作成果总结，说说你对自己点赞或失望的地方。"</span><br>
@@ -461,7 +452,7 @@
     </div>
     <br>
     <div class="menu-sep" style="margin-left:0px ;"></div>
-    <div class="container" style="margin-left: 250px;">
+    <div  style="margin-left: 250px;">
         <h3 style="color: white;">他们本周无周报记录</h3>
     </div>
 </div>
