@@ -68,7 +68,10 @@ public class DiscusServicelmpl implements DiscusService {
         return 0;
     }
 
-    public List<Discus> select(Discus discus, int discusId) {return null;}
+    public List<Discus> select(Discus discus, int discusId) {
+
+        return null;
+    }
 
     /**
      * 根据项目id 遍历出该id所有的讨论
