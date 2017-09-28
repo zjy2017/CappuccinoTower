@@ -69,6 +69,7 @@ public class DynamicTool {
         //                    +"table="+table+",\n"
         //                    +"time="+time+",\n");
         //TODO 累赘？
+        System.out.println(user.getuId()+project.getpId());
         dynamic.setuId(user.getuId());
         dynamic.setpId(project.getpId());
         dynamic.setAction(action);

@@ -111,19 +111,21 @@
                         $("#aa2").empty();
                         $("#aa3").empty();
                         $("#aa4").empty();
+                        $("#who1_1").empty();
+                        $("#when1_1").empty();
                         {
                             //在指定问题后输出周报内容
                             $("#aa1").append(result.data.wSummary),
                                 $("#aa2").append(result.data.wChallenge),
                                 $("#aa3").append(result.data.wTarget),
                                 $("#aa4").append(result.data.wMethod)
+                            $("#who1_1").append(result.page.uName),
+                                $("#when1_1").append(dateFormat(result.data.wTime));
 
                         }
                     }else if(result.errcode==0){
-                        $("#aa1").empty();
-                        $("#aa2").empty();
-                        $("#aa3").empty();
-                        $("#aa4").empty();
+                        $("#weekly1_1_content").hide();
+                        $("#weekly1_1_empty").show();
                     }else if(result.errcode==2){
                         alert("该团队没有创建周报");
                     }
@@ -132,6 +134,7 @@
                     alert("周报不存在");
                 }
             })
+            $("#weekly1_1_empty").hide();
             $('#report_setting').hide()
             $("#report_index").show()
 
@@ -214,27 +217,27 @@
                             $("#aa2").empty();
                             $("#aa3").empty();
                             $("#aa4").empty();
+                            $("#who1_1").empty();
+                            $("#when1_1").empty();
                             {
                                 //在指定问题后输出周报内容
                                     $("#aa1").append(result.data.wSummary),
                                     $("#aa2").append(result.data.wChallenge),
                                     $("#aa3").append(result.data.wTarget),
-                                    $("#aa4").append(result.data.wMethod)
-
+                                    $("#aa4").append(result.data.wMethod),
+                                $("#who1_1").append(result.page.uName),
+                                    $("#when1_1").append(dateFormat(result.data.wTime));
                             }
-                        }else if(result.errcode==0){
-                            $("#aa1").empty();
-                            $("#aa2").empty();
-                            $("#aa3").empty();
-                            $("#aa4").empty();
-                        }else if(result.errcode==2){
-                            alert("该团队没有创建周报");
+                        }else{
+                            $("#weekly1_1_content").hide()
+                            $("#weekly1_1_empty").show()
                         }
                     },
                     error:function (result) {
                         alert("周报不存在");
                     }
                 })
+
 
                 //根据所选日期查询该日期所在周
                 $.ajax({
@@ -349,7 +352,7 @@
     <p style="text-align: center;font-size: 30px;color: #0abd6a;font-weight: bold;">
         <a href="#" class="report_btn" style="font-weight: bold;font-size: 30px;">
             </a>
-        <span id="report_indate"><input  id="time1" name="createdatetimeStart" value="<%=today%>" style="width: 120px;"
+        <span id="report_indate"><input  id="time1" name="createdatetimeStart" value="<%=today%>" style="width: 120px;border: none;background-color: #212121;color: #0abd6a;cursor: pointer;font-size: 20px"
                                          onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" onclick="aaa()"/></span>
             <a class="report_btn" href="#" style="font-weight: bold;font-size: 30px;"></a>
 
@@ -430,6 +433,7 @@
     <div style="margin-left: 250px;margin-top: -110px;margin-bottom: 10px;">
         <div class="container" >
             <h3 style="color:0#0ABD6A;">本周周报</h3></div>
+        <div id="weekly1_1_content">
         <div id="p1" style="font-weight: bold;color: #0ABD6A;"><span>"本周工作成果总结，说说你对自己点赞或失望的地方。"</span><br>
             <span style="color: grey;" id="aa1"></span>
         </div>
@@ -447,10 +451,14 @@
         </div>
 
         <br>
-        <span style="color: grey;">勇郭</span>
+        <span id="who1_1" style="color: grey;"></span>
         <span style="color: grey;">，创建于</span>
-        <span style="color: grey;">2017年9月8日</span>
+        <span id="when1_1" style="color: grey;"></span>
         <button id="inreport_setting" class="report_btn" onclick="bbb()">查看详情</button>
+        </div>
+        <div id="weekly1_1_empty">
+            <h2 style="color: grey;">本周无周报</h2>
+        </div>
     </div>
     <br>
     <div class="menu-sep" style="margin-left:0px ;"></div>

@@ -56,7 +56,7 @@ public class WeeklyServiceImpl implements WeeklyService {
                     DateHelper.getMonday(weekly.getwTime())).andWTimeLessThan(
                     DateHelper.getNextMonday(weekly.getwTime())).andTIdEqualTo(weekly.gettId());
             List<Weekly> weeklies = weeklyMapper.selectByExample(weeklyExample);
-            if(weeklies!=null||weeklies.size()!=0){
+            if(weeklies!=null&&weeklies.size()!=0){
                 return weeklies;
             }else{
                 return null;
