@@ -1,13 +1,7 @@
 package com.controller;
 
-import com.pojo.Project;
-import com.pojo.Team;
-import com.pojo.User;
-import com.pojo.Userandteam;
-import com.service.ProjectService;
-import com.service.TeamService;
-import com.service.UserService;
-import com.service.UserandteamService;
+import com.pojo.*;
+import com.service.*;
 import com.util.AjaxResult;
 import com.util.ObtainSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +35,9 @@ public class UserController {
     //注入依赖[UserandteamService]
     @Autowired
     private UserandteamService userandteamService;
+    //注入依赖[UserandprojectService]
+    @Autowired
+    private UserandprojectService userandprojectService;
 
     /**
      * 这里不用 [User] 做返回值的原因是，怕就算密码错误返回了一个JSON到前台比人还是可以查看到整个用户信息
@@ -178,23 +175,4 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "userByPidandTid")
-    @ResponseBody
-    public AjaxResult userByPidandTid(@RequestParam("pId")int pId){
-        Project project = new Project();
-        project.setpId(pId);
-        List<Project> projectList = projectService.selectProject(project, 0);
-        Integer tId = projectList.get(0).gettId();
-        Userandteam userandteam = new Userandteam();
-        userandteam.settId(tId);
-        List<Userandteam> userandteamList = userandteamService.selectUserandteam(userandteam, 2);
-        if(userandteamList!=null||userandteamList.size()!=0){
-            for(int i=0;i<userandteamList.size();i++){
-                return new AjaxResult(1,"根据团队ID查询用户成功",userandteamList.get(i));
-            }
-        }else{
-            return new AjaxResult(0,"查询用户失败");
-        }
-        return null;
-    }
 }

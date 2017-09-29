@@ -631,34 +631,6 @@
         }
 
         
-        //点击添加任务遍历该项目所有组员
-        function createTask() {
-            $.ajax({
-                type:"Post",
-                url:"",
-                dataType:"json",
-                data:{
-                    pId:${param.pId},
-                },
-                success:function (result) {
-                    if(result.errcode==1){
-
-                    }
-                }
-            })
-        }
-        //添加任务
-        function addTask() {
-            $.ajax({
-                type:"Post",
-                url:"",
-                dataType:"json",
-                data:{
-                    taskName:$("#taskName").val(),
-                    taskAssigner:$("#")
-                }
-            })
-        }
 
         //返回讨论总表
         function backdiscus() {
@@ -699,9 +671,9 @@
     <div id="taskdiv">
         <ul class="menu" style="  background-color: #212121;border: none;">
             <li>
-                <a id="inaddtask1" href="#" onclick="createTask()">- 添加任务 -</a>
+                <a id="inaddtask1" href="#" >- 添加任务 -</a>
                 <ul class="submenu">
-                    <li><a id="inaddtask2" style="text-align: center;" href="#">添加任务</a></li>
+                    <li><a id="inaddtask2" style="text-align: center;" href="#" onclick="createTask()">添加任务</a></li>
                     <li><a id="inaddlist" style="text-align: center;" href="#">添加清单</a></li>
                 </ul>
             </li>
@@ -893,9 +865,9 @@
 
             <span style="color: grey;">指派成员完成该任务</span>
             <br>
-            <label>
-                <input id="radiouser" type="radio" name="t" class="checked-boom" value=""/>
-            </label>
+            <div id="radiouser">
+
+            </div>
 
 
             <!--日历-->

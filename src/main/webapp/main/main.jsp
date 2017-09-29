@@ -84,7 +84,6 @@
     <%--页面加载时遍历团队--%>
     <script type="text/javascript">
         $(document).ready(function () {
-            alert($("#queryTeam"));
             $.ajax({
                 type:"POST",
                 url:"/user/queryTeam",
@@ -257,7 +256,7 @@
         </div>
 
         <div class="link mission-link" style="margin:10px;cursor: pointer;display: inline-block">
-            <a class="button" data-title="" style="font-size: 30px;color:slateblue;" onclick="goteam()>
+            <a class="button" data-title="" style="font-size: 30px;color:slateblue;" onclick=goteam()>
                 <span class="line line-top"></span>
                 <span class="line line-right"></span>
                 <span class="line line-bottom"></span>

@@ -109,10 +109,8 @@ public class UserandteamServiceImpl implements UserandteamService {
             userandteamList= userandteamMapper.selectByExample(userandteamExample);
             //userandteamList
             if(userandteamList==null&&userandteamList.get(0).getuId()==null){
-                System.out.println("没有查询到数据");
                 return null;
             }else {
-                System.out.println("返回了List集合");
                 return userandteamList;
             }
         }
