@@ -62,7 +62,7 @@ public class BulbController {
     //TODO 需要考虑一个问题，自己添加动态不会显示，别人添加动态才会显示
     public AjaxResult abc(HttpServletRequest request){
         user = new ObtainSession(request).getUser();
-        DL2 = dynamicService.bulbQuery(user.getuId());
+        //DL2 = dynamicService.bulbQuery(user.getuId());
         if (DL2==null){
             return null;
         }

@@ -38,8 +38,6 @@ public class DynamicTool {
     private User user;
     // 操作项目
     private Project project;
-    // 操作团队
-    private Team team;
     // 操作时间
     private Date time;
     //团队
