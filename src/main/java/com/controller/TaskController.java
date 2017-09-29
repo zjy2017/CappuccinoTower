@@ -1,11 +1,8 @@
 package com.controller;
 
-import com.dto.Taskdto;
 import com.pojo.Task;
-import com.pojo.User;
 import com.service.DynamicService;
 import com.service.TaskService;
-import com.service.UserService;
 import com.util.AjaxResult;
 import com.util.DynamicTool;
 import com.util.ObtainSession;
@@ -35,21 +32,13 @@ import java.util.List;
 public class TaskController {
     // slf4j日志配置
     private static final Logger _LOG = LoggerFactory.getLogger(TaskController.class);
-    //注入动态依赖
+    //注入依赖
     @Autowired
-    DynamicService dynamicService;
-
-    //注入任务依赖
+    private DynamicService dynamicService;
     @Autowired
-    TaskService taskService;
-
-    //注入用户依赖
-    @Autowired
-    UserService userService;
-
+    private TaskService taskService;
     /**
      * 新增任务
-     *
      * @param task
      * @param request
      * @return
@@ -69,22 +58,22 @@ public class TaskController {
         task.setTaskUser(new ObtainSession(request).getUser().getuId());
         // 返回此次新增任务的ID
         int i = taskService.addTask(task);
-        if (i == 0) {
+        if (i==0){
             _LOG.error("向数据库插入新的一个任务出错 --> Controller层");
-        } else {
+        }
+        else{
             task.setTaskId(i);
             //动态-->将操作信息存入动态表，因为用到session所以在controller中控制，不再去service中控制，减少代码使用
             //动态操作
-            DynamicTool d = new DynamicTool(i, "task", "新建了一个任务", request, dynamicService);
+            DynamicTool d = new DynamicTool(i,"task","新建了一个任务",request,dynamicService);
             d.newDynamic();
         }
         //返回1，表示任务添加成功
-        return new AjaxResult(1, "添加任务成功");
+        return new AjaxResult(1,"添加任务成功");
     }
 
     /**
      * 更新任务
-     *
      * @param task
      * @param request
      * @return
@@ -110,10 +99,10 @@ public class TaskController {
                 DynamicTool d = new DynamicTool(task.getTaskId(),"task","更新了一个任务",request,dynamicService);
                 d.newDynamic();
                 System.out.println("更新成功");
-                return new AjaxResult(1, "更新任务成功");
-            } else {
+                return new AjaxResult(1,"更新任务成功");
+            }else{
                 System.out.println("更新失败");
-                return new AjaxResult(0, "更新任务失败");
+                return new AjaxResult(0,"更新任务失败");
             }
         }
         return null;
@@ -121,7 +110,6 @@ public class TaskController {
 
     /**
      * 创建任务后修改前查看的信息
-     *
      * @param task
      * @param taskid
      * @param request
@@ -140,11 +128,9 @@ public class TaskController {
                 return new AjaxResult(0,"查询失败");
             }
         }
-    }
 
     /**
      * 向前台遍历所有的任务
-     *
      * @param request
      * @return
      */
@@ -160,7 +146,6 @@ public class TaskController {
 
     /**
      * 遍历任务List后，点击查看该任务的信息
-     *
      * @param task
      * @param request
      * @return
@@ -178,9 +163,12 @@ public class TaskController {
             return new AjaxResult(1,"任务信息显示成功",task1);
         }else{
             //返回0，表示任务信息显示失败
-            return new AjaxResult(0, "任务信息显示失败");
+            return new AjaxResult(0,"任务信息显示失败");
         }
     }
+
+    /**
+     * 删除任务
      * @param task
      * @return
      */
@@ -191,26 +179,13 @@ public class TaskController {
         int m = task.getTaskId();
         if(i==1){
             //动态操作
-            DynamicTool d = new DynamicTool(m, "task", "删除了一个任务", request, dynamicService);
+            DynamicTool d = new DynamicTool(m,"task","删除了一个任务",request,dynamicService);
             d.newDynamic();
             //返回1，表示删除任务成功
-            return new AjaxResult(1, "删除任务成功");
-        } else {
+            return new AjaxResult(1,"删除任务成功");
+        }else{
             //返回0，表示删除任务失败
-            return new AjaxResult(0, "删除任务失败");
-        }
-    }
-
-    @RequestMapping(value = "selectTask")
-    @ResponseBody
-    public AjaxResult selectTask(@RequestParam("taskId") int taskId) {
-        Task task = new Task();
-        task.setTaskId(taskId);
-        List<Taskdto> taskdtoList = taskService.DtoQueryList(task);
-        if (taskdtoList != null || taskdtoList.size() != 0) {
-            return new AjaxResult(1, "查询任务详情成功", taskdtoList.get(0));
-        } else {
-            return new AjaxResult(0, "查询任务详情失败");
+            return new AjaxResult(0,"删除任务失败");
         }
     }
 }

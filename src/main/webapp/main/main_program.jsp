@@ -39,6 +39,8 @@
     <script type="text/javascript" src="../resources/js/jquery.dad.min.js"></script>
     <script src="../resources/js/jquery.min.js" type="text/javascript"></script>
     <script src="../resources/js/xq_navbar.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/resources/My97DatePicker/WdatePicker.js"></script>
+
     <script type="text/javascript">
         $(document).on('ready', function onReady() {
             var checkbox = $('#checkbox'),
@@ -404,7 +406,7 @@
                     taskName: $("#taskname").val(),
                     taskAssigner:$("input[name='q']:checked").val(),
                     taskUser: $("#creatName").text(),
-                    endTime:$("#endtime").val()
+                    endTime:$("#time2").val()
                 },
                 success: function (result) {
                     queryTask($("#creatName").text());
@@ -435,7 +437,6 @@
         }
         // 新增任务
         function newTask2() {
-            alert($("#endTime2").text());
             $.ajax({
                 type: "Post",
                 url: "/Task/AddTask",
@@ -444,7 +445,7 @@
                     taskName: $("#newtaskname").val(),
                     taskAssigner:$("input[name='qq']:checked").val(),
                     taskDescribe:$("#taskmiao").val(),
-                    endTime:$("#endTime2").text()
+                    endTime:$("#time1").val()
                 },
                 success: function (result) {
                     alert(result.info);
@@ -898,7 +899,8 @@
             <br>
             <span style="color: grey;">截止日期</span>
             <br>
-            <input id="endtime" type="text" class="easyui-datebox" required="required" value="2017-09-20">
+            <input  id="time2" name="createdatetimeStart" style="width: 120px;border: none;background-color: #212121;color: #0abd6a;cursor: pointer;font-size: 20px"
+                    onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
             <br><br>
             <button id="task_edsure" class="ps_btn" style="margin-top: 5px; font-size: 15px;" onclick="cTask2()">保存</button>
         </div>
@@ -1025,7 +1027,8 @@
             <br>
             <span style="color: grey;">截止日期</span>
             <br>
-            <input id="endTime2" type="text" class="easyui-datebox">
+            <input  id="time1" name="createdatetimeStart" style="width: 120px;border: none;background-color: #212121;color: #0abd6a;cursor: pointer;font-size: 20px"
+                    onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
             <br>
             <br>
             <button id="addtask_sure" class="ps_btn" style="font-size: 20px;" onclick="newTask2()">确定</button>
