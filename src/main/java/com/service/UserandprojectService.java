@@ -25,4 +25,5 @@ public interface UserandprojectService {
     void deleteUserandproject(int upId);
 
     List<User> QueryAl(int pId);
+
 }

@@ -1,5 +1,6 @@
 package com.service;
 
+import com.dto.AllObj;
 import com.dto.General;
 import com.pojo.Dynamic;
 
@@ -47,10 +48,10 @@ public interface DynamicService {
     List<General> QueryList(Dynamic dynamic);
 
     /**
-     * 根据用户ID来查询相关的动态 用来做小灯泡功能
-     * @param uId
+     * 根据表名和被操作的ID查找被操作的对象
+     * @param operateId 被操作对象的ID
+     * @param table 被操作的表名
      * @return
      */
-    List<Dynamic> bulbQuery(int uId);
-
+    List<AllObj> selectObj(int operateId, String table);
 }

@@ -54,7 +54,6 @@ public class ProjectServiceImpl implements ProjectService {
      */
 
     public Project addProject(Project project, List<Integer> uId) {
-        project.settId(1);
         // 判断是否有sensitive
         if (project.getpSensitive() == null) {
             project.setpSensitive(0);
@@ -143,58 +142,29 @@ public class ProjectServiceImpl implements ProjectService {
         //用ID主键进行查询
         if (i == 0) {
             project1 = projectMapper.selectByPrimaryKey(project.getpId());
-            System.out.println(project1.toString() + "aaa-----------------");
             projectList.add(project1);
-            for (int a = 0; a < projectList.size(); a++) {
-                System.out.println(projectList.get(a).toString() + "b--------------");
+            if (projectList != null || projectList.size() != 0) {
+                return projectList;
             }
         }
-        //若查询为空则返回null
-        if (projectList == null || projectList.size() == 0) {
-            System.out.println("返回了空");
-            return null;
-        }
-        //否则返回这个list
-        else {
-            System.out.println("返回了List");
-            return projectList;
-        }
+        return null;
     }
 
+
     /**
-     * 对根据用户ID 对项目表进行遍历
+     * 根据登录用户当前选择的团队查询项目
+     * @param tId 团队ID
      * @return
      */
-    public List<Project> QueryList(int uId) {
-        System.out.println("service.......");
-        Userandteam userandteam = new Userandteam();
-        //将uId放到userandteam对象中去
-        userandteam.setuId(uId);
-        //根据uId(用户ID)查询tId(团队编号)  通过Userandteam表
-        //得到用户ID所参加的团队 List
-        List<Userandteam> userandteamList = userandteamService.selectUserandteam(userandteam, 0);
-
-        //创建一个项目List集合去接收通过tId查询到的项目
-        List<Project> projectList = new ArrayList<Project>();
-
-        //调用tId（团队编号）去查找pId(项目)  通过Project表
-        for (int i = 0; i < userandteamList.size(); i++) {
-            ProjectExample projectExample = new ProjectExample();
-            //userandteamList.get(i).gettId()   得到每个团队ID
-            projectExample.createCriteria().andTIdEqualTo(userandteamList.get(i).gettId());
-            List<Project> projects = projectMapper.selectByExample(projectExample);
-            //将查到的项目放到项目List中
-            projectList.add(projects.get(0));
-        }
-        //判断
-        if (projectList.get(0).getpId() == null && projectList == null) {
-            System.out.println("没有查询到");
-            return null;
-        } else {
-            System.out.println("返回集合");
+    public List<Project> QueryList(int tId) {
+        ProjectExample projectExample = new ProjectExample();
+        projectExample.createCriteria().andTIdEqualTo(tId);
+        List<Project> projectList = projectMapper.selectByExample(projectExample);
+        if(projectList!=null||projectList.size()!=0){
             return projectList;
+        }else{
+            return null;
         }
-
     }
 
     /**

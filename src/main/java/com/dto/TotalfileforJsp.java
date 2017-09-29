@@ -40,7 +40,7 @@ public class TotalfileforJsp {
     }
 
     /**
-     * 用来判断是否是文件夹或者是文件，0为文件，1为文件夹
+     * 用来判断是否是文件夹或者是文件，0为文件，1为文件夹,2为有文件夹父类的文件
 
      */
     private int type;

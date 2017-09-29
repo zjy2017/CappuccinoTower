@@ -536,13 +536,17 @@
                 data: {
                     pId:${param.pId},
                 },
-                success: function (result) {
-                    $.each(result.data, function (n, v) {
-                        $("#discus_all").append("<a class='ps_btn' style='display: inline;font-size: 20px;'>" + v.uName + "</a><br>" +
-                            "<a  href='../discus/discusAndcomment.jsp?discusId=" + v.discusId + "'>" +
-                            "<h3 class='ps_btn' style='color: white;margin-left:0px; font-weight: bold;'>" + v.dTopic + "</h3></a>" +
-                            "<div class='discuss1' style='color: grey;margin-left:0px;font-size: 15px;'>" + v.dContent + "</div>")
-                    })
+                success:function (result) {
+                    if(result.errcode==1) {
+                        $.each(result.data, function (n, v) {
+                            $("#discus_all").append("<a class='ps_btn' style='display: inline;font-size: 20px;'>" + v.uName + "</a><br>" +
+                                "<a name='" + v.discusId + "' onclick='opencomment(this)'>" +
+                                "<h3 class='ps_btn' style='color: white;margin-left:0px; font-weight: bold;'>" + v.dTopic + "</h3></a>" +
+                                "<div class='discuss1' style='color: grey;margin-left:0px;font-size: 15px;'>" + v.dContent + "</div>")
+                        })
+                    }else{
+                        alert("该项目现在还没有讨论");
+                    }
                 },
                 error: function () {
                     alert("遍历评论错了")
@@ -559,15 +563,24 @@
                 data: {
                     pId:${param.pId},
                 },
-                success: function (result) {
-                    $.each(result.data, function (n, v) {
-                        if (v.type == 0) {
-                            $("#file_folderdiv").append("<i class='icono-folder' id='file_folder" + v.fileId + "' style='cursor: pointer;margin-left: 10px;'></i><span style='color: white;' id='" + v.fileId + "'>" + v.fileName + "</span>");
-                        }
-                        if (v.type == 1) {
-                            $("#file_folderdiv").append("<i class='icono-folder' id='file_folder" + v.folderId + "' style='cursor: pointer;margin-left: 10px;'></i><span style='color: white;' id='" + v.folderId + "'><a href=''>" + v.folderName + "</a></span>")
-                        }
-                    })
+                success:function (result) {
+                    if(result.errcode==1) {
+                        $.each(result.data, function (n, v) {
+                            if (v.type == 0) {
+                                $("#file_folderdiv").append("<i class='icono-folder' " +
+                                    "id='file_folder" + v.fileId + "' style='cursor: pointer;margin-left: 10px;'></i>" +
+                                    "<span style='color: white;' id='" + v.fileId + "'>" + v.fileName + "</span>");
+                            }
+                            if (v.type == 1) {
+                                $("#file_folderdiv").append("<i class='icono-folder' " +
+                                    "id='file_folder" + v.folderId + "' style='cursor: pointer;margin-left: 10px;'></i>" +
+                                    "<span style='color: white;'>" +
+                                    "<a onclick=intofolder('" + v.folderId + "','" + v.folderName + "')>" + v.folderName + "</a></span>")
+                            }
+                        })
+                    }else{
+                        alert("该项目还没有文件或者文件夹");
+                    }
                 },
                 error: function () {
                     alert("文件遍历了失败");
@@ -577,13 +590,34 @@
     </script>
 
     <script type="text/javascript">
+        /**
+         * 把毫秒级时间转换成字符串
+         * 格式：yyyy年MM月dd日
+         * @param date
+         * @returns {string}
+         */
+        function dateFormat(date) {
+            var dateStr = new Date(date);
+            // 重写toString方法
+            Date.prototype.toLocaleString = function() {
+                return this.getFullYear() + "年" + (this.getMonth() + 1) + "月" + this.getDate() + "日";
+            };
+            return dateStr.toLocaleString();
+        }
         //打开上传文件的表单
         function upfile() {
-            $("#uploadForm").show();
+            $("#upfile").show();
+            $("#file_folderdiv").hide();
+            $("#file_filediv1").hide();
         }
         //关闭上传文件的表单
         function closefile() {
-            $("#uploadForm").hide();
+            $("#file_filediv1").hide()
+            $("#file_filediv2").hide()
+            $("#file_folderdiv").show()
+            $("#file_allfile").hide()
+            $("#upfile").hide();
+            $("#file_folderdiv").show();
         }
         //        上传文件
         function doUpload() {
@@ -604,6 +638,172 @@
                     alert("上传失败");
                 }
             })
+        }
+    
+        //打开创建文件夹位置
+        function openfolder() {
+            $("#creatfolder").show();
+            $("#file_folderdiv").hide();
+
+        }
+        
+        //关掉创建文件夹位置
+        function closefolder() {
+            $("#creatfolder").hide();
+            $("#file_folderdiv").show();
+        }
+        
+        
+        //        创建文件夹
+        function startfolder() {
+            $.ajax({
+                type:"Post",
+                url:"/Folder/AddFolder",
+                dataType:"json",
+                data:{
+                    folderName:$("#folderName").val(),
+                    pId:${param.pId},
+                },
+                success:function (result) {
+                    $("#creatfolder").hide();
+                    $("#file_folderdiv").show();
+                    $("#file_folderdiv").append("<i class='icono-folder' id='file_folder"+result.data.folderId+"' " +
+                        "style='cursor: pointer;margin-left: 10px;'></i>" +
+                        "<span style='color: white;'>" +
+                        "<a onclick=intofolder('"+result.data.folderId+"','"+result.data.folderName+"')>"+result.data.folderName+"</a></span>")
+
+                },
+                error:function () {
+                    alert("文件夹创建错误");
+                }
+            })
+        }
+        
+    //进入文件夹中
+        function intofolder(a,b) {
+            var folderId=a;
+            $.ajax({
+                type:"Post",
+                url:"/Folder/queryFileByFolderId",
+                dataType:"json",
+                data:{
+                    folderId:folderId,
+                },
+                success:function (result){
+                    $("#file_folderdiv").hide();
+                    $("#file_filediv1").show();
+                    $("#file_filediv1").html("");
+                    $("#file_filediv1").append("<h2><a onclick='backfolder()'>文件：>"+b+"</a></h2>");
+                    if(result.errcode==1) {
+                        $.each(result.data, function (n, v) {
+                            $("#file_filediv1").append("<span style='color: white;'>" +
+                                "<i class='icono-file'  style='cursor: pointer;margin-left: 10px;'></i>" + v.fileName + "" +
+                                "<button class='ps_btn' href='#' style='border: none;' >下载</button>" +
+                                "<button style='border: none;' class='ps_btn' href='#' >删除</button></span>")
+                        })
+                    }else{
+                        alert("该文件夹中还没有文件");
+                    }
+                },
+                error:function () {
+                    alert("文件夹中的文件遍历失败");
+                }
+            })
+        }
+
+        //返回文件夹总榜
+        function backfolder() {
+            $("#file_filediv1").hide();
+            $("#file_folderdiv").show();
+        }
+
+
+        //发起讨论
+        function startdiscus() {
+            $.ajax({
+                type:"Post",
+                url:"/discus/creatDiscus",
+                dataType:"json",
+                data:{
+                    pId:${param.pId},
+                    dTopic:$("#dTopic").val(),
+                    dContent:$("#dContent").val(),
+                },
+                success:function (result) {
+                    $("#discus_all").append("<a class='ps_btn' style='display: inline;font-size: 20px;'>"+result.data.uName+"</a><br>" +
+                        "<a name='"+result.data.discusId+"' onclick='opencomment(this)'>" +
+                        "<h3 class='ps_btn' style='color: white;margin-left:0px; font-weight: bold;'>"+result.data.dTopic+"</h3></a>" +
+                        "<div class='discuss1' style='color: grey;margin-left:0px;font-size: 15px;'>"+result.data.dContent+"</div>")
+                },
+                error:function () {
+                    alert("发起讨论失败");
+                }
+            })
+        }
+
+        //进入单个讨论表
+        function opencomment(obj) {
+            var discusId=obj.name;
+            $("#discus_all").hide();
+            $("#discus_one").show();
+            $("#discus_one_discus").html("");
+            $("#discus_one_comment").html("");
+            $("#didiscus_one_addcomment_buttom").html("");
+            $.ajax({
+                type:"Post",
+                url:"/discus/selectDiscusByDid",
+                dataType:"json",
+                data:{
+                    discusId:discusId,
+                },
+                success:function (result) {
+                    $("#commentTheDiscus").show();
+                    $("#discus_one_discus").append("<h2><a href='#' style='color: white;' onclick='backdiscus()'>讨论：>"+result.data.dTopic+"</a></h2>" +
+                        "<h3 style='color: white;'>"+result.data.dContent+"</h3>");
+                    if(result.errcode==1) {
+                        $.each(result.page, function (n, v) {
+                            $("#discus_one_comment").append("<span style='color: white;'>" + v.uName + "评论了: " + v.cContent + "" +
+                                "&nbsp<span style='color: white;'>" + dateFormat(v.cTime) + "</span></span><br>")
+                        });
+                        $("#discus_one_addcomment").show();
+                        $("#didiscus_one_addcomment_buttom").append("<button name='" + result.data.discusId + "' class='ps_btn' onclick='addcomment(this)'>发表评论</button>");
+                    }else {
+                        alert("讨论中还没有评论")
+                    }
+                },
+                error:function () {
+                    alert("进入讨论单表失败");
+                }
+            })
+        }
+        
+        //对讨论表发表评论
+        function addcomment(obj) {
+            var discusId=obj.name;
+            $.ajax({
+                type:"Post",
+                url:"/Comment/cContent",
+                dataType:"json",
+                data:{
+                    cContent:$("#cContent").val(),
+                    discusId:discusId,
+                },
+                success:function (result) {
+                    $("#discus_one_comment").append("<span>"+result.data.uName+"评论了: "+result.data.cContent+"" +
+                        "&nbsp<span>"+dateFormat(result.data.cTime)+"</span></span><br>")
+                },
+                error:function () {
+                    alert("发表评论失败");
+                }
+            })
+        }
+
+        
+
+        //返回讨论总表
+        function backdiscus() {
+            $("#discus_one").hide()
+            $("#discus_all").show();
         }
     </script>
 </head>
@@ -874,47 +1074,57 @@
         </ul>
         <!--新建讨论&富文本编辑器-->
         <div id="adddiscussdiv" style="margin-left: 210px;margin-top:10px;">
-            <textarea placeholder="标题"
-                      style=" calc(5px);margin-top: 10px; background-color: #212121;resize: none;border-radius: calc(5px);color: pink;height: 30px;font-size: 20px;"></textarea>
+            <input id="dTopic" name="dTopic"   placeholder="标题" style=" calc(5px);margin-top: 10px; background-color: #212121;resize: none;border-radius: calc(5px);color: pink;height: 30px;font-size: 20px;"></input>
             <br>
-            <textarea placeholder="编辑讨论内容"
-                      style="margin-top: 10px;height: 200px;width: 600px;border-radius: calc(5px);background-color: #212121;resize: none;color: pink;font-size: 20px;"></textarea>
+            <input id="dContent" name="dContent" placeholder="编辑讨论内容" style="margin-top: 10px;height: 200px;width: 600px;border-radius: calc(5px);background-color: #212121;resize: none;color: pink;font-size: 20px;"></input>
             <br>,
-            <br/>
-            <button id="adddiscuss_sure" class="ps_btn" style="font-size: 20px;">发起讨论</button>
+            <br />
+            <button id="adddiscuss_sure" class="ps_btn" style="font-size: 20px;" onclick="startdiscus()">发起讨论</button>
             <button id="adddiscuss_cancel" class="ps_btn" style="font-size: 20px;">取消</button>
         </div>
         <!--讨论列表-->
         <div id="discus_all" style="margin-left: 210px;margin-top:10px;">
             <a style="font-size: 25px;color: white;">当前讨论</a>
+            <br>
             <%--<button class="ps_btn" href="#" style="display: inline;font-size: 20px;">PG ONE万磁王</button>--%>
             <%--</br>--%>
             <%--</br>--%>
             <%--<a class="discuss1 " href="#	" style="color: white;margin-left: 55px; font-weight: bold;">竞猜：谁是冠军!!</a></br>--%>
             <%--<a class="discuss1 " href="#" style="color: grey;margin-left: 55px;font-size: 15px;">大家都来说说今晚我会不会拿冠军</a>--%>
             <!--评论列表-->
-            <div style="margin-left: 55px;margin-top:10px;">
-                <a id="discuss_newcom" style="color: white;font-size: 15px;"><span>勇郭：</span>这是一条新添加的评论</a>
+            <%--<div style="margin-left: 55px;margin-top:10px;">--%>
+                <%--<a id="discuss_newcom" style="color: white;font-size: 15px;"><span>勇郭：</span>这是一条新添加的评论</a>--%>
+            <%--</div>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<div id="discuss1div">--%>
+                <%--<textarea placeholder="标题" style=" calc(5px);margin-left: 55px; background-color: #212121;resize: none;border-radius: calc(5px);color: pink;height: 30px;font-size: 20px;"></textarea>--%>
+                <%--<br>--%>
+                <%--<button id="discuss1com_sure" class="ps_btn" style="margin-left: 55px;margin-top: 5px; font-size: 15px;">评论</button>--%>
+                <%--<button id="discuss1com_cancel" class="ps_btn" style="margin-left: 10px; font-size: 15px;">取消</button>--%>
+                <%--<!--CLICK显示隐藏功能-->--%>
+            <%--</div>--%>
+            <%--<div class="discuss1 discuss1hide" style="margin-left: 60px;margin-top:-30px;">--%>
+                <%--<button class="ps_btn" id="indiscuss1com">评论</button>--%>
+                <%--<button class="ps_btn" style="margin-left: 20px;">关注</button>--%>
+                <%--<button class="ps_btn" style="margin-left: 20px;">编辑</button>--%>
+                <%--<button class="ps_btn" style="margin-left: 20px;">删除</button>--%>
             </div>
-            <br>
-            <br>
-            <div id="discuss1div">
-                <textarea placeholder="标题"
-                          style=" calc(5px);margin-left: 55px; background-color: #212121;resize: none;border-radius: calc(5px);color: pink;height: 30px;font-size: 20px;"></textarea>
-                <br>
-                <button id="discuss1com_sure" class="ps_btn"
-                        style="margin-left: 55px;margin-top: 5px; font-size: 15px;">评论
-                </button>
-                <button id="discuss1com_cancel" class="ps_btn" style="margin-left: 10px; font-size: 15px;">取消</button>
-                <!--CLICK显示隐藏功能-->
+            <%--讨论单个的表--%>
+            <div id="discus_one" style="margin-left: 210px;margin-top:10px;">
+                <%--讨论的内容--%>
+                <div id="discus_one_discus">
+                </div>
+                <%--评论的内容--%>
+                <div id="discus_one_comment">
+                </div>
+                <%--提交评论的内容--%>
+                <div id="discus_one_addcomment" hidden>
+                    评论:<input id="cContent" name="cContent" type="text" style="height: 100px;width: 400px;border-radius: calc(5px);background-color: #212121;resize: none;color: pink;font-size: 20px;">
+                    <div id="didiscus_one_addcomment_buttom">
+                    </div>
+                </div>
             </div>
-            <div class="discuss1 discuss1hide" style="margin-left: 60px;margin-top:-30px;">
-                <button class="ps_btn" id="indiscuss1com">评论</button>
-                <button class="ps_btn" style="margin-left: 20px;">关注</button>
-                <button class="ps_btn" style="margin-left: 20px;">编辑</a>
-                    <button class="ps_btn" style="margin-left: 20px;">删除</a>
-            </div>
-
         </div>
 
     </div>
@@ -927,25 +1137,25 @@
                 <a id="inaddtask1" href="#">- 上传文件 -</a>
                 <ul class="submenu">
                     <li><a id="inaddtask2" style="text-align: center;" onclick="upfile()">上传文件</a></li>
-                    <li>
-                        <form id="uploadForm" enctype="multipart/form-data" hidden>
-                            <table>
-                                <tr>
-                                    <td>上传文件:<input class="ps_btn" type="file" name="file"/></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="button" value="上传" onclick="doUpload()" class="ps_btn"/>
-                                    <td>
-                                        <button onclick="closefile()" class="ps_btn">取消</button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                    </li>
-                    <li><a id="inaddlist" style="text-align: center;" href="#">创建文件夹</a></li>
+                    <li><a id="inaddlist" style="text-align: center;" onclick="openfolder()" href="#">创建文件夹</a></li>
                 </ul>
             </li>
         </ul>
+        <%--上传文件模块--%>
+        <div id="upfile" style="margin-left: 210px;margin-top:10px;width: 960px;" hidden>
+            <form id= "uploadForm" enctype="multipart/form-data">
+                <p>上传文件： <input type="file" name="file"/></p>
+                <input class="ps_btn" type="button" value="上传" onclick="doUpload()"/>
+            </form>
+            <button class="ps_btn" onclick="closefile()">取消</button>
+        </div>
+        
+        <%--创建文件夹模块--%>
+        <div id="creatfolder" style="margin-left: 210px;margin-top:10px;width: 960px;" hidden>
+            文件夹名：<input id="folderName" type="text" name="folderName" >
+            <button onclick="startfolder()">创建文件夹</button>
+            <button onclick="closefolder()">取消</button>
+        </div>
         <!--核心内容-->
         <div id="file_folderdiv" style="margin-left: 210px;margin-top:10px;width: 960px;">
             <a style="font-size: 25px;color: white;">文件夹列表</a>
@@ -968,86 +1178,84 @@
 
         <!--需求文档点进去文件列表-->
         <div id="file_filediv1" style="margin-left: 210px;margin-top:10px;width: 960px;">
-            <a href="#" class="infolderdiv" style="font-size: 25px;color: pink;">文件夹列表</a>
-            <a style="font-size: 25px;color: white;"> > </a>
-            <a style="font-size: 25px;color: white;">需求文档</a>
-            <br>
-            <br>
-            <span style="color: white;">
-					<i class="icono-file" style="cursor: pointer;margin-left: 10px;"></i>
-					 需求文档终板
-				<button class="ps_btn" href="#" style="border: none;">下载</button>
-				<button style="border: none;" class="ps_btn" href="#">删除</button>
-				</span>
-            <br>
-            <br>
-            <span style="color: white;">
-					<i class="icono-file" style="cursor: pointer;margin-left: 10px;"></i>
-					 笑话十则
-					 <button class="ps_btn" href="#" style="border: none;">下载</button>
-				<buton style="border: none;" class="ps_btn" href="#">删除</button>
-				</span>
+            <%--<a href="#" class="infolderdiv" style="font-size: 25px;color: pink;">文件夹列表</a>--%>
+            <%--<a style="font-size: 25px;color: white;"> > </a>--%>
+            <%--<a style="font-size: 25px;color: white;">需求文档</a>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<span style="color: white;">--%>
+					<%--<i class="icono-file"  style="cursor: pointer;margin-left: 10px;"></i>--%>
+					 <%--需求文档终板--%>
+				<%--<button class="ps_btn" href="#" style="border: none;" >下载</button>--%>
+				<%--<button style="border: none;" class="ps_btn" href="#" >删除</button>--%>
+				<%--</span>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<span style="color: white;">--%>
+					<%--<i class="icono-file"  style="cursor: pointer;margin-left: 10px;"></i>--%>
+					 <%--笑话十则--%>
+					 <%--<button class="ps_btn" href="#" style="border: none;" >下载</button>--%>
+				    <%--<buton style="border: none;" class="ps_btn" href="#" >删除</button>--%>
+				<%--</span>--%>
         </div>
 
-        <!--参考资料点进去文件列表-->
-        <div id="file_filediv2" style="margin-left: 210px;margin-top:10px;width: 960px;">
-            <a href="#" class="infolderdiv" style="font-size: 25px;color: pink;">文件夹列表</a><a
-                style="font-size: 25px;color: white;"> > 参考资料</a>
-            <br>
-            <br>
-            <span style="color: white;">
-					<i class="icono-file" style="cursor: pointer;margin-left: 10px;"></i>
-					 JAVA从入门到放弃
-				<button class="ps_btn" href="#" style="border: none;">下载</button>
-				<button style="border: none;" class="ps_btn" href="#">删除</button>
-				</span>
-            <br>
-            <br>
-            <span style="color: white;">
-					<i class="icono-file" style="cursor: pointer;margin-left: 10px;"></i>
-					 终极算法全篇
-					 <button class="ps_btn" href="#" style="border: none;">下载</button>
-				<buton style="border: none;" class="ps_btn" href="#">删除</button>
-				</span>
-        </div>
+        <%--<!--参考资料点进去文件列表-->--%>
+        <%--<div id="file_filediv2" style="margin-left: 210px;margin-top:10px;width: 960px;">--%>
+            <%--<a href="#" class="infolderdiv" style="font-size: 25px;color: pink;">文件夹列表</a><a style="font-size: 25px;color: white;"> > 参考资料</a>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<span style="color: white;">--%>
+					<%--<i class="icono-file"  style="cursor: pointer;margin-left: 10px;"></i>--%>
+					 <%--JAVA从入门到放弃--%>
+				<%--<button class="ps_btn" href="#" style="border: none;" >下载</button>--%>
+				<%--<button style="border: none;" class="ps_btn" href="#" >删除</button>--%>
+				<%--</span>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<span style="color: white;">--%>
+					<%--<i class="icono-file"  style="cursor: pointer;margin-left: 10px;"></i>--%>
+					 <%--终极算法全篇--%>
+					 <%--<button class="ps_btn" href="#" style="border: none;" >下载</button>--%>
+				<%--<buton style="border: none;" class="ps_btn" href="#" >删除</button>--%>
+				<%--</span>--%>
+        <%--</div>--%>
 
-        <div id="file_allfile" style="margin-left: 210px;margin-top:10px;width: 960px;">
-            <a href="#" class="infolderdiv" style="font-size: 25px;color: pink;">文件夹列表</a><a
-                style="font-size: 25px;color: white;"> > 所有文件</a>
-            <br>
-            <br>
-            <span style="color: white;">
-					<i class="icono-file" style="cursor: pointer;margin-left: 10px;"></i>
-					 JAVA从入门到放弃
-				<button class="ps_btn" href="#" style="border: none;">下载</button>
-				<button style="border: none;" class="ps_btn" href="#">删除</button>
-				</span>
-            <br>
-            <br>
-            <span style="color: white;">
-					<i class="icono-file" style="cursor: pointer;margin-left: 10px;"></i>
-					 终极算法全篇
-					 <button class="ps_btn" href="#" style="border: none;">下载</button>
-				<buton style="border: none;" class="ps_btn" href="#">删除</button>
-				</span>
-            <br>
-            <br>
-            <span style="color: white;">
-					<i class="icono-file" style="cursor: pointer;margin-left: 10px;"></i>
-					 需求文档终板
-				<button class="ps_btn" href="#" style="border: none;">下载</button>
-				<button style="border: none;" class="ps_btn" href="#">删除</button>
-				</span>
-            <br>
-            <br>
-            <span style="color: white;">
-					<i class="icono-file" style="cursor: pointer;margin-left: 10px;"></i>
-					 笑话十则
-					 <button class="ps_btn" href="#" style="border: none;">下载</button>
-				<buton style="border: none;" class="ps_btn" href="#">删除</button>
-				</span>
-        </div>
-    </div>
+        <%--<div id="file_allfile" style="margin-left: 210px;margin-top:10px;width: 960px;">--%>
+            <%--<a href="#" class="infolderdiv" style="font-size: 25px;color: pink;">文件夹列表</a><a style="font-size: 25px;color: white;"> > 所有文件</a>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<span style="color: white;">--%>
+					<%--<i class="icono-file"  style="cursor: pointer;margin-left: 10px;"></i>--%>
+					 <%--JAVA从入门到放弃--%>
+				<%--<button class="ps_btn" href="#" style="border: none;" >下载</button>--%>
+				<%--<button style="border: none;" class="ps_btn" href="#" >删除</button>--%>
+				<%--</span>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<span style="color: white;">--%>
+					<%--<i class="icono-file"  style="cursor: pointer;margin-left: 10px;"></i>--%>
+					 <%--终极算法全篇--%>
+					 <%--<button class="ps_btn" href="#" style="border: none;" >下载</button>--%>
+				<%--<buton style="border: none;" class="ps_btn" href="#" >删除</button>--%>
+				<%--</span>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<span style="color: white;">--%>
+					<%--<i class="icono-file"  style="cursor: pointer;margin-left: 10px;"></i>--%>
+					 <%--需求文档终板--%>
+				<%--<button class="ps_btn" href="#" style="border: none;" >下载</button>--%>
+				<%--<button style="border: none;" class="ps_btn" href="#" >删除</button>--%>
+				<%--</span>--%>
+            <%--<br>--%>
+            <%--<br>--%>
+            <%--<span style="color: white;">--%>
+					<%--<i class="icono-file"  style="cursor: pointer;margin-left: 10px;"></i>--%>
+					 <%--笑话十则--%>
+					 <%--<button class="ps_btn" href="#" style="border: none;" >下载</button>--%>
+				<%--<buton style="border: none;" class="ps_btn" href="#" >删除</button>--%>
+				<%--</span>--%>
+        <%--</div>--%>
+    <%--</div>--%>
 
     <!--日程-->
     <div id="schedulediv">

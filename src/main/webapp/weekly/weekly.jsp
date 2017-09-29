@@ -111,19 +111,21 @@
                         $("#aa2").empty();
                         $("#aa3").empty();
                         $("#aa4").empty();
+                        $("#who1_1").empty();
+                        $("#when1_1").empty();
                         {
                             //在指定问题后输出周报内容
                             $("#aa1").append(result.data.wSummary),
                                 $("#aa2").append(result.data.wChallenge),
                                 $("#aa3").append(result.data.wTarget),
                                 $("#aa4").append(result.data.wMethod)
+                            $("#who1_1").append(result.page.uName),
+                                $("#when1_1").append(dateFormat(result.data.wTime));
 
                         }
                     }else if(result.errcode==0){
-                        $("#aa1").empty();
-                        $("#aa2").empty();
-                        $("#aa3").empty();
-                        $("#aa4").empty();
+                        $("#weekly1_1_content").hide();
+                        $("#weekly1_1_empty").show();
                     }else if(result.errcode==2){
                         alert("该团队没有创建周报");
                     }
@@ -132,6 +134,7 @@
                     alert("周报不存在");
                 }
             })
+            $("#weekly1_1_empty").hide();
             $('#report_setting').hide()
             $("#report_index").show()
 
@@ -214,27 +217,27 @@
                             $("#aa2").empty();
                             $("#aa3").empty();
                             $("#aa4").empty();
+                            $("#who1_1").empty();
+                            $("#when1_1").empty();
                             {
                                 //在指定问题后输出周报内容
                                     $("#aa1").append(result.data.wSummary),
                                     $("#aa2").append(result.data.wChallenge),
                                     $("#aa3").append(result.data.wTarget),
-                                    $("#aa4").append(result.data.wMethod)
-
+                                    $("#aa4").append(result.data.wMethod),
+                                $("#who1_1").append(result.page.uName),
+                                    $("#when1_1").append(dateFormat(result.data.wTime));
                             }
-                        }else if(result.errcode==0){
-                            $("#aa1").empty();
-                            $("#aa2").empty();
-                            $("#aa3").empty();
-                            $("#aa4").empty();
-                        }else if(result.errcode==2){
-                            alert("该团队没有创建周报");
+                        }else{
+                            $("#weekly1_1_content").hide()
+                            $("#weekly1_1_empty").show()
                         }
                     },
                     error:function (result) {
                         alert("周报不存在");
                     }
                 })
+
 
                 //根据所选日期查询该日期所在周
                 $.ajax({
@@ -337,24 +340,15 @@
     String today = dft.format(date.getTime());  // today即为当前时间
 %>
 <div style="margin: 30px;">
-    <a id="inreport_index" aria-label='word' class='h-button centered' data-text='周报总览' href='#' style="text-align: center; font-size: 30px;">
-        <span>R</span>
-        <span>e</span>
-        <span>p</span>
-        <span>o</span>
-        <span>r</span>
-        <span>t</span>
-
-    </a>
-    <p style="text-align: center;font-size: 30px;color: #0abd6a;font-weight: bold;">
-        <a href="#" class="report_btn" style="font-weight: bold;font-size: 30px;">
-            </a>
-        <span id="report_indate"><input  id="time1" name="createdatetimeStart" value="<%=today%>" style="width: 120px;"
+    <div  href='#' style="text-align: center;font-size: 30px;color: #0ABD6A">
+        周报总览
+    </div>
+    <p style="text-align: center">
+        <span id="report_indate"><input  id="time1" name="createdatetimeStart" value="<%=today%>" style="width: 120px;border: none;background-color: #212121;color: #0abd6a;cursor: pointer;font-size: 20px"
                                          onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" onclick="aaa()"/></span>
-            <a class="report_btn" href="#" style="font-weight: bold;font-size: 30px;"></a>
-
+            <%--<a class="report_btn" href="#" style="font-weight: bold;font-size: 30px;"></a>--%>
     </p>
-    <p style="text-align: center;font-size: 20px; color: gray;">
+    <p style="text-align: center;font-size: 18px; color: gray;">
         <span id="bb1"></span>
         <span id="bb2"></span>
     </p>
@@ -363,99 +357,84 @@
 
 <div style="text-align: right;margin-top: -180px;">
 
-    <a onclick="goaddweekly()" class="report_btn">写周报</a>
+    <a onclick="goaddweekly()" class="report_btn" style="font-size: 20px;font-family: "Microsoft YaHei", sans-serif">写周报</a>
 
 </div>
 <div class="menu-sep" style="margin-top: 130px;"></div>
 
 <!--周报设置DIV-->
 <div id="report_setting" style="margin-left: 260px;">
-    <div class="container">
-        <h3 style="color: white;">周报模版设置</h3></div>
-    <p style="color: grey;">可以根据团队 / 小组 / 成员 三个不同层级，分别设置周报模板</p>
-    <div class="container">
-        <h3 style="color: white;">团队级模板</h3></div>
-    <p style="color: grey;">团队所有成员，需要填写的内容</p>
+    <div >
+        <h3 style="color: white;font-size: 30px;">周报模版设置</h3></div>
+    <p style="font-size: 25px;color: grey;">可以根据团队 / 小组 / 成员 三个不同层级，分别设置周报模板</p>
+    <div >
+        <h3 style="font-size: 30px;color: white;">团队级模板</h3></div>
+    <p style="font-size: 25px;color: grey;">团队所有成员，需要填写的内容</p>
 
-    <p id="report_setting_p1" style="color:white;height:30px;width: 600px; font-size: 17px;">&nbsp;&nbsp;本周工作成果总结，说说你对自己点赞或失望的地方。
+    <p id="report_setting_p1" style="font-size: 20px;color:white;font-size: 17px;">&nbsp;&nbsp;本周工作成果总结，说说你对自己点赞或失望的地方。
     </p>
-    <textarea  id="tx1" style="resize: none;height:30px;width: 600px;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea>
-    <p id="report_setting_p2" style="color:white;height:30px;width: 600px; font-size: 17px;">&nbsp;&nbsp;有遇到挑战或者困难么？希望团队怎么帮助你？
+    <textarea  id="tx1" cols="60" rows="1" style="resize: none;font-size: 20px;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea>
 
+    <p id="report_setting_p2" style="font-size: 20px;color:white; font-size: 17px;">&nbsp;&nbsp;有遇到挑战或者困难么？希望团队怎么帮助你？
     </p>
-    <textarea  id="tx2" style="resize: none;height:30px;width: 600px;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea>
-    <p id="report_setting_p3" style="color:white;height:30px;width: 600px; font-size: 17px;">&nbsp;&nbsp;下周的工作目标是什么？只许说一个。
+    <textarea  id="tx2" cols="60" rows="1" style="font-size: 20px;resize: none;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea>
 
+    <p id="report_setting_p3" style="font-size: 20px;color:white; font-size: 17px;">&nbsp;&nbsp;下周的工作目标是什么？只许说一个。
     </p>
-    <textarea  id="tx3" style="resize: none;height:30px;width: 600px;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea><br>
-    <p id="report_setting_p4" style="color:white;height:30px;width: 600px; font-size: 17px;">&nbsp;&nbsp;你觉得采取哪些措施，会对你提升工作效率有帮助
+    <textarea  id="tx3" cols="60" rows="1" style="font-size: 20px;resize: none;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea><br>
 
+    <p id="report_setting_p4" style="font-size: 20px;color:white; font-size: 17px;">&nbsp;&nbsp;你觉得采取哪些措施，会对你提升工作效率有帮助
     </p>
-    <textarea id="tx4" style="resize: none;height:30px;width: 600px;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea><br>
-    <button class="report_btn" id="weeklyUpdate" onclick="ccc()">保存周报</button>
+    <textarea id="tx4" cols="60" rows="1" style="font-size: 20px;resize: none;border-radius:5px;background-color: #212121;color: #0ABD6A;border-color:#0ABD6A;"></textarea><br><br>
+
+    <button class="report_btn" style="border: solid 1px #0ABD6A;font-size: 30px" id="weeklyUpdate" onclick="ccc()">保存周报</button>
     <br>
-    <span id="team_add_span">
-				<textarea placeholder="编辑周报新问题" style="color: #0ABD6A;background-color: #212121;resize: none;width: 300px;height: 20px;"></textarea><br>
-				<button id="team_add_sure" class="report_btn" >添加</button>
-				<button id="team_add_cancel" class="report_btn">取消</button>
-			</span>
-    </br>
-    <div class="container">
-        <h3 style="color:white">小组级模块</h3></div>
-    <p style="color: grey;">指定小组的成员，需要填写的内容
-    <p style="color: grey;">团队内还没有小组，<button class="report_btn">点击这里新建小组。</button></p>
-    </br>
-    <div class="container">
-        <h3 style="color: white;">成员级模块</h3></div>
-    <p style="color: grey;">指定的成员，需要填写的内容</p>
-    <p style="color: grey;">还没有成员级的模板</p>
-    <button class="report_btn" id="member_add" >+添加一条</button>
-    <br>
-    <span id="member_add_span">&nbsp;&nbsp;
-				<select style="width: 70px;" class="easyui-combobox">
-					<option>BF</option>
-					<option>YG</option>
-					<option>JH</option>
-				</select>
-				<textarea placeholder="输入成员问题" style="float: left; height: 20px; font-size: 15px;background-color: #212121;color: #0ABD6A;resize: none;" ></textarea>&nbsp;
-					<button class="report_btn" id="member_add_sure">添加</button>
-				<button id="member_add_cancel" class="report_btn">取消</button>
-			</span>-
+    <%--<span id="team_add_span">--%>
+				<%--<textarea placeholder="编辑周报新问题" style="color: #0ABD6A;background-color: #212121;resize: none;width: 300px;height: 20px;"></textarea><br>--%>
+				<%--<button id="team_add_sure" class="report_btn" >添加</button>--%>
+				<%--<button id="team_add_cancel" class="report_btn">取消</button>--%>
+			<%--</span>--%>
+    <%--</br>--%>
+
 </div>
 <!--主页面-->
-<div id="report_index">
-    <img src="images/fzl2.jpg" height="50px" style=" margin-left: 50px;margin-top: 30px;" />
+<div id="report_index" style="magin-left:80px">
     <br>
-    <a href="#" class="report_btn" style="margin-left: 60px;font-weight: bold;">邓超</a>
-    <div style="margin-left: 250px;margin-top: -110px;margin-bottom: 10px;">
-        <div class="container" >
-            <h3 style="color:0#0ABD6A;">本周周报</h3></div>
-        <div id="p1" style="font-weight: bold;color: #0ABD6A;"><span>"本周工作成果总结，说说你对自己点赞或失望的地方。"</span><br>
+    <a href="#" class="report_btn" style="margin-left: 60px;font-weight: bold;font-size: 30px"></a>
+    <div style="margin-left: 250px;margin-top: -50px;margin-bottom: 10px;">
+        <div style="color: white;magin-top:10px" >
+            <h3 style="color:0#0ABD6A;font-size: 30px">本周周报</h3></div>
+        <div id="weekly1_1_content">
+        <div id="p1" style="font-weight: bold;color: #0ABD6A;font-size: 20px"><span>"本周工作成果总结，说说你对自己点赞或失望的地方。"</span><br>
             <span style="color: grey;" id="aa1"></span>
-        </div>
+        </div><br>
 
-        <div id="p2" style="font-weight: bold;color: #0ABD6A;"><span>"有遇到挑战或者困难么？希望团队怎么帮助你？"</span><br>
+        <div id="p2" style="font-size: 20px;font-weight: bold;color: #0ABD6A;"><span>"有遇到挑战或者困难么？希望团队怎么帮助你？"</span><br>
             <span style="color: grey;" id="aa2"></span>
-        </div>
+        </div><br>
 
-        <div id="p3" style="font-weight: bold;color: #0ABD6A;"><span>"下周的工作目标是什么？只许说一个。"</span><br>
+        <div id="p3" style="font-size: 20px;font-weight: bold;color: #0ABD6A;"><span>"下周的工作目标是什么？只许说一个。"</span><br>
             <span style="color: grey;" id="aa3"></span>
-        </div>
+        </div><br>
 
-        <div id="p4" style="font-weight: bold;color: #0ABD6A"><span>"你觉得采取哪些措施，会对你提升工作效率有帮助？"</span><br>
+        <div id="p4" style="font-size: 20px;font-weight: bold;color: #0ABD6A"><span>"你觉得采取哪些措施，会对你提升工作效率有帮助？"</span><br>
             <span style="color: grey;" id="aa4"></span>
         </div>
 
         <br>
-        <span style="color: grey;">勇郭</span>
+        <span id="who1_1" style="color: grey;font-weight: bold"></span>
         <span style="color: grey;">，创建于</span>
-        <span style="color: grey;">2017年9月8日</span>
+        <span id="when1_1" style="color: grey;"></span>
         <button id="inreport_setting" class="report_btn" onclick="bbb()">查看详情</button>
+        </div>
+        <div id="weekly1_1_empty">
+            <h2 style="color: grey;">本周无周报</h2>
+        </div>
     </div>
     <br>
     <div class="menu-sep" style="margin-left:0px ;"></div>
-    <div class="container" style="margin-left: 250px;">
-        <h3 style="color: white;">他们本周无周报记录</h3>
+    <div  style="margin-left: 250px;">
+        <h3 style="font-size: 30px;color: white;">他们本周无周报记录</h3>
     </div>
 </div>
 </div>

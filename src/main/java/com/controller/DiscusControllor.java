@@ -1,7 +1,9 @@
 package com.controller;
 
+import com.pojo.Comment;
 import com.pojo.Discus;
 import com.pojo.Project;
+import com.service.CommentService;
 import com.service.DiscusService;
 import com.service.ProjectService;
 import com.util.AjaxResult;
@@ -32,6 +34,10 @@ public class DiscusControllor {
     //注入讨论Service
     @Autowired
     DiscusService discusService;
+    //注入评论的Service
+    @Autowired
+    CommentService commentService;
+
 
     /**
      * 新建讨论
@@ -55,7 +61,6 @@ public class DiscusControllor {
         if (projectList.get(0)!=null){
                 Discus discus1 = discusService.addDiscus(discus, projectList.get(0));
                 System.out.println(discus1+"11111111111111");
-                System.out.println("进入这里了");
                 return new AjaxResult(1,"成功",discus1);
             }else {
                 return new AjaxResult(0,"badness");
@@ -63,7 +68,7 @@ public class DiscusControllor {
     }
 
     /**
-     * 遍历该项目中所有的评论
+     * 遍历该项目中所有的讨论
      * @return
      */
     @RequestMapping(value = "/QueryDiscus")
@@ -80,5 +85,27 @@ public class DiscusControllor {
         }else {
             return new AjaxResult(0,"失败");
         }
+    }
+
+    /**
+     * 根据讨论ID查找内容
+     * @param discusId
+     * @return
+     */
+    @RequestMapping("/selectDiscusByDid")
+    @ResponseBody
+    public AjaxResult selectDiscusByDid(@RequestParam("discusId")int discusId,HttpServletRequest request){
+        Discus discus=new Discus();
+        discus.setDiscusId(discusId);
+        Comment comment=new Comment();
+        comment.setDiscusId(discusId);
+        List<Discus> discusList = discusService.select(discus, 0);
+        List<Comment> commentList=commentService.selectComment(comment,2);
+        if(discusList!=null&&commentList!=null){
+            discus=discusList.get(0);
+            request.getSession().setAttribute("discus",discus);
+            return new AjaxResult(1,"成功",discus,commentList);
+        }
+        return new AjaxResult(0,"失败");
     }
 }
