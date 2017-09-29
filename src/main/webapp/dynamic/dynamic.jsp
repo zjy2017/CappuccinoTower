@@ -70,7 +70,7 @@
                             dateFormat(v.date) + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
                             "</span>" +
                             "<span class='weekcontent'>" + v.uname + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "</span>" + ": " +
-                            "<span class='weekcontent'>"  + v.action +"<a  href='#' onclick=gohref('"+v.operateId+"','"+v.table+"')>"+v.aaName+"</a>" + "</span>" +
+                            "<span class='weekcontent'>"  + v.action +"<a style='color: #ffdd4d'  href='#' onclick=gohref('"+v.operateId+"','"+v.table+"')>"+v.aaName+"</a>" + "</span>" +
                             "</div></li>")
                     })
                 },
@@ -245,7 +245,7 @@
 
     </style>
 </head>
-<body style="margin: 20px;">
+<body style="margin-left: 80px;">
 <p style="color: #ffdd4d;font-size: 30px">筛选动态:</p>
 <div style="float:left;">
     <select id="select1">
