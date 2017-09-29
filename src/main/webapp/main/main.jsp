@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="../resources/css/main_style.css" />
     <link rel="stylesheet" type="text/css" href="../resources/js/jquery-easyui-1.4.5/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="../resources/js/jquery-easyui-1.4.5/themes/icon.css">
+    <link rel="stylesheet" href="../resources/allround_btn_css/style.css">
+    <script src="../resources/allround_btn_js/jquery-1.8.3.min.js"></script>
+    <script src="../resources/allround_btn_js/script.js"></script>
     <script type="text/javascript" src="../resources/js/jquery-easyui-1.4.5/jquery.min.js"></script>
     <script type="text/javascript" src="../resources/js/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../resources/js/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
@@ -41,6 +44,10 @@
                 $("#通知框").hide()
             })
             $(".icon-filter").tooltip()
+
+            $("#inpersonalsetting").click(function () {
+                $("#manmenu").hide()
+            })
 
         })
 
@@ -77,6 +84,7 @@
     <%--页面加载时遍历团队--%>
     <script type="text/javascript">
         $(document).ready(function () {
+            alert($("#queryTeam"));
             $.ajax({
                 type:"POST",
                 url:"/user/queryTeam",
@@ -177,12 +185,10 @@
         }
 
         function goweekly() {
-//            location.href="/weekly/weekly.jsp";
             document.getElementById("program_index").src="..//weekly/weekly.jsp";
         }
 
         function gopersonalsetting() {
-//            location.href="/personal/personal-setting.jsp";
             document.getElementById("program_index").src="..//personal/personal-setting.jsp";
         }
     </script>
@@ -206,33 +212,93 @@
 <div style="margin-left: 100px;margin-top: 30px;">
 
 
-    <div class="back" style="z-index: 1000;">
-        <div class="menu-back">
-            <select id="queryTeam" class="nav-links">
-            </select>
+    <%--<div class="back" style="z-index: 1000;">--%>
+        <%--<div class="menu-back">--%>
+            <%--<select id="queryTeam" class="nav-links">--%>
+            <%--</select>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+
+    <div style="margin-left: 40px;display: inline-block" >
+        <select id="queryTeam" style="background-color: #212121;color: grey;width: 120px;height: 50px;font-size: 30px;text-align: center;font-weight: bold;border-color: white;padding-left: 15px">
+        </select>
+    </div>
+
+    <%--最上面的菜单栏的五个菜单--%>
+    <div style="margin-left: 40px;display: inline-block">
+        <div class="link mission-link" style="margin:10px;cursor: pointer;display: inline-block">
+            <a class="button" data-title="" style="font-size: 30px;color: pink">
+                <span class="line line-top"></span>
+                <span class="line line-right"></span>
+                <span class="line line-bottom"></span>
+                <span class="line line-left"></span>
+                项目
+            </a>
         </div>
+
+        <div class="link mission-link" style="margin:10px;cursor: pointer;display: inline-block">
+            <a class="button" data-title="" style="color: #ffdd4d;font-size: 30px;" onclick=godynamic()>
+                <span class="line line-top"></span>
+                <span class="line line-right"></span>
+                <span class="line line-bottom"></span>
+                <span class="line line-left"></span>
+                动态
+            </a>
+        </div>
+
+        <div class="link mission-link" style="margin:10px;cursor: pointer;display: inline-block">
+            <a class="button" data-title="" style="font-size: 30px;color: #0ABD6A;"onclick=goweekly()>
+                <span class="line line-top"></span>
+                <span class="line line-right"></span>
+                <span class="line line-bottom"></span>
+                <span class="line line-left"></span>
+                周报
+            </a>
+        </div>
+
+        <div class="link mission-link" style="margin:10px;cursor: pointer;display: inline-block">
+            <a class="button" data-title="" style="font-size: 30px;color:slateblue;" onclick="goteam()>
+                <span class="line line-top"></span>
+                <span class="line line-right"></span>
+                <span class="line line-bottom"></span>
+                <span class="line line-left"></span>
+                团队
+            </a>
+        </div>
+
+        <div class="link mission-link" style="margin:10px;cursor: pointer;display: inline-block">
+            <a class="button" data-title="" style="font-size: 30px;color:deepskyblue;">
+                <span class="line line-top"></span>
+                <span class="line line-right"></span>
+                <span class="line line-bottom"></span>
+                <span class="line line-left"></span>
+                我自己
+            </a>
+        </div>
+
+
     </div>
 
 
-    <span style="margin-left: 40px;">
-    		<a href="#" style="color: pink;margin-left: 40px;font-size: 25px;">项目</a>
-    		<a href="#" style="color: #ffdd4d;margin-left: 40px;font-size: 25px;" onclick=godynamic()>动态</a>
-    		<a href="#" style="color: #0abd6a;margin-left: 40px;font-size: 25px;" onclick=goweekly()>周报</a>
-    		<a href="#" style="color: slateblue;margin-left: 40px;font-size: 25px;" onclick="goteam()">团队</a>
-    		<a href="#" style="color: deepskyblue;margin-left: 40px;font-size: 25px;">我自己</a>
-    		</span>
+    <%--<span style="margin-left: 40px;">--%>
+    		<%--<a href="#" style="color: grey;margin-left: 40px;font-size: 25px;">项目</a>--%>
+    		<%--<a href="#" style="color: grey;margin-left: 40px;font-size: 25px;" onclick=godynamic()>动态</a>--%>
+    		<%--<a href="#" style="color: grey;margin-left: 40px;font-size: 25px;" onclick=goweekly()>周报</a>--%>
+    		<%--<a href="#" style="color: grey;margin-left: 40px;font-size: 25px;" onclick="goteam()>团队</a>--%>
+    		<%--<a href="#" style="color: grey;margin-left: 40px;font-size: 25px;">我自己</a>--%>
+    		<%--</span>--%>
 
-
-    <span style="margin-left: 30px;"><i class="icono-comment" style="cursor: pointer;margin-left: 400px;"></i></span>
+    <div style="display: inline-block;">
+    <span style="margin-left: 0px;"><i class="icono-comment" style="cursor: pointer;margin-left: 40px;"></i></span>
     <!--<button class="icon-man" style="height: 20px;width: 20px;background-color: white;margin-left: 23px;" title="个人"></button>-->
     <span><i class="icono-gear spin" style="cursor: pointer;margin-left: 10px;"></i></span>
-    <span><i class="icono-search" style="   cursor: pointer;margin-left: 10px;"></i></span>
-
+    <span><i class="icono-search" style="cursor: pointer;margin-left: 10px;"></i></span>
+    </div>
 
     <!--搜索框-->
-    <span id = "ss">
-		<textarea style="position: absolute;margin-top: 3px;margin-left: 5px; resize: none;height: 20px;border-radius: calc(5px);background-color: #212121;color: darkgray;" placeholder="请输入搜索内容"></textarea>
-		<button class="main_btn" style="font-family: '微软雅黑';position: absolute;margin-top: 3px;margin-left: 170px;"><b>搜索</b></button>
+    <span id = "ss" style="">
+		<textarea style="position: absolute;margin-top: 30px;margin-left: 5px; resize: none;height: 20px;border-radius: calc(5px);background-color: #212121;color: darkgray;" placeholder="请输入搜索内容"></textarea>
+		<button class="main_btn" style="font-family: '微软雅黑';position: absolute;margin-top: 30px;margin-left: 170px;"><b>搜索</b></button>
 		</span>
     </span>
     </span>
@@ -266,9 +332,9 @@
     <!--头像下拉菜单-->
     <div id="manmenu" style="margin-left: 970px;margin-top: 20px; position:absolute;padding: 10px;
 				background-color: black;border: solid;border-color: white;border-width: 0.3px;">
-        <a href="#" style="color: white;margin: 10px;" onclick="gopersonalsetting()">个人设置</a>><br>
-        <a href="#" id="manmenu2" style="color: white;margin: 10px;">通知设置</a><br>
-        <a href="#" id="manmenu3" style="color: white;margin: 10px;">我的关注</a><br>
+        <a href="#" id="inpersonalsetting" style="color: white;margin: 10px;" onclick="gopersonalsetting()">个人设置</a>><br>
+        <%--<a href="#" id="manmenu2" style="color: white;margin: 10px;">通知设置</a><br>--%>
+        <%--<a href="#" id="manmenu3" style="color: white;margin: 10px;">我的关注</a><br>--%>
         <div class="menu-sep" style="width: 70px;margin-left: 00px;margin: 10px;"></div>
         <a href="#" id="manmenu4" style="color: white;margin-left: 15px;margin: 10px;text-align: center;margin-bottom: 10px;">退出</a>
     </div>
