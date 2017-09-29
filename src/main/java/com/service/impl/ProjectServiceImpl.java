@@ -142,23 +142,14 @@ public class ProjectServiceImpl implements ProjectService {
         //用ID主键进行查询
         if (i == 0) {
             project1 = projectMapper.selectByPrimaryKey(project.getpId());
-            System.out.println(project1.toString() + "aaa-----------------");
             projectList.add(project1);
-            for (int a = 0; a < projectList.size(); a++) {
-                System.out.println(projectList.get(a).toString() + "b--------------");
+            if (projectList != null || projectList.size() != 0) {
+                return projectList;
             }
         }
-        //若查询为空则返回null
-        if (projectList == null || projectList.size() == 0) {
-            System.out.println("返回了空");
-            return null;
-        }
-        //否则返回这个list
-        else {
-            System.out.println("返回了List");
-            return projectList;
-        }
+        return null;
     }
+
 
     /**
      * 根据登录用户当前选择的团队查询项目
@@ -181,16 +172,8 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     public Project projectALL(int pId,int uId){
-        //创建ProjectList,返回web层的对象
-        ProjectList projectList=new ProjectList();
         //根据pId查找出项目的信息；
         Project project = projectMapper.selectByPrimaryKey(pId);
-        //将查找到的project，放到projectList中，
-        projectList.setpId(pId);
-        projectList.setpName(project.getpName());
-        projectList.setpDescribe(project.getpDescribe());
-        projectList.setIspublic(project.getIspublic());
-        projectList.setpSensitive(project.getpSensitive());
         return project;
     }
 

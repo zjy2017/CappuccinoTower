@@ -104,6 +104,7 @@
                             alert(result.data.file.fileName);
                         }else if(result.data.type==5){
                             alert(result.data.folder.folderName);
+                            document.getElementById("program_index").src="../main/main_program.jsp";
                         }else if(result.data.type==6){
                             alert(result.data.team.tName);
                         }else if(result.data.type==7){
@@ -153,19 +154,17 @@
                             $("#ul1_1").html("");
                             $.each(result.data, function (n, v) {
                                 $("#ul1_1").append("<li>" + "<h1>" + v.pName + "</h1>" +
-                                    "<div id='weekdate' style='font-size: 20px;color: grey;'>" +
-                                    dateFormat(v.date) +
-                                    "</div>" +
-                                    "<div >" +
-                                    "<a name='v.operateId' >" +
-                                    v.uname + ": " +
-                                    v.aaName +
-                                    v.action +
-                                    "</a></div></li>")
+                                    "<span style='font-size: 20px;color: grey;font-family: 'Microsoft YaHei', sans-serif'>" +
+                                    dateFormat(v.date) + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+                                    "</span>" +
+                                    "<span class='weekcontent'>" + v.uname + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "</span>" + ": " +
+                                    "<span class='weekcontent'>"  + v.action +"<a style='color: #ffdd4d'  href='#' onclick=gohref('"+v.operateId+"','"+v.table+"')>"+v.aaName+"</a>" + "</span>" +
+                                    "</div></li>")
                             })
-                        } else {
-                            alert("显示失败！")
                         }
+                    },
+                    error:function () {
+                        alert("错误");
                     }
                 })
             })
@@ -205,14 +204,12 @@
                         if (result.errcode == 1) {
                             $("#ul1_1").html("");
                             $.each(result.data, function (n, v) {
-                                $("#ul1_1").append("<li>" +
-                                    "<h1>" + v.pName + "</h1>" +
-                                    "<div id='weekdate' style='font-size: 20px;color: grey;'>" +
-                                    dateFormat(v.date) +
-                                    "</div>" +
-                                    "<div >" +
-                                    v.uname + ": " +
-                                    v.action +
+                                $("#ul1_1").append("<li>" + "<h1>" + v.pName + "</h1>" +
+                                    "<span style='font-size: 20px;color: grey;font-family: 'Microsoft YaHei', sans-serif'>" +
+                                    dateFormat(v.date) + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+                                    "</span>" +
+                                    "<span class='weekcontent'>" + v.uname + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "</span>" + ": " +
+                                    "<span class='weekcontent'>"  + v.action +"<a style='color: #ffdd4d'  href='#' onclick=gohref('"+v.operateId+"','"+v.table+"')>"+v.aaName+"</a>" + "</span>" +
                                     "</div></li>")
                             })
                         } else {
