@@ -196,7 +196,7 @@
 
         function goweekly() {
 //            location.href="/weekly/weekly.jsp";
-            document.getElementById("program_index").src="..//weekly/weekly.jsp";
+            document.getElementById("program_index").src="../weekly/weekly.jsp";
         }
 
         function gopersonalsetting() {

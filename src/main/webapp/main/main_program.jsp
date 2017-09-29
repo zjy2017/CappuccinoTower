@@ -630,6 +630,36 @@
             })
         }
 
+        
+        //点击添加任务遍历该项目所有组员
+        function createTask() {
+            $.ajax({
+                type:"Post",
+                url:"",
+                dataType:"json",
+                data:{
+                    pId:${param.pId},
+                },
+                success:function (result) {
+                    if(result.errcode==1){
+
+                    }
+                }
+            })
+        }
+        //添加任务
+        function addTask() {
+            $.ajax({
+                type:"Post",
+                url:"",
+                dataType:"json",
+                data:{
+                    taskName:$("#taskName").val(),
+                    taskAssigner:$("#")
+                }
+            })
+        }
+
         //返回讨论总表
         function backdiscus() {
             $("#discus_one").hide()
@@ -669,7 +699,7 @@
     <div id="taskdiv">
         <ul class="menu" style="  background-color: #212121;border: none;">
             <li>
-                <a id="inaddtask1" href="#">- 添加任务 -</a>
+                <a id="inaddtask1" href="#" onclick="createTask()">- 添加任务 -</a>
                 <ul class="submenu">
                     <li><a id="inaddtask2" style="text-align: center;" href="#">添加任务</a></li>
                     <li><a id="inaddlist" style="text-align: center;" href="#">添加清单</a></li>
@@ -863,21 +893,11 @@
 
             <span style="color: grey;">指派成员完成该任务</span>
             <br>
-            <input type="radio" name="t" class="checked-boom" />
-            </label>
-            <span style="color: pink;font-size: 15px;font-weight: ;">德莱文</span>&nbsp;&nbsp;
             <label>
-                <input type="radio" name="t" class="checked-boom" />
+                <input id="radiouser" type="radio" name="t" class="checked-boom" value=""/>
             </label>
-            <span style="color: pink;font-size: 15px;font-weight: ;">提莫</span>&nbsp;&nbsp;
-            <label>
-                <input type="radio" name="t" class="checked-boom" />
-            </label>
-            <span style="color: pink;font-size: 15px;font-weight: ;">妖姬</span>&nbsp;&nbsp;
-            <label>
-                <input type="radio" name="t" class="checked-boom" />
-            </label>
-            <span style="color: pink;font-size: 15px;font-weight: ;">赵信</span>&nbsp;&nbsp;
+
+
             <!--日历-->
             <br>
             <br>
@@ -886,7 +906,7 @@
             <input id="dd" type="text" class="easyui-datebox" required="required"></input>
             <br>
             <br>
-            <button id="addtask_sure" class="ps_btn" style="font-size: 20px;">确定</button>
+            <button id="addtask_sure" class="ps_btn" style="font-size: 20px;" onclick="addTask()">确定</button>
             <button id="addtask_cancel" class="ps_btn" style="font-size: 20px;">取消</button>
         </div>
 

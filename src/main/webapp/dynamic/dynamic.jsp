@@ -104,6 +104,7 @@
                             alert(result.data.file.fileName);
                         }else if(result.data.type==5){
                             alert(result.data.folder.folderName);
+                            document.getElementById("program_index").src="../main/main_program.jsp";
                         }else if(result.data.type==6){
                             alert(result.data.team.tName);
                         }else if(result.data.type==7){
