@@ -183,6 +183,7 @@ public class FileController {
      * @return
      */
     @RequestMapping(value = "deletefile",method = RequestMethod.GET)
+    @ResponseBody
     public AjaxResult deletefile(int fileId,HttpServletRequest request){
         try{
             fileService.deleteFile(fileId);

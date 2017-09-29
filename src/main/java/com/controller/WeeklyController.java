@@ -139,6 +139,27 @@ public class WeeklyController {
         return null;
     }
 
+    /**
+     * 动态中点击周报跳转至周报详情
+     * 先根据周报ID查询周报时间，再根据时间查询周报内容
+     * @param operateId 被点击的周报id
+     * @return
+     */
+    @RequestMapping(value = "weeklyByweekId")
+    @ResponseBody
+    public AjaxResult weeklyByweekId(@RequestParam("operateId")int operateId){
+        Weekly weekly = new Weekly();
+        weekly.setWeeklyId(operateId);
+        List<Weekly> weeklies = weeklyService.selectWeekly(weekly, 2);
+        if(weeklies!=null||weeklies.size()!=0){
+            User user = new User();
+            user.setuId(weeklies.get(0).getuId());
+            List<User> userList = userService.selectUser(user, 0);
+            return new AjaxResult(1,"动态点击查询周报成功",weeklies.get(0),userList.get(0));
+            }else{
+                return new AjaxResult(0,"动态点击查询周报失败");
+            }
+        }
 
     /**
      * 更新周报

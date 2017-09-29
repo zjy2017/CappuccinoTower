@@ -1,11 +1,9 @@
 package com.service.impl;
 
+import com.dao.FileMapper;
 import com.dao.FolderMapper;
 import com.dao.TotalfileMapper;
-import com.pojo.Folder;
-import com.pojo.FolderExample;
-import com.pojo.Project;
-import com.pojo.Totalfile;
+import com.pojo.*;
 import com.service.FolderService;
 import com.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,10 @@ public class FolderServiceImpl implements FolderService{
     ProjectService projectService;
     @Autowired
     TotalfileMapper totalfileMapper;
+
+    //注入文件的Mapper
+    @Autowired
+    FileMapper fileMapper;
     public int addFolder(Folder folder,int pId) {
         Project project=new Project();
         project.setpId(pId);
@@ -95,5 +97,23 @@ public class FolderServiceImpl implements FolderService{
             return folderList;
         }
        return null;
+    }
+
+
+    /**
+     * 根据文件夹ID遍历其中的文件
+     * @param folderId
+     * @return
+     */
+    public List<File> queryFileByFolderId(int folderId){
+        System.out.println("进入了queryFileByFolderId------->Service");
+        FileExample fileExample=new FileExample();
+        fileExample.createCriteria().andFolderIdEqualTo(folderId);
+        //select * from file where folderID=?
+        List<File> fileList = fileMapper.selectByExample(fileExample);
+        if(fileList!=null&&fileList.size()!=0){
+            return fileList;
+        }
+        return null;
     }
 }

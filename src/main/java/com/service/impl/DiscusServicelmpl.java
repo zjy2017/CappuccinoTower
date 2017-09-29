@@ -69,7 +69,15 @@ public class DiscusServicelmpl implements DiscusService {
     }
 
     public List<Discus> select(Discus discus, int discusId) {
-
+        List<Discus> discusList=new ArrayList<Discus>();
+        Discus discus1=null;
+        if (discusId==0){
+            discus1=discusMapper.selectByPrimaryKey(discus.getDiscusId());
+            if (discus1!=null){
+                discusList.add(discus1);
+                return discusList;
+            }
+        }
         return null;
     }
 

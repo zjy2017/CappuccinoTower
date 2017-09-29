@@ -71,7 +71,15 @@ public class TotalfileServiceImpl implements TatalfileService {
                     totalfileforJsp.setFileId(fileList.get(i).getFileId());
                     totalfileforJsp.setFileName(fileList.get(i).getFileName());
                     totalfileforJsp.setFileUrl(fileList.get(i).getFileUrl());
-                    totalfileforJsp.setType(0);
+                    //判断文件是否有文件夹的父类
+                    if (fileList.get(i).getFolderId()!=null){
+                        //2为有文件夹父类的文件
+                        totalfileforJsp.setType(2);
+                    }else {
+                        //0为文件
+                        totalfileforJsp.setType(0);
+                    }
+
                     totalfileforJspList.add(totalfileforJsp);
                 }
                 for (int j=0;j<folderList.size();j++){
@@ -80,7 +88,8 @@ public class TotalfileServiceImpl implements TatalfileService {
                     totalfileforJsp.setTotalfileId(projectList.get(0).getfTotalid());
                     totalfileforJsp.setFolderId(folderList.get(j).getFolderId());
                     totalfileforJsp.setFolderName(folderList.get(j).getFolderName());
-                    System.out.println(totalfileforJsp.getFolderName()+"这是文件夹的名字名字啊啊啊啊");
+                    System.out.println(totalfileforJsp.getFolderName()+"这是文件夹的名字----》");
+                    //1为文件夹
                     totalfileforJsp.setType(1);
                     totalfileforJspList.add(totalfileforJsp);
                 }

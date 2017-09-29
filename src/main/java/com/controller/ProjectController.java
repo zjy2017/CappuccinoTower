@@ -57,7 +57,11 @@ public class ProjectController {
      * @return
      */
     @RequestMapping("/putProject")
-    public String putProject( Project project, @RequestParam("uId") List<Integer> uId,HttpServletRequest request){
+    @ResponseBody
+    public AjaxResult putProject( Project project, @RequestParam("uId[]") List<Integer> uId,HttpServletRequest request){
+        System.out.println("进入了putProject------》Controller");
+        int tId=new ObtainSession(request).getTeam().gettId();
+        project.settId(tId);
 
         //调用实现类，插入项目数据(返回项目)
         Project projectback = projectService.addProject(project, uId);
@@ -67,7 +71,7 @@ public class ProjectController {
         //动态操作
         DynamicTool d=new DynamicTool(projectback.getpId(),"project","创建了这个项目",request,dynamicService);
         d.newDynamic();
-        return "AllSuccess";
+        return new AjaxResult(1,"成功");
     }
 
     /**
