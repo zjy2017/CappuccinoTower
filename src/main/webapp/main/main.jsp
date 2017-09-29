@@ -239,9 +239,6 @@
         <div class="menu-sep" style="width: 70px;margin-left: 00px;margin: 10px;"></div>
         <a href="#" id="manmenu4" style="color: white;margin-left: 15px;margin: 10px;text-align: center;margin-bottom: 10px;">退出</a>
     </div>
-
-
-
     </p>
 </div>
 </div>

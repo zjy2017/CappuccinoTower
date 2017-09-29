@@ -281,4 +281,8 @@ public class DynamicServiceImpl implements DynamicService {
         }
         return generalList;
     }
+
+    public List<Dynamic> bulbQuery(int uId) {
+        return null;
+    }
 }

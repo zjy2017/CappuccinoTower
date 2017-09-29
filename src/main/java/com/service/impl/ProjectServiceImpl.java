@@ -201,18 +201,10 @@ public class ProjectServiceImpl implements ProjectService {
      * 将项目的相关信息全部遍历出来
      * @return
      */
-    public ProjectList projectALL(int pId,int uId){
-        //创建ProjectList,返回web层的对象
-        ProjectList projectList=new ProjectList();
+    public Project projectALL(int pId,int uId){
         //根据pId查找出项目的信息；
         Project project = projectMapper.selectByPrimaryKey(pId);
-        //将查找到的project，放到projectList中，
-        projectList.setpId(pId);
-        projectList.setpName(project.getpName());
-        projectList.setpDescribe(project.getpDescribe());
-        projectList.setIspublic(project.getIspublic());
-        projectList.setpSensitive(project.getpSensitive());
-        return projectList;
+        return project;
     }
 
 }

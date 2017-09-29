@@ -15,7 +15,6 @@ public interface DynamicService {
     /**
      * 创建一个动态表
      * @param dynamic 动态表实体类
-     * @param action 定义操作动作
      * @return 返回0表示失败，返回1表示成功
      */
     int addDynamic(Dynamic dynamic);
@@ -47,5 +46,11 @@ public interface DynamicService {
 
     List<General> QueryList(Dynamic dynamic);
 
+    /**
+     * 根据用户ID来查询相关的动态 用来做小灯泡功能
+     * @param uId
+     * @return
+     */
+    List<Dynamic> bulbQuery(int uId);
 
 }
